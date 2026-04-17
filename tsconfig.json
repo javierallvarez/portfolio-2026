@@ -34,10 +34,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": [
-    "node_modules",
-    "drizzle",
-    "playwright-report",
-    "test-results"
-  ]
+  "exclude": ["node_modules", "drizzle", "playwright-report", "test-results"]
 }

@@ -1,12 +1,12 @@
 # JAG-001 — Project Initialization & Architecture Setup
 
-| Field       | Value                               |
-|-------------|-------------------------------------|
-| **ID**      | JAG-001                             |
-| **Status**  | ✅ Done                              |
-| **Type**    | Chore / Foundation                  |
-| **Author**  | JAG (+ AI pair programming)         |
-| **Created** | 2026-04-15                          |
+| Field       | Value                       |
+| ----------- | --------------------------- |
+| **ID**      | JAG-001                     |
+| **Status**  | ✅ Done                     |
+| **Type**    | Chore / Foundation          |
+| **Author**  | JAG (+ AI pair programming) |
+| **Created** | 2026-04-15                  |
 
 ---
 
@@ -17,6 +17,7 @@ This is the foundational setup for the 2026 professional portfolio. The project 
 `JAG-XXX` spec file before any code is written.
 
 The portfolio is intended to demonstrate:
+
 - Enterprise-level code quality and standards
 - Security best practices (Zod validation, XSS sanitization, CORS, Rate Limiting)
 - CI/CD culture (GitHub Actions, PR templates, Playwright E2E)
@@ -27,31 +28,38 @@ The portfolio is intended to demonstrate:
 ## 2. Technical Decisions
 
 ### Framework: Next.js 15 (App Router)
+
 - Chosen for RSC (React Server Components) + Server Actions, enabling full-stack patterns
   with zero-client-bundle overhead for data-fetching layers.
 - App Router enables co-located layouts, loading states, and error boundaries.
 
 ### Database: PostgreSQL via Drizzle ORM
+
 - Drizzle is type-safe at the schema level, lightweight, and generates raw SQL (no magic).
 - Neon (serverless Postgres) as the default target for easy deployment to Vercel.
 
 ### Styling: Tailwind CSS + HeroUI
+
 - HeroUI provides accessible, production-grade components built on Radix primitives.
 - Tailwind enables rapid, consistent design without context-switching to CSS files.
 
 ### Validation: Zod
+
 - Shared schema definitions used on both the frontend (React Hook Form) and backend
   (Server Actions), eliminating double-validation logic.
 
 ### Monitoring: Sentry
+
 - Automatic error capture for both client and server (Edge/Node runtime).
 - Source map uploads on build for production-grade stack traces.
 
 ### Testing: Playwright
+
 - E2E tests simulate real user flows against a local dev server.
 - Run on every CI push via GitHub Actions.
 
 ### Rate Limiting Strategy
+
 - Middleware-level rate limiting using Upstash Redis (token bucket algorithm).
 - Applied to all API route handlers under `/api/` and Server Action endpoints.
 
@@ -116,6 +124,7 @@ The portfolio is intended to demonstrate:
 
 This ticket was implemented via AI pair programming (Cursor / Claude Sonnet).
 The AI was responsible for:
+
 - Scaffolding boilerplate configuration files
 - Generating the initial Drizzle schema shape
 - Writing the CI workflow YAML

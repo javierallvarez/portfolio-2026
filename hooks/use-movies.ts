@@ -15,9 +15,7 @@ function moviesReducer(state: Movie[], action: OptimisticAction): Movie[] {
     case "delete":
       return state.filter((m) => m.id !== action.id);
     case "update":
-      return state.map((m) =>
-        m.id === action.movie.id ? { ...m, ...action.movie } : m,
-      );
+      return state.map((m) => (m.id === action.movie.id ? { ...m, ...action.movie } : m));
   }
 }
 

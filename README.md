@@ -9,19 +9,19 @@
 
 ## Tech Stack
 
-| Layer         | Technology                                    |
-|---------------|-----------------------------------------------|
-| Framework     | [Next.js 15](https://nextjs.org) (App Router) |
-| Language      | TypeScript (strict mode)                      |
-| Styling       | Tailwind CSS + [HeroUI](https://heroui.com)   |
-| Database      | PostgreSQL via [Drizzle ORM](https://orm.drizzle.team) + Neon |
-| Validation    | [Zod](https://zod.dev) (shared frontend/backend) |
+| Layer         | Technology                                                               |
+| ------------- | ------------------------------------------------------------------------ |
+| Framework     | [Next.js 15](https://nextjs.org) (App Router)                            |
+| Language      | TypeScript (strict mode)                                                 |
+| Styling       | Tailwind CSS + [HeroUI](https://heroui.com)                              |
+| Database      | PostgreSQL via [Drizzle ORM](https://orm.drizzle.team) + Neon            |
+| Validation    | [Zod](https://zod.dev) (shared frontend/backend)                         |
 | XSS Safety    | [isomorphic-dompurify](https://github.com/kkomelin/isomorphic-dompurify) |
-| Rate Limiting | Upstash Redis (token bucket via `@upstash/ratelimit`) |
-| Monitoring    | [Sentry](https://sentry.io) (client + server + edge) |
-| Testing       | [Playwright](https://playwright.dev) E2E      |
-| Linting       | ESLint (strict) + Prettier                    |
-| CI/CD         | GitHub Actions                                |
+| Rate Limiting | Upstash Redis (token bucket via `@upstash/ratelimit`)                    |
+| Monitoring    | [Sentry](https://sentry.io) (client + server + edge)                     |
+| Testing       | [Playwright](https://playwright.dev) E2E                                 |
+| Linting       | ESLint (strict) + Prettier                                               |
+| CI/CD         | GitHub Actions                                                           |
 
 ---
 
@@ -54,12 +54,12 @@ Every spec lives in `/specs/JAG-XXX-title.md` and contains:
 
 ### Naming Convention
 
-| Prefix | Example                          | Meaning             |
-|--------|----------------------------------|---------------------|
-| JAG-   | `JAG-001-project-setup`          | All tickets         |
-| feat/  | `feat/JAG-002-movie-crud`        | Feature branches    |
-| fix/   | `fix/JAG-015-xss-sanitize-bug`   | Bug fix branches    |
-| chore/ | `chore/JAG-003-ci-setup`         | Tooling/config work |
+| Prefix | Example                        | Meaning             |
+| ------ | ------------------------------ | ------------------- |
+| JAG-   | `JAG-001-project-setup`        | All tickets         |
+| feat/  | `feat/JAG-002-movie-crud`      | Feature branches    |
+| fix/   | `fix/JAG-015-xss-sanitize-bug` | Bug fix branches    |
+| chore/ | `chore/JAG-003-ci-setup`       | Tooling/config work |
 
 ---
 
@@ -97,22 +97,22 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Available Scripts
 
-| Command               | Description                                  |
-|-----------------------|----------------------------------------------|
-| `npm run dev`         | Start dev server with hot reload             |
-| `npm run build`       | Build for production                         |
-| `npm run start`       | Start production server                      |
-| `npm run lint`        | Run ESLint                                   |
-| `npm run lint:fix`    | Run ESLint with auto-fix                     |
-| `npm run format`      | Format all files with Prettier               |
-| `npm run format:check`| Check formatting (used in CI)               |
-| `npm run type-check`  | Run TypeScript type check without emitting   |
-| `npm run test:e2e`    | Run Playwright E2E tests (headless)          |
-| `npm run test:e2e:ui` | Run Playwright with interactive UI           |
-| `npm run db:generate` | Generate Drizzle migration files             |
-| `npm run db:migrate`  | Apply pending migrations                     |
-| `npm run db:push`     | Push schema directly (dev only)              |
-| `npm run db:studio`   | Open Drizzle Studio (visual DB browser)      |
+| Command                | Description                                |
+| ---------------------- | ------------------------------------------ |
+| `npm run dev`          | Start dev server with hot reload           |
+| `npm run build`        | Build for production                       |
+| `npm run start`        | Start production server                    |
+| `npm run lint`         | Run ESLint                                 |
+| `npm run lint:fix`     | Run ESLint with auto-fix                   |
+| `npm run format`       | Format all files with Prettier             |
+| `npm run format:check` | Check formatting (used in CI)              |
+| `npm run type-check`   | Run TypeScript type check without emitting |
+| `npm run test:e2e`     | Run Playwright E2E tests (headless)        |
+| `npm run test:e2e:ui`  | Run Playwright with interactive UI         |
+| `npm run db:generate`  | Generate Drizzle migration files           |
+| `npm run db:migrate`   | Apply pending migrations                   |
+| `npm run db:push`      | Push schema directly (dev only)            |
+| `npm run db:studio`    | Open Drizzle Studio (visual DB browser)    |
 
 ---
 
@@ -163,14 +163,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Security Model
 
-| Concern         | Implementation                                                        |
-|-----------------|-----------------------------------------------------------------------|
-| Input Validation| Zod schemas on every Server Action and API route handler             |
-| XSS Prevention  | `isomorphic-dompurify` strips all HTML before DB writes              |
-| CORS            | `lib/security/cors.ts` — allowlist-based origin checking             |
-| Rate Limiting   | Upstash Redis sliding-window limiter on all mutating endpoints       |
-| Secrets         | Never in code — `.env.local` only, documented in `.env.example`      |
-| Type Safety     | TypeScript strict mode — `any` is a lint error                       |
+| Concern          | Implementation                                                  |
+| ---------------- | --------------------------------------------------------------- |
+| Input Validation | Zod schemas on every Server Action and API route handler        |
+| XSS Prevention   | `isomorphic-dompurify` strips all HTML before DB writes         |
+| CORS             | `lib/security/cors.ts` — allowlist-based origin checking        |
+| Rate Limiting    | Upstash Redis sliding-window limiter on all mutating endpoints  |
+| Secrets          | Never in code — `.env.local` only, documented in `.env.example` |
+| Type Safety      | TypeScript strict mode — `any` is a lint error                  |
 
 ---
 
@@ -192,6 +192,7 @@ push → lint (ESLint + Prettier + tsc) → build → e2e (Playwright)
 ## AI-Assisted Development Policy
 
 This portfolio is explicitly built with AI pair programming (Cursor + Claude). This is:
+
 - **Transparent** — every PR documents AI involvement in the `AI Contribution` section
 - **Intentional** — AI is used as a productivity multiplier, not a replacement for engineering judgment
 - **Verified** — all AI-generated code is reviewed, tested, and understood by the human engineer
@@ -202,10 +203,11 @@ This portfolio is explicitly built with AI pair programming (Cursor + Claude). T
 
 ## Spec Index
 
-| Spec    | Title                     | Status    |
-|---------|---------------------------|-----------|
-| JAG-001 | Project Initialization    | ✅ Done    |
-| JAG-002 | _TBD_                     | 🔜 Planned |
+| Spec    | Title                            | Status     |
+| ------- | -------------------------------- | ---------- |
+| JAG-001 | Project Initialization           | ✅ Done    |
+| JAG-002 | Core UI, HeroUI & Dev Experience | ✅ Done    |
+| JAG-003 | _TBD_                            | 🔜 Planned |
 
 ---
 

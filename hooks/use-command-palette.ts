@@ -1,32 +1,18 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useOverlayState } from "@heroui/react";
+import type { UseOverlayStateReturn } from "@heroui/react";
 
 /**
- * Manages the open/close state of the Command Palette triggered by Cmd+K / Ctrl+K.
- * The keyboard shortcut is registered globally on mount.
+ * Thin wrapper around HeroUI's `useOverlayState` for the Command Palette.
+ *
+ * Returns the full overlay state object so:
+ * - `CommandPalette` can pass it to `<Modal state={...}>` as a single source of truth
+ * - `Navbar` and other components can call `state.open()` to trigger the palette
+ *
+ * The ⌘K / Ctrl+K keyboard shortcut is registered inside `CommandPalette` itself,
+ * which is rendered once at the app root — keeping the listener lifecycle correct.
  */
-export function useCommandPalette() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const open = useCallback(() => setIsOpen(true), []);
-  const close = useCallback(() => setIsOpen(false), []);
-  const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
-
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        toggle();
-      }
-      if (e.key === "Escape") {
-        close();
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [toggle, close]);
-
-  return { isOpen, open, close, toggle };
+export function useCommandPalette(): UseOverlayStateReturn {
+  return useOverlayState();
 }

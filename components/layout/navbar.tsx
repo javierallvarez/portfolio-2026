@@ -1,22 +1,150 @@
 "use client";
 
-/**
- * Site Navbar — JAG-XXX (to be implemented)
- *
- * Planned features:
- * - Logo / name on the left
- * - Navigation links: Home, Movies, Under the Hood
- * - Theme toggle button (sun/moon)
- * - Cmd+K hint badge to open Command Palette
- */
+import NextLink from "next/link";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Button, Kbd } from "@heroui/react";
+import { useCommandPalette } from "@/hooks/use-command-palette";
+
+const NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/movies", label: "Movies" },
+  { href: "/under-the-hood", label: "Under the Hood" },
+] as const;
+
+function SunIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+    </svg>
+  );
+}
 
 export function Navbar() {
-  // TODO (JAG-XXX): Implement Navbar
+  const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
+  const palette = useCommandPalette();
+
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
+
   return (
-    <header className="border-b border-divider bg-background/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <span className="font-semibold tracking-tight">JAG Portfolio</span>
-        <span className="text-xs text-default-400">⌘K</span>
+    <header className="bg-background/80 sticky top-0 z-40 border-b border-[--border-color,oklch(0%_0_0_/_8%)] backdrop-blur-md">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+        {/* ── Logo ── */}
+        <NextLink
+          href="/"
+          className="text-foreground text-sm font-semibold tracking-tight transition-opacity hover:opacity-70"
+        >
+          JAG
+          <span className="text-muted ml-1.5">/ portfolio</span>
+        </NextLink>
+
+        {/* ── Nav Links ── */}
+        <ul className="hidden items-center gap-1 sm:flex" role="list">
+          {NAV_LINKS.map(({ href, label }) => {
+            const isActive = pathname === href;
+            return (
+              <li key={href}>
+                <NextLink
+                  href={href}
+                  className={[
+                    "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                    isActive
+                      ? "bg-surface text-foreground"
+                      : "text-muted hover:bg-surface hover:text-foreground",
+                  ].join(" ")}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {label}
+                </NextLink>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* ── Right-side Actions ── */}
+        <div className="flex items-center gap-2">
+          {/* Theme toggle */}
+          <Button
+            variant="ghost"
+            isIconOnly
+            onPress={toggleTheme}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            className="h-9 w-9 rounded-md"
+          >
+            {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+          </Button>
+
+          {/* Command palette trigger */}
+          <button
+            type="button"
+            onClick={palette.open}
+            className="bg-surface text-muted hover:bg-surface-secondary hover:text-foreground hidden items-center gap-2 rounded-md border border-[--border-color,oklch(0%_0_0_/_12%)] px-3 py-1.5 text-sm transition-colors sm:flex"
+            aria-label="Open command palette"
+          >
+            <span>Search…</span>
+            <span className="flex items-center gap-0.5">
+              <Kbd className="text-xs">⌘</Kbd>
+              <Kbd className="text-xs">K</Kbd>
+            </span>
+          </button>
+
+          {/* Mobile: icon-only ⌘K button */}
+          <Button
+            variant="ghost"
+            isIconOnly
+            onPress={palette.open}
+            aria-label="Open command palette"
+            className="h-9 w-9 rounded-md sm:hidden"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+          </Button>
+        </div>
       </nav>
     </header>
   );
