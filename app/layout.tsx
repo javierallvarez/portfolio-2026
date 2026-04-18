@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { DeveloperGreeting } from "@/components/layout/developer-greeting";
 import "./globals.css";
@@ -18,11 +19,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "JAG — Software Engineering Portfolio",
-    template: "%s | JAG Portfolio",
+    default: "Javier Álvarez — Software Engineering Portfolio",
+    template: "%s | Javier Álvarez",
   },
   description:
-    "A spec-driven, enterprise-grade portfolio showcasing modern full-stack engineering with Next.js, PostgreSQL, Drizzle ORM, and CI/CD best practices.",
+    "Software Engineer at Adevinta. Spec-driven, full-stack engineering with Next.js, PostgreSQL, Drizzle ORM, and CI/CD best practices.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
 };
 
@@ -54,6 +55,7 @@ export default function RootLayout({
           <DeveloperGreeting />
           <Navbar />
           <main className="flex-1">{children}</main>
+          <Footer />
           <CommandPalette />
         </Providers>
       </body>

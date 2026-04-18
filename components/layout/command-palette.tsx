@@ -8,7 +8,7 @@ import { useCommandPalette } from "@/hooks/use-command-palette";
 
 // ─── Command Definitions ───────────────────────────────────────────────────────
 
-type CommandCategory = "Navigate" | "Theme" | "Actions";
+type CommandCategory = "Navigate" | "Theme" | "Actions" | "Automations (Mock)";
 
 interface Command {
   id: string;
@@ -33,12 +33,12 @@ function useCommands(): Command[] {
         action: () => router.push("/"),
       },
       {
-        id: "nav-movies",
-        label: "Go to Movies",
-        description: "Browse and manage the movie collection",
+        id: "nav-interactive-lab",
+        label: "Go to Interactive Lab",
+        description: "Live database interactions, optimistic UI, and full-stack validation",
         category: "Navigate" as const,
-        icon: "🎬",
-        action: () => router.push("/movies"),
+        icon: "🧪",
+        action: () => router.push("/interactive-lab"),
       },
       {
         id: "nav-under-the-hood",
@@ -63,6 +63,18 @@ function useCommands(): Command[] {
         icon: "📄",
         action: () => {
           toast.info("CV download coming soon — check back after JAG-005!");
+        },
+      },
+      {
+        id: "run-slack-webhook",
+        label: "Run Slack Webhook (Simulated)",
+        description: "Simulates a Google Workspace automation with Slack notification",
+        category: "Automations (Mock)" as const,
+        icon: "🔔",
+        action: () => {
+          toast.success(
+            "Ping! 🚀 Simulated Google Workspace task completed and team notified via Slack.",
+          );
         },
       },
     ],
