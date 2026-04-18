@@ -13,24 +13,23 @@
      Reference key files, patterns, or architectural decisions made. -->
 
 -
--
-
----
+- ***
 
 ## AI Contribution
 
 <!-- Be transparent about AI involvement. This portfolio explicitly showcases AI-assisted development. -->
 
-| Area                    | AI Involvement                        |
-|-------------------------|---------------------------------------|
-| Boilerplate / Scaffold  | `[ ] None` `[ ] Partial` `[ ] Full`  |
-| Business Logic          | `[ ] None` `[ ] Partial` `[ ] Full`  |
-| Tests                   | `[ ] None` `[ ] Partial` `[ ] Full`  |
-| Code Review / Refactor  | `[ ] None` `[ ] Partial` `[ ] Full`  |
+| Area                   | AI Involvement                      |
+| ---------------------- | ----------------------------------- |
+| Boilerplate / Scaffold | `[ ] None` `[ ] Partial` `[ ] Full` |
+| Business Logic         | `[ ] None` `[ ] Partial` `[ ] Full` |
+| Tests                  | `[ ] None` `[ ] Partial` `[ ] Full` |
+| Code Review / Refactor | `[ ] None` `[ ] Partial` `[ ] Full` |
 
 **AI tools used:** (e.g. Cursor + Claude Sonnet 4.5, GitHub Copilot)
 
 **Human oversight applied:**
+
 - [ ] All AI-generated code reviewed line-by-line
 - [ ] Security implications checked
 - [ ] Tests written or verified by human
@@ -42,20 +41,23 @@
 <!-- Screenshots, recordings, or test output proving the work is complete. -->
 
 ### UI / Behaviour
+
 <!-- Paste screenshots or a Loom link here -->
 
 ### Test Results
+
 ```
 # Paste relevant Playwright / unit test output
 ```
 
 ### Lighthouse Score (if applicable)
-| Metric        | Score |
-|---------------|-------|
-| Performance   |       |
-| Accessibility |       |
-| Best Practices|       |
-| SEO           |       |
+
+| Metric         | Score |
+| -------------- | ----- |
+| Performance    |       |
+| Accessibility  |       |
+| Best Practices |       |
+| SEO            |       |
 
 ---
 

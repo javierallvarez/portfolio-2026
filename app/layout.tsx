@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { Navbar } from "@/components/layout/navbar";
 import { CommandPalette } from "@/components/layout/command-palette";
+import { DeveloperGreeting } from "@/components/layout/developer-greeting";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -38,13 +39,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    /*
+     * suppressHydrationWarning is required here because next-themes modifies
+     * the class attribute on <html> on the client, causing a mismatch with the
+     * server-rendered markup. This suppresses that specific warning only.
+     */
     <html
       lang="en"
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-background text-foreground">
+      <body className="bg-background text-foreground flex min-h-full flex-col">
         <Providers>
+          <DeveloperGreeting />
           <Navbar />
           <main className="flex-1">{children}</main>
           <CommandPalette />

@@ -34,7 +34,13 @@ export const testMovies: NewMovie[] = [
 export const invalidMovieFixtures = {
   emptyTitle: { title: "", director: "Test", year: 2020, genre: "drama" as const },
   futurYear: { title: "Test", director: "Test", year: 2099, genre: "drama" as const },
-  invalidRating: { title: "Test", director: "Test", year: 2020, genre: "drama" as const, rating: 11 },
+  invalidRating: {
+    title: "Test",
+    director: "Test",
+    year: 2020,
+    genre: "drama" as const,
+    rating: 11,
+  },
   xssTitle: {
     title: '<script>alert("xss")</script>',
     director: "Test",

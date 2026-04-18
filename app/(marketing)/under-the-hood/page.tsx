@@ -21,10 +21,10 @@ export default function UnderTheHoodPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
       <h1 className="text-4xl font-bold tracking-tight">Under the Hood</h1>
-      <p className="mt-4 text-lg text-default-500">
+      <p className="text-default-500 mt-4 text-lg">
         A transparent look at the architecture, tooling, and process behind this portfolio.
       </p>
-      <div className="mt-12 rounded-xl border border-dashed border-default-200 p-8 text-center text-default-400">
+      <div className="border-default-200 text-default-400 mt-12 rounded-xl border border-dashed p-8 text-center">
         🚧 Full content coming in JAG-XXX
       </div>
     </div>
