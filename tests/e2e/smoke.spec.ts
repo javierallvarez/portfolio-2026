@@ -39,9 +39,10 @@ test.describe("Smoke Tests", () => {
 
     test("Home nav link is marked aria-current='page' on the homepage", async ({ page }) => {
       await page.goto("/");
-      await expect(
-        page.locator("header nav").getByRole("link", { name: "Home" }),
-      ).toHaveAttribute("aria-current", "page");
+      await expect(page.locator("header nav").getByRole("link", { name: "Home" })).toHaveAttribute(
+        "aria-current",
+        "page",
+      );
     });
 
     test("renders a theme-toggle button", async ({ page }) => {
