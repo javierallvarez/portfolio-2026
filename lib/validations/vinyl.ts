@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const currentYear = new Date().getFullYear();
 
-export const vinylStatusValues = ["in_collection", "wishlist"] as const;
+export const vinylStatusValues = ["in_collection", "recommended"] as const;
 export type VinylStatus = (typeof vinylStatusValues)[number];
 
 /**
@@ -31,15 +31,25 @@ export const vinylBaseSchema = z.object({
 
   coverUrl: z.string().url("Must be a valid URL").max(500).optional().or(z.literal("")),
 
-  status: z.enum(vinylStatusValues, { error: "Status must be 'in_collection' or 'wishlist'" }),
+  status: z.enum(vinylStatusValues, {
+    error: "Status must be 'in_collection' or 'recommended'",
+  }),
 });
 
 /**
- * Public submission schema — status is locked to 'wishlist'.
- * Used for unauthenticated visitor submissions.
+ * Public submission schema — status is locked to 'recommended'.
+ * Used for unauthenticated visitor submissions (community recommendations).
  */
 export const createVinylSchema = vinylBaseSchema.extend({
-  status: z.literal("wishlist").default("wishlist"),
+  status: z.literal("recommended").default("recommended"),
+});
+
+/**
+ * Admin create schema — status is unrestricted, defaults to 'in_collection'.
+ * Only used when the caller is authenticated.
+ */
+export const adminCreateVinylSchema = vinylBaseSchema.extend({
+  status: z.enum(vinylStatusValues).default("in_collection"),
 });
 
 /**
@@ -54,5 +64,6 @@ export const deleteVinylSchema = z.object({
 });
 
 export type CreateVinylInput = z.infer<typeof createVinylSchema>;
+export type AdminCreateVinylInput = z.infer<typeof adminCreateVinylSchema>;
 export type UpdateVinylInput = z.infer<typeof updateVinylSchema>;
 export type DeleteVinylInput = z.infer<typeof deleteVinylSchema>;

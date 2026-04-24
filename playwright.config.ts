@@ -12,8 +12,10 @@ export default defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  retries: process.env.CI ? 2 : 1,
+  // CI: serial (1) to stay within runner resources.
+  // Local: cap at 2 so both browser projects don't overload the dev server.
+  workers: process.env.CI ? 1 : 2,
 
   reporter: [
     ["list"],

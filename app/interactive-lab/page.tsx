@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
+import { Chip } from "@heroui/react";
+import { db } from "@/lib/db";
+import { vinyls } from "@/lib/db/schema";
+import { VinylSearch } from "@/components/vinyls/vinyl-search";
+import { VinylDeleteButton } from "@/components/vinyls/vinyl-delete-button";
+import type { Vinyl } from "@/lib/db/schema";
 
 export const metadata: Metadata = {
   title: "Interactive Lab — Vinyl Collection",
@@ -7,10 +14,105 @@ export const metadata: Metadata = {
     "A live laboratory powered by a real vinyl record collection. Demonstrates PostgreSQL with Drizzle ORM, optimistic UI, rate limiting, and strict Zod validation in Next.js.",
 };
 
-export default function InteractiveLabPage() {
+// ─── Vinyl Card ───────────────────────────────────────────────────────────────
+
+function VinylCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
+  return (
+    <article className="border-divider bg-content1 hover:bg-content2 flex gap-4 rounded-xl border p-4 transition-colors">
+      {/* Cover art */}
+      <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
+        {vinyl.coverUrl ? (
+          <Image
+            src={vinyl.coverUrl}
+            alt={`${vinyl.title} cover art`}
+            fill
+            sizes="80px"
+            className="object-cover"
+            unoptimized
+          />
+        ) : (
+          <div
+            className="bg-content3 text-default-400 flex h-full w-full items-center justify-center rounded-lg text-xs"
+            aria-label="No cover art"
+          >
+            🎵
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
+        <div>
+          <h3 className="truncate text-sm leading-tight font-semibold">{vinyl.title}</h3>
+          <p className="text-default-500 truncate text-sm">{vinyl.artist}</p>
+          {vinyl.year && <p className="text-default-400 text-xs">{vinyl.year}</p>}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Chip size="sm" variant={vinyl.status === "in_collection" ? "primary" : "secondary"}>
+            {vinyl.status === "in_collection" ? "In Collection" : "Recommended"}
+          </Chip>
+
+          {isAdmin && <VinylDeleteButton vinylId={vinyl.id} title={vinyl.title} />}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+// ─── Section heading ─────────────────────────────────────────────────────────
+
+function SectionHeading({
+  label,
+  count,
+  dotColor,
+}: {
+  label: string;
+  count: number;
+  dotColor: "primary" | "secondary";
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <span
+        className={`h-2.5 w-2.5 rounded-full ${dotColor === "primary" ? "bg-primary" : "bg-secondary"}`}
+        aria-hidden="true"
+      />
+      <h2 className="text-foreground text-lg font-semibold">{label}</h2>
+      <span className="text-default-400 text-sm">({count})</span>
+    </div>
+  );
+}
+
+// ─── Page ────────────────────────────────────────────────────────────────────
+
+export default async function InteractiveLabPage() {
+  // Gracefully degrade when Clerk is unavailable (e.g. rate-limited handshake
+  // or a dummy publishableKey in CI). Treat as unauthenticated rather than
+  // crashing the render.
+  let userId: string | null = null;
+  try {
+    ({ userId } = await auth());
+  } catch {
+    // Clerk unavailable — treat as unauthenticated
+  }
+  const isAdmin = !!userId;
+
+  // Gracefully degrade when the database is unreachable (e.g. CI with a stub
+  // DATABASE_URL). The page still renders — heading, hero, search — just with
+  // empty collection/recommendation lists instead of a 500 error boundary.
+  let allVinyls: Vinyl[] = [];
+  try {
+    allVinyls = await db.select().from(vinyls).orderBy(vinyls.createdAt);
+  } catch {
+    // DB unavailable — fall through with empty list
+  }
+
+  const collection = allVinyls.filter((v) => v.status === "in_collection");
+  const recommended = allVinyls.filter((v) => v.status === "recommended");
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
-      {/* Hero header */}
+      {/* ── Hero ── */}
       <div className="from-primary/10 via-surface to-secondary/10 relative isolate overflow-hidden rounded-2xl bg-gradient-to-br p-8 sm:p-12">
         <div
           aria-hidden="true"
@@ -20,9 +122,8 @@ export default function InteractiveLabPage() {
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           {/* Text content */}
           <div>
-            <div className="mb-3 text-4xl">🎵</div>
             <h1 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-              Vinyl Collection &amp; Wishlist
+              Vinyl Collection &amp; Recommendations
             </h1>
             <p className="text-muted mt-4 text-base leading-relaxed sm:text-lg">
               I collect vinyl records and love showing off my home audio setup — a warm, analogue
@@ -38,13 +139,13 @@ export default function InteractiveLabPage() {
             <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
               <span className="text-foreground font-medium">My collection</span> is what I own and
               spin at home. The{" "}
-              <span className="text-foreground font-medium">Community Wishlist</span> is open to
-              everyone — add a record you think I should own. Go ahead, break it… or better yet,
-              convince me to buy your favourite album. 🎶
+              <span className="text-foreground font-medium">Community Recommendations</span> section
+              is open to everyone — search for an album below and recommend it. Go ahead, convince
+              me to buy your favourite record. 🎶
             </p>
           </div>
 
-          {/* Placeholder image — replace src with a real photo of your setup */}
+          {/* Home setup photo */}
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-lg">
             <Image
               src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800&auto=format&fit=crop&q=80"
@@ -55,29 +156,61 @@ export default function InteractiveLabPage() {
               priority
             />
             <div className="from-background/60 absolute inset-0 bg-gradient-to-t to-transparent" />
-            <p className="text-muted absolute right-3 bottom-3 text-xs italic">
-              📸 Replace with a photo of your actual setup
-            </p>
           </div>
         </div>
       </div>
 
-      {/* Status legend */}
-      <div className="mt-8 flex flex-wrap gap-3">
-        <span className="bg-surface text-muted inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm ring-1 ring-[--border-color,oklch(0%_0_0_/_8%)]">
-          <span className="bg-primary h-2 w-2 rounded-full" aria-hidden="true" />
-          In Collection
-        </span>
-        <span className="bg-surface text-muted inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm ring-1 ring-[--border-color,oklch(0%_0_0_/_8%)]">
-          <span className="bg-secondary h-2 w-2 rounded-full" aria-hidden="true" />
-          Community Wishlist
-        </span>
-      </div>
+      {/* ── Discogs Search ── */}
+      <section className="mt-10" aria-label="Search and add vinyl records">
+        <h2 className="text-foreground mb-1 text-lg font-semibold">
+          {isAdmin ? "Add to Your Collection" : "Recommend a Record"}
+        </h2>
+        <p className="text-default-500 mb-4 text-sm">
+          {isAdmin
+            ? "Search Discogs and add records directly to your collection or recommendations."
+            : "Search Discogs and recommend an album you think should be here."}
+        </p>
+        <VinylSearch isAdmin={isAdmin} />
+      </section>
 
-      {/* Placeholder for full CRUD UI */}
-      <div className="border-default-200 text-default-400 mt-8 rounded-xl border border-dashed p-8 text-center">
-        🚧 Full CRUD UI (add to wishlist, browse collection) coming in JAG-006
-      </div>
+      {/* ── Collection ── */}
+      <section className="mt-12" aria-label="Javier's vinyl collection">
+        <SectionHeading label="Javier's Collection" count={collection.length} dotColor="primary" />
+        {collection.length > 0 ? (
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {collection.map((vinyl) => (
+              <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-default-400 mt-4 text-sm">
+            No records in the collection yet — check back soon!
+          </p>
+        )}
+      </section>
+
+      {/* ── Community Recommendations ── */}
+      <section className="mt-12" aria-label="Community recommendations">
+        <SectionHeading
+          label="Community Recommendations"
+          count={recommended.length}
+          dotColor="secondary"
+        />
+        <p className="text-default-500 mt-1 mb-4 text-sm">
+          Albums the community thinks Javier should own.
+        </p>
+        {recommended.length > 0 ? (
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {recommended.map((vinyl) => (
+              <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-default-400 mt-4 text-sm">
+            No recommendations yet — be the first to recommend an album above!
+          </p>
+        )}
+      </section>
     </div>
   );
 }

@@ -3,6 +3,7 @@
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
+import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button, Kbd } from "@heroui/react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
 import { useIsClient } from "@/hooks/use-is-client";
@@ -55,6 +56,7 @@ function MoonIcon() {
 export function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const { isSignedIn } = useAuth();
   const palette = useCommandPalette();
 
   // next-themes resolves the theme from localStorage, which is unavailable during
@@ -103,6 +105,25 @@ export function Navbar() {
 
         {/* ── Right-side Actions ── */}
         <div className="flex items-center gap-2">
+          {/* Auth — Clerk UserButton (signed in) or Sign In button (signed out) */}
+          {isSignedIn ? (
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox: "h-8 w-8",
+                },
+              }}
+            />
+          ) : (
+            <SignInButton mode="modal">
+              <button
+                type="button"
+                className="text-muted hover:text-foreground rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
+              >
+                Sign In
+              </button>
+            </SignInButton>
+          )}
           {/* Theme toggle — rendered client-side only to avoid SSR hydration mismatch */}
           {isClient ? (
             <Button
