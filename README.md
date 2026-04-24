@@ -202,14 +202,14 @@ This portfolio is explicitly built with AI pair programming (Cursor + Claude). T
 
 ## Spec Index
 
-| Spec    | Title                                                   | Status     |
-| ------- | ------------------------------------------------------- | ---------- |
-| JAG-001 | Project Initialization                                  | ✅ Done    |
-| JAG-002 | Core UI, HeroUI & Dev Experience                        | ✅ Done    |
-| JAG-003 | Personal Branding, Content Refinement & Interactive Lab | ✅ Done    |
-| JAG-004 | Vinyl Collection Pivot & Live DB Connection             | ✅ Done    |
-| JAG-005 | Auth (Clerk) & External API (Discogs)                   | ✅ Done    |
-| JAG-006 | _TBD_                                                   | 🔜 Planned |
+| Spec    | Title                                                   | Status  |
+| ------- | ------------------------------------------------------- | ------- |
+| JAG-001 | Project Initialization                                  | ✅ Done |
+| JAG-002 | Core UI, HeroUI & Dev Experience                        | ✅ Done |
+| JAG-003 | Personal Branding, Content Refinement & Interactive Lab | ✅ Done |
+| JAG-004 | Vinyl Collection Pivot & Live DB Connection             | ✅ Done |
+| JAG-005 | Auth (Clerk) & External API (Discogs)                   | ✅ Done |
+| JAG-006 | Infrastructure Showcase (AWS & IaC)                     | ✅ Done |
 
 ---
 

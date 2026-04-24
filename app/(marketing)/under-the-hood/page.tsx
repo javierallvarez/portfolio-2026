@@ -3,30 +3,571 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Under the Hood",
   description:
-    "A transparent look at the architecture, CI/CD pipeline, Spec-Driven process, and AI-assisted workflow behind this portfolio.",
+    "A transparent look at the AWS architecture, Terraform IaC, CI/CD pipeline, and Spec-Driven workflow behind this portfolio.",
 };
 
-/**
- * Under the Hood — JAG-XXX (to be fully implemented)
- *
- * Planned sections:
- * - Architecture diagram
- * - CI/CD badge strip (linked to GitHub Actions)
- * - PR template example with highlighted AI Contribution section
- * - Spec-Driven workflow explanation (JAG-XXX lifecycle)
- * - Tech stack breakdown with rationale
- * - Security measures (Zod, DOMPurify, rate limiting, CORS)
- */
+// ─── Shared primitives ───────────────────────────────────────────────────────
+
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">{children}</h2>
+  );
+}
+
+function Prose({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="text-default-600 mt-3 max-w-3xl space-y-3 text-base leading-relaxed">
+      {children}
+    </div>
+  );
+}
+
+function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  return (
+    <div className={`bg-content1 border-divider rounded-xl border p-5 shadow-sm ${className}`}>
+      {children}
+    </div>
+  );
+}
+
+// ─── Architecture diagram ────────────────────────────────────────────────────
+
+function ArchNode({
+  icon,
+  label,
+  sublabel,
+  accent = false,
+}: {
+  icon: string;
+  label: string;
+  sublabel?: string;
+  accent?: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1 text-center">
+      <div
+        className={`flex h-14 w-14 items-center justify-center rounded-xl text-2xl shadow-sm ${
+          accent
+            ? "from-primary/20 to-secondary/20 border-primary/30 border bg-gradient-to-br"
+            : "bg-content2 border-divider border"
+        }`}
+      >
+        {icon}
+      </div>
+      <span className="text-foreground text-xs leading-tight font-semibold">{label}</span>
+      {sublabel && <span className="text-default-400 text-[10px] leading-tight">{sublabel}</span>}
+    </div>
+  );
+}
+
+function ArrowRight() {
+  return (
+    <div className="text-default-300 flex flex-col items-center justify-center">
+      <svg width="28" height="14" viewBox="0 0 28 14" fill="none" aria-hidden="true">
+        <path
+          d="M0 7h24M18 1l6 6-6 6"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+function ArrowDown() {
+  return (
+    <div className="text-default-300 flex items-center justify-center">
+      <svg width="14" height="24" viewBox="0 0 14 28" fill="none" aria-hidden="true">
+        <path
+          d="M7 0v24M1 18l6 6 6-6"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+function ArchitectureDiagram() {
+  return (
+    <div className="overflow-x-auto">
+      {/* Desktop: horizontal flow */}
+      <div className="hidden min-w-0 items-center justify-center gap-3 sm:flex">
+        <ArchNode icon="🌍" label="User" />
+        <ArrowRight />
+        <ArchNode icon="⚡" label="CloudFront" sublabel="CDN + TLS" accent />
+        <ArrowRight />
+        {/* Fork */}
+        <div className="flex flex-col items-center gap-4">
+          <ArchNode icon="🗄️" label="S3" sublabel="Static assets" />
+          <ArchNode icon="λ" label="Lambda" sublabel="SSR / API" accent />
+        </div>
+        <ArrowRight />
+        <ArchNode icon="🐘" label="Neon" sublabel="PostgreSQL" />
+      </div>
+
+      {/* Mobile: vertical flow */}
+      <div className="flex flex-col items-center gap-1 sm:hidden">
+        <ArchNode icon="🌍" label="User" />
+        <ArrowDown />
+        <ArchNode icon="⚡" label="CloudFront" sublabel="CDN + TLS" accent />
+        <ArrowDown />
+        <div className="flex items-start gap-6">
+          <ArchNode icon="🗄️" label="S3" sublabel="Static" />
+          <ArchNode icon="λ" label="Lambda" sublabel="SSR / API" accent />
+        </div>
+        <ArrowDown />
+        <ArchNode icon="🐘" label="Neon" sublabel="PostgreSQL" />
+      </div>
+    </div>
+  );
+}
+
+// ─── Terraform snippet ───────────────────────────────────────────────────────
+
+const TERRAFORM_SNIPPET = `# CloudFront distribution with two origins:
+#  1. S3 — static assets (_next/static/**, public/**)
+#  2. Lambda Function URL — SSR pages + API routes
+
+resource "aws_cloudfront_distribution" "cdn" {
+  enabled         = true
+  is_ipv6_enabled = true
+  price_class     = "PriceClass_100"   # EU + US edges only
+
+  # Origin 1 — S3 (private, accessed via OAC)
+  origin {
+    domain_name              = aws_s3_bucket.static_assets.bucket_regional_domain_name
+    origin_id                = "s3-static-origin"
+    origin_access_control_id = aws_cloudfront_origin_access_control.static_assets.id
+  }
+
+  # Cache behaviour — immutable static chunks (1 year TTL)
+  ordered_cache_behavior {
+    path_pattern           = "/_next/static/*"
+    target_origin_id       = "s3-static-origin"
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 31536000
+    default_ttl            = 31536000
+    max_ttl                = 31536000
+    # ...
+  }
+
+  # Default — forward to Lambda SSR (no cache)
+  default_cache_behavior {
+    target_origin_id       = "lambda-ssr-origin"
+    viewer_protocol_policy = "redirect-to-https"
+    default_ttl            = 0
+    # ...
+  }
+}`;
+
+function CodeBlock({ code }: { code: string }) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-[#30363d] bg-[#0d1117]">
+      {/* Title bar */}
+      <div className="flex items-center gap-2 border-b border-[#30363d] px-4 py-2.5">
+        <div className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+        <div className="h-3 w-3 rounded-full bg-[#febc2e]" />
+        <div className="h-3 w-3 rounded-full bg-[#28c840]" />
+        <span className="ml-2 font-mono text-xs text-[#8b949e]">
+          infrastructure/terraform/main.tf
+        </span>
+      </div>
+      <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-[#e6edf3]">
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
+}
+
+// ─── CI/CD pipeline diagram ───────────────────────────────────────────────────
+
+function PipelineStep({
+  icon,
+  label,
+  description,
+}: {
+  icon: string;
+  label: string;
+  description: string;
+}) {
+  return (
+    <div className="flex items-start gap-3">
+      <div className="bg-primary/10 text-primary flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-base font-bold">
+        {icon}
+      </div>
+      <div>
+        <p className="text-foreground text-sm font-semibold">{label}</p>
+        <p className="text-default-500 text-xs leading-relaxed">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Tech table ──────────────────────────────────────────────────────────────
+
+const TECH_STACK = [
+  {
+    layer: "Framework",
+    tech: "Next.js 15 (App Router)",
+    why: "Server Components, Server Actions, and ISR out of the box",
+  },
+  {
+    layer: "Language",
+    tech: "TypeScript (strict)",
+    why: "`any` is a lint error; types as living documentation",
+  },
+  {
+    layer: "Styling",
+    tech: "Tailwind CSS + HeroUI v3",
+    why: "Utility-first speed with accessible, themeable components",
+  },
+  {
+    layer: "Database",
+    tech: "PostgreSQL via Drizzle ORM",
+    why: "Type-safe queries without the ORM magic overhead",
+  },
+  {
+    layer: "Auth",
+    tech: "Clerk v7",
+    why: "RBAC with zero-infrastructure overhead; JWKS-based JWT verification",
+  },
+  {
+    layer: "Validation",
+    tech: "Zod",
+    why: "Single schema shared between server actions and client forms",
+  },
+  {
+    layer: "External API",
+    tech: "Discogs REST API",
+    why: "Server-side token; client never touches the secret",
+  },
+  {
+    layer: "Testing",
+    tech: "Playwright E2E",
+    why: "Chromium + Mobile Safari; runs against production build in CI",
+  },
+  {
+    layer: "CI/CD",
+    tech: "GitHub Actions",
+    why: "Lint → type-check → build → E2E; PRs blocked on red CI",
+  },
+  {
+    layer: "IaC (demo)",
+    tech: "Terraform ≥ 1.7",
+    why: "HCL is cloud-agnostic; demonstrates enterprise AWS readiness",
+  },
+  {
+    layer: "Hosting (live)",
+    tech: "Vercel + Neon",
+    why: "Zero-ops; $0/month on free tier for a portfolio workload",
+  },
+] as const;
+
+// ─── Page ────────────────────────────────────────────────────────────────────
+
 export default function UnderTheHoodPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-16">
-      <h1 className="text-4xl font-bold tracking-tight">Under the Hood</h1>
-      <p className="text-default-500 mt-4 text-lg">
-        A transparent look at the architecture, tooling, and process behind this portfolio.
-      </p>
-      <div className="border-default-200 text-default-400 mt-12 rounded-xl border border-dashed p-8 text-center">
-        🚧 Full content coming in JAG-XXX
+    <div className="mx-auto max-w-5xl space-y-20 px-4 py-16">
+      {/* ── Hero ── */}
+      <div>
+        <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl">
+          Under the Hood
+        </h1>
+        <p className="text-default-500 mt-4 max-w-2xl text-lg leading-relaxed">
+          A transparent look at the architecture, infrastructure-as-code, CI/CD pipeline, and
+          engineering process behind this portfolio.
+        </p>
       </div>
+
+      {/* ── Infrastructure & Deployment ── */}
+      <section aria-labelledby="infra-heading" className="space-y-6">
+        <div>
+          <SectionTitle>
+            <span id="infra-heading">Infrastructure &amp; Deployment</span>
+          </SectionTitle>
+          <Prose>
+            <p>
+              The live site runs on <strong>Vercel + Neon</strong> for cost-efficiency — zero
+              infrastructure to operate and a generous free tier that fits a portfolio workload.
+              However, enterprise roles demand AWS fluency, so the repository includes
+              production-grade <strong>Terraform manifests</strong> that define the same
+              architecture on AWS: ready to{" "}
+              <code className="bg-content2 rounded px-1 py-0.5 font-mono text-sm">
+                terraform apply
+              </code>{" "}
+              against a real account.
+            </p>
+          </Prose>
+        </div>
+
+        {/* Architecture diagram */}
+        <Card>
+          <p className="text-default-500 mb-5 text-xs font-semibold tracking-widest uppercase">
+            AWS Architecture
+          </p>
+          <ArchitectureDiagram />
+          <div className="border-divider mt-6 grid gap-3 border-t pt-5 sm:grid-cols-3">
+            {[
+              {
+                icon: "⚡",
+                title: "CloudFront",
+                body: "Global CDN with TLS termination, WAF integration, and signed-URL support for private content.",
+              },
+              {
+                icon: "🗄️",
+                title: "S3 + OAC",
+                body: "Immutable static bundle behind a private bucket. CloudFront accesses it via Origin Access Control — no public bucket URL.",
+              },
+              {
+                icon: "λ",
+                title: "Lambda (Node 20)",
+                body: "Handles SSR pages, API routes, and ISR revalidation. Function URL exposes an HTTPS endpoint without API Gateway overhead.",
+              },
+            ].map((item) => (
+              <div key={item.title} className="space-y-1">
+                <p className="text-foreground text-sm font-semibold">
+                  {item.icon} {item.title}
+                </p>
+                <p className="text-default-500 text-xs leading-relaxed">{item.body}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* Terraform snippet */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <span className="bg-warning/10 text-warning rounded-md px-2.5 py-1 text-xs font-semibold">
+              IaC
+            </span>
+            <p className="text-default-500 text-sm">
+              Excerpt from{" "}
+              <code className="bg-content2 rounded px-1 py-0.5 font-mono text-xs">
+                infrastructure/terraform/main.tf
+              </code>
+            </p>
+          </div>
+          <CodeBlock code={TERRAFORM_SNIPPET} />
+          <p className="text-default-400 text-xs leading-relaxed">
+            The full manifests (<code className="font-mono">main.tf</code>,{" "}
+            <code className="font-mono">variables.tf</code>,{" "}
+            <code className="font-mono">outputs.tf</code>) live in{" "}
+            <code className="font-mono">/infrastructure/terraform/</code> in the repository. They
+            define an S3 bucket, a CloudFront distribution with two cache behaviors (static long-TTL
+            vs. SSR passthrough), a Lambda function with a Function URL, and all IAM roles. No state
+            backend is configured to avoid free-tier surprises — a production setup would add an S3
+            backend with DynamoDB state locking.
+          </p>
+        </div>
+      </section>
+
+      {/* ── CI/CD Pipeline ── */}
+      <section aria-labelledby="cicd-heading" className="space-y-6">
+        <div>
+          <SectionTitle>
+            <span id="cicd-heading">CI/CD Pipeline</span>
+          </SectionTitle>
+          <Prose>
+            <p>
+              Every push to any branch triggers the GitHub Actions workflow. PRs cannot be merged
+              while any job is red — there is no manual override.
+            </p>
+          </Prose>
+        </div>
+
+        <Card>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <PipelineStep
+              icon="1"
+              label="Lint & Type-check"
+              description="ESLint (strict) + Prettier format check + tsc --noEmit. Catches style drift and type errors before a single byte is compiled."
+            />
+            <PipelineStep
+              icon="2"
+              label="Build"
+              description="next build with dummy env vars. Catches missing environment variable references and SSR-incompatible imports at compile time."
+            />
+            <PipelineStep
+              icon="3"
+              label="Playwright E2E"
+              description="30 tests across Chromium + Mobile Safari, run against the production artifact. Tests cover navigation, responsive layout, and page content."
+            />
+            <PipelineStep
+              icon="4"
+              label="Artifact Upload"
+              description="The .next/ build output is uploaded as a GitHub artifact (7-day retention) so the E2E job reuses the exact same binary without rebuilding."
+            />
+          </div>
+        </Card>
+
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="https://github.com/javierallvarez/portfolio-2026"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-content2 hover:bg-content3 border-divider inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+              <path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.185 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.071 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.944.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.744 0 .267.18.578.688.48C19.138 20.203 22 16.447 22 12.021 22 6.484 17.523 2 12 2z" />
+            </svg>
+            View repository
+          </a>
+          <a
+            href="https://github.com/javierallvarez/portfolio-2026/pulls?q=is%3Apr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-content2 hover:bg-content3 border-divider inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+              <path d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm13-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0ZM6 15a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm2-6.5A.5.5 0 0 0 6.5 11h-1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V11a.5.5 0 0 0-.5-.5h-1v-.5a.5.5 0 0 0-.5-.5Zm6.5-1.25A.75.75 0 0 0 12.75 10h-1.5A.75.75 0 0 0 10.5 10.75v2.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-2.5ZM18 11a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v2.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V11Z" />
+            </svg>
+            PR history (JAG-XXX workflow)
+          </a>
+        </div>
+      </section>
+
+      {/* ── Spec-Driven Development ── */}
+      <section aria-labelledby="sdd-heading" className="space-y-6">
+        <div>
+          <SectionTitle>
+            <span id="sdd-heading">Spec-Driven Development</span>
+          </SectionTitle>
+          <Prose>
+            <p>
+              No code is written without a spec. Every feature starts as a{" "}
+              <code className="bg-content2 rounded px-1 py-0.5 font-mono text-sm">
+                /specs/JAG-XXX-title.md
+              </code>{" "}
+              file that defines context, technical decisions, acceptance criteria, and an AI
+              contribution section. The spec is the single source of truth: it is written before the
+              branch is cut and closed when CI is green.
+            </p>
+          </Prose>
+        </div>
+
+        <Card>
+          <ol className="space-y-3">
+            {[
+              ["IDEA", "Identify the feature or fix needed"],
+              ["SPEC", "Write /specs/JAG-XXX-title.md with acceptance criteria"],
+              ["BRANCH", "git checkout -b feat/JAG-XXX-short-title"],
+              ["IMPLEMENT", "Build against the spec — AI pair-programming, always reviewed"],
+              ["PR", "Open PR using the PULL_REQUEST_TEMPLATE (includes AI Contribution table)"],
+              ["CI", "GitHub Actions: lint → build → Playwright E2E"],
+              ["MERGE", "Squash merge to main with JAG-XXX in the commit message"],
+              ["CLOSE", "Update spec status to ✅ Done"],
+            ].map(([step, desc], i) => (
+              <li key={step} className="flex items-start gap-3">
+                <span className="text-primary bg-primary/10 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                  {i + 1}
+                </span>
+                <div className="text-sm">
+                  <span className="text-foreground font-semibold">{step}</span>
+                  <span className="text-default-500"> — {desc}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Card>
+      </section>
+
+      {/* ── Tech stack ── */}
+      <section aria-labelledby="stack-heading" className="space-y-6">
+        <div>
+          <SectionTitle>
+            <span id="stack-heading">Tech Stack &amp; Rationale</span>
+          </SectionTitle>
+          <Prose>
+            <p>Every technology choice has a documented reason — no cargo-culting.</p>
+          </Prose>
+        </div>
+
+        <div className="overflow-x-auto rounded-xl">
+          <table className="border-divider w-full border-collapse text-sm">
+            <thead>
+              <tr className="bg-content2 text-left">
+                <th className="border-divider border px-4 py-3 font-semibold">Layer</th>
+                <th className="border-divider border px-4 py-3 font-semibold">Technology</th>
+                <th className="border-divider border px-4 py-3 font-semibold">Why</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TECH_STACK.map(({ layer, tech, why }, i) => (
+                <tr key={layer} className={i % 2 === 0 ? "bg-content1" : "bg-content2/50"}>
+                  <td className="border-divider text-default-500 border px-4 py-2.5 text-xs font-medium whitespace-nowrap">
+                    {layer}
+                  </td>
+                  <td className="border-divider border px-4 py-2.5 font-mono text-xs whitespace-nowrap">
+                    {tech}
+                  </td>
+                  <td className="border-divider text-default-500 border px-4 py-2.5 text-xs">
+                    {why}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* ── Security model ── */}
+      <section aria-labelledby="security-heading" className="space-y-6">
+        <div>
+          <SectionTitle>
+            <span id="security-heading">Security Model</span>
+          </SectionTitle>
+          <Prose>
+            <p>Security is layered — no single control is relied upon exclusively.</p>
+          </Prose>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {[
+            {
+              icon: "✅",
+              title: "Input validation",
+              body: "Zod schemas on every Server Action and API route. The same schema validates client-side forms and server-side payloads.",
+            },
+            {
+              icon: "🛡️",
+              title: "XSS prevention",
+              body: "A zero-dependency regex sanitizer strips all HTML tags and null bytes before any string reaches the database.",
+            },
+            {
+              icon: "🚦",
+              title: "Rate limiting",
+              body: "Upstash Redis sliding-window limiter on all mutating endpoints. Anonymous and authenticated limits are configured separately.",
+            },
+            {
+              icon: "🔑",
+              title: "RBAC (Clerk)",
+              body: "Anonymous users can only recommend vinyls. The admin (me) can add to collection, update, and delete — enforced server-side.",
+            },
+            {
+              icon: "🌐",
+              title: "CORS allowlist",
+              body: "lib/security/cors.ts enforces an explicit origin allowlist. Unknown origins receive a 403 before any handler runs.",
+            },
+            {
+              icon: "🔒",
+              title: "No secrets in code",
+              body: "All credentials live in .env (gitignored) and GitHub Secrets. .env.example documents the required variables without values.",
+            },
+          ].map((item) => (
+            <Card key={item.title}>
+              <p className="text-foreground mb-1 text-sm font-semibold">
+                {item.icon} {item.title}
+              </p>
+              <p className="text-default-500 text-xs leading-relaxed">{item.body}</p>
+            </Card>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
