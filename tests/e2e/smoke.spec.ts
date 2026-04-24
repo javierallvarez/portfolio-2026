@@ -20,29 +20,37 @@ test.describe("Smoke Tests", () => {
   // ── Navbar ────────────────────────────────────────────────────────────────
 
   test.describe("Navbar", () => {
-    test("renders the JAG logo linking to home", async ({ page }) => {
+    test("renders the Javier Álvarez logo linking to home", async ({ page }) => {
       await page.goto("/");
       // Logo is the first link inside the sticky header
       const logo = page.locator("header").getByRole("link").first();
       await expect(logo).toBeVisible();
-      await expect(logo).toContainText("JAG");
+      await expect(logo).toContainText("Javier Álvarez");
       await expect(logo).toHaveAttribute("href", "/");
     });
 
-    test("renders navigation links for Home, Movies, and Under the Hood", async ({ page }) => {
+    test("renders navigation links for Home, Interactive Lab, and Under the Hood", async ({
+      page,
+    }) => {
       await page.goto("/");
       const nav = page.locator("header nav");
-      await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
-      await expect(nav.getByRole("link", { name: "Movies" })).toBeVisible();
-      await expect(nav.getByRole("link", { name: "Under the Hood" })).toBeVisible();
+      // Links are CSS-hidden on mobile (hidden sm:flex) but still in the DOM.
+      // We use includeHidden + toBeAttached to test routing correctness on all viewports.
+      await expect(nav.getByRole("link", { name: "Home", includeHidden: true })).toBeAttached();
+      await expect(
+        nav.getByRole("link", { name: "Interactive Lab", includeHidden: true }),
+      ).toBeAttached();
+      await expect(
+        nav.getByRole("link", { name: "Under the Hood", includeHidden: true }),
+      ).toBeAttached();
     });
 
     test("Home nav link is marked aria-current='page' on the homepage", async ({ page }) => {
       await page.goto("/");
-      await expect(page.locator("header nav").getByRole("link", { name: "Home" })).toHaveAttribute(
-        "aria-current",
-        "page",
-      );
+      // includeHidden so this passes on the mobile viewport where the link is CSS-hidden.
+      await expect(
+        page.locator("header nav").getByRole("link", { name: "Home", includeHidden: true }),
+      ).toHaveAttribute("aria-current", "page");
     });
 
     test("renders a theme-toggle button", async ({ page }) => {
@@ -69,16 +77,18 @@ test.describe("Smoke Tests", () => {
       await expect(page.locator("h1")).toContainText("Software Engineer");
     });
 
-    test("renders the availability status badge", async ({ page }) => {
+    test("renders Adevinta in the subtitle", async ({ page }) => {
       await page.goto("/");
-      await expect(page.getByText(/available for new opportunities/i)).toBeVisible();
+      await expect(page.getByText(/Adevinta/)).toBeVisible();
     });
 
-    test("renders a 'View Movie Collection' CTA that links to /movies", async ({ page }) => {
+    test("renders a 'Explore the Interactive Lab' CTA that links to /interactive-lab", async ({
+      page,
+    }) => {
       await page.goto("/");
-      const cta = page.getByRole("link", { name: /view movie collection/i });
+      const cta = page.getByRole("link", { name: /explore the interactive lab/i });
       await expect(cta).toBeVisible();
-      await expect(cta).toHaveAttribute("href", "/movies");
+      await expect(cta).toHaveAttribute("href", "/interactive-lab");
     });
 
     test("renders an 'Open Command Palette' CTA button", async ({ page }) => {
@@ -98,7 +108,7 @@ test.describe("Smoke Tests", () => {
 
     test("renders all three feature cards", async ({ page }) => {
       await page.goto("/");
-      await expect(page.getByText("Spec-Driven")).toBeVisible();
+      await expect(page.getByText("Internal Tooling & Automation")).toBeVisible();
       await expect(page.getByText("AI-Transparent")).toBeVisible();
       await expect(page.getByText("Security-First")).toBeVisible();
     });
@@ -111,8 +121,8 @@ test.describe("Smoke Tests", () => {
     await expect(page.locator("h1")).toContainText("Under the Hood");
   });
 
-  test("movies page loads and renders its heading", async ({ page }) => {
-    await page.goto("/movies");
-    await expect(page.locator("h1")).toContainText("Movie Collection");
+  test("interactive lab page loads and renders its heading", async ({ page }) => {
+    await page.goto("/interactive-lab");
+    await expect(page.locator("h1")).toContainText("Interactive Lab");
   });
 });

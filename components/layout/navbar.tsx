@@ -5,10 +5,11 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Button, Kbd } from "@heroui/react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
+import { useIsClient } from "@/hooks/use-is-client";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/movies", label: "Movies" },
+  { href: "/interactive-lab", label: "Interactive Lab" },
   { href: "/under-the-hood", label: "Under the Hood" },
 ] as const;
 
@@ -56,7 +57,14 @@ export function Navbar() {
   const { theme, setTheme } = useTheme();
   const palette = useCommandPalette();
 
-  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
+  // next-themes resolves the theme from localStorage, which is unavailable during
+  // SSR. Without this guard the aria-label and icon differ between the server
+  // render and the first client render, causing a hydration mismatch.
+  // We render a same-sized placeholder until after hydration is complete.
+  const isClient = useIsClient();
+
+  const isDark = isClient && theme === "dark";
+  const toggleTheme = () => setTheme(isDark ? "light" : "dark");
 
   return (
     <header className="bg-background/80 sticky top-0 z-40 border-b border-[--border-color,oklch(0%_0_0_/_8%)] backdrop-blur-md">
@@ -66,7 +74,7 @@ export function Navbar() {
           href="/"
           className="text-foreground text-sm font-semibold tracking-tight transition-opacity hover:opacity-70"
         >
-          JAG
+          Javier Álvarez
           <span className="text-muted ml-1.5">/ portfolio</span>
         </NextLink>
 
@@ -95,16 +103,20 @@ export function Navbar() {
 
         {/* ── Right-side Actions ── */}
         <div className="flex items-center gap-2">
-          {/* Theme toggle */}
-          <Button
-            variant="ghost"
-            isIconOnly
-            onPress={toggleTheme}
-            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            className="h-9 w-9 rounded-md"
-          >
-            {theme === "dark" ? <SunIcon /> : <MoonIcon />}
-          </Button>
+          {/* Theme toggle — rendered client-side only to avoid SSR hydration mismatch */}
+          {isClient ? (
+            <Button
+              variant="ghost"
+              isIconOnly
+              onPress={toggleTheme}
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              className="h-9 w-9 rounded-md"
+            >
+              {isDark ? <SunIcon /> : <MoonIcon />}
+            </Button>
+          ) : (
+            <div className="h-9 w-9 shrink-0" aria-hidden="true" />
+          )}
 
           {/* Command palette trigger */}
           <button

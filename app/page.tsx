@@ -10,15 +10,6 @@ export default function HomePage() {
       />
 
       <section className="mx-auto flex max-w-4xl flex-col items-center px-6 pt-20 pb-24 text-center sm:pt-32">
-        {/* Status badge */}
-        <div className="bg-surface text-muted mb-6 inline-flex items-center gap-2 rounded-full border border-[--border-color,oklch(0%_0_0_/_10%)] px-4 py-1.5 text-xs font-medium shadow-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="bg-success absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
-            <span className="bg-success relative inline-flex h-2 w-2 rounded-full" />
-          </span>
-          Available for new opportunities · Apr 2026
-        </div>
-
         {/* Headline */}
         <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
           Software Engineer{" "}
@@ -29,11 +20,12 @@ export default function HomePage() {
 
         {/* Subheading */}
         <p className="text-muted mt-6 max-w-2xl text-lg leading-relaxed sm:text-xl">
-          I design and build full-stack web applications with a focus on performance, security, and
-          developer experience. Every feature starts with a spec. Every PR tells a story.
+          Currently building awesome things alongside a brilliant team at{" "}
+          <span className="text-foreground font-medium">Adevinta</span>. Passionate about crafting
+          robust products and solving complex architectural challenges.
         </p>
 
-        {/* CTA Buttons (client component for palette interaction) */}
+        {/* CTA Buttons */}
         <HeroActions />
 
         {/* Tech chips */}
@@ -78,10 +70,10 @@ export default function HomePage() {
 
 const FEATURE_CARDS = [
   {
-    icon: "📋",
-    title: "Spec-Driven",
+    icon: "🔧",
+    title: "Internal Tooling & Automation",
     description:
-      "Every feature starts as a JAG-XXX ticket with context, decisions, and acceptance criteria before any code is written.",
+      "Designing ad-hoc scripts and internal apps. As a Slack and Google Workspace admin, I automate workflows that save hundreds of hours for the company.",
   },
   {
     icon: "🤖",

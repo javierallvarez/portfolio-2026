@@ -14,10 +14,10 @@ export function HeroActions() {
   return (
     <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
       <NextLink
-        href="/movies"
+        href="/interactive-lab"
         className="bg-primary text-primary-foreground inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-medium shadow-sm transition-opacity hover:opacity-90 active:opacity-75"
       >
-        View Movie Collection
+        Explore the Interactive Lab
       </NextLink>
 
       <button

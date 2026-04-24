@@ -123,7 +123,7 @@ Open [http://localhost:3000](http://localhost:3000).
 ├── app/                     # Next.js App Router
 │   ├── (marketing)/         # Route group: public pages (no extra layout)
 │   │   └── under-the-hood/  # Architecture showcase page
-│   ├── movies/              # Movie CRUD feature
+│   ├── interactive-lab/     # Interactive Lab feature (movies DB demo)
 │   ├── api/                 # API route handlers
 │   ├── layout.tsx           # Root layout (Providers, Navbar)
 │   └── page.tsx             # Homepage
@@ -131,7 +131,7 @@ Open [http://localhost:3000](http://localhost:3000).
 ├── components/
 │   ├── ui/                  # Reusable primitive components
 │   ├── movies/              # Feature-scoped movie components
-│   ├── layout/              # Navbar, CommandPalette
+│   ├── layout/              # Navbar, Footer, CommandPalette
 │   └── providers/           # HeroUIProvider, ThemeProvider
 │
 ├── lib/
@@ -203,11 +203,12 @@ This portfolio is explicitly built with AI pair programming (Cursor + Claude). T
 
 ## Spec Index
 
-| Spec    | Title                            | Status     |
-| ------- | -------------------------------- | ---------- |
-| JAG-001 | Project Initialization           | ✅ Done    |
-| JAG-002 | Core UI, HeroUI & Dev Experience | ✅ Done    |
-| JAG-003 | _TBD_                            | 🔜 Planned |
+| Spec    | Title                                                   | Status     |
+| ------- | ------------------------------------------------------- | ---------- |
+| JAG-001 | Project Initialization                                  | ✅ Done    |
+| JAG-002 | Core UI, HeroUI & Dev Experience                        | ✅ Done    |
+| JAG-003 | Personal Branding, Content Refinement & Interactive Lab | ✅ Done    |
+| JAG-004 | _TBD_                                                   | 🔜 Planned |
 
 ---
 

@@ -71,6 +71,10 @@ jobs:
         with:
           name: nextjs-build
           path: .next/
+          # .next/ is a hidden directory (dot-prefixed); upload-artifact@v4 excludes
+          # hidden files by default, which causes the artifact to be empty and the
+          # E2E download step to fail. This must be explicitly opted in.
+          include-hidden-files: true
           retention-days: 1
 
   # ─── Job 3: Playwright E2E Tests ──────────────────────────────────────────
@@ -102,7 +106,7 @@ jobs:
           path: .next/
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
 
       - name: Run Playwright tests
         run: npm run test:e2e
