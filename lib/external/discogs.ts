@@ -14,6 +14,7 @@ export interface DiscogsResult {
   year: number | null;
   coverUrl: string | null;
   thumb: string | null;
+  genre: string | null;
 }
 
 interface DiscogsRawResult {
@@ -22,6 +23,8 @@ interface DiscogsRawResult {
   year?: string;
   cover_image?: string;
   thumb?: string;
+  genre?: string[];
+  style?: string[];
 }
 
 interface DiscogsSearchResponse {
@@ -81,6 +84,8 @@ export async function searchDiscogs(query: string): Promise<DiscogsResult[]> {
 
   return data.results.map((r) => {
     const { artist, title } = parseTitleArtist(r.title);
+    // Prefer the broader genre classification; fall back to style (sub-genre)
+    const genre = r.genre?.[0] ?? r.style?.[0] ?? null;
     return {
       discogsId: r.id,
       title,
@@ -88,6 +93,7 @@ export async function searchDiscogs(query: string): Promise<DiscogsResult[]> {
       year: r.year ? parseInt(r.year, 10) : null,
       coverUrl: r.cover_image ?? null,
       thumb: r.thumb ?? null,
+      genre,
     };
   });
 }

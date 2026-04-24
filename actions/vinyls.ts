@@ -104,6 +104,39 @@ export async function deleteVinylAction(input: DeleteVinylInput): Promise<Action
   return { success: true };
 }
 
+// ─── Now Spinning (admin only) ────────────────────────────────────────────────
+//
+// Single-selection: sets is_now_spinning = true for the target vinyl and
+// false for all others. If the target is already spinning, clears all
+// (acts as a toggle to stop playback).
+
+export async function setNowSpinningAction(id: string): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return authResult.error;
+
+  await checkRateLimit("vinyls:create");
+
+  const parsed = deleteVinylSchema.safeParse({ id });
+  if (!parsed.success) return { success: false, error: "Invalid vinyl ID" };
+
+  // Read current state to implement toggle
+  const [current] = await db
+    .select({ isNowSpinning: vinyls.isNowSpinning })
+    .from(vinyls)
+    .where(eq(vinyls.id, id));
+
+  // Clear all first (ensures single-selection invariant)
+  await db.update(vinyls).set({ isNowSpinning: false });
+
+  // Toggle: only set to true if it wasn't already spinning
+  if (!current?.isNowSpinning) {
+    await db.update(vinyls).set({ isNowSpinning: true }).where(eq(vinyls.id, id));
+  }
+
+  revalidatePath("/interactive-lab");
+  return { success: true };
+}
+
 // ─── Read (public) ────────────────────────────────────────────────────────────
 
 export async function getVinylsAction() {

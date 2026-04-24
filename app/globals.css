@@ -7,4 +7,19 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-dm-serif);
+}
+
+/* Reusable teal→cyan gradient for headings and accent text */
+@layer utilities {
+  .gradient-heading {
+    background: linear-gradient(to right, #2dd4bf, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-spin-slow {
+    animation: spin 4s linear infinite;
+  }
 }

@@ -90,6 +90,7 @@ export function VinylSearch({ isAdmin }: VinylSearchProps) {
         artist: selected.artist,
         year: selected.year ?? new Date().getFullYear(),
         coverUrl: selected.coverUrl ?? "",
+        genre: selected.genre ?? "",
         status,
       });
 
