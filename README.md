@@ -130,7 +130,6 @@ Open [http://localhost:3000](http://localhost:3000).
 │
 ├── components/
 │   ├── ui/                  # Reusable primitive components
-│   ├── movies/              # Feature-scoped movie components
 │   ├── layout/              # Navbar, Footer, CommandPalette
 │   └── providers/           # HeroUIProvider, ThemeProvider
 │
@@ -140,8 +139,8 @@ Open [http://localhost:3000](http://localhost:3000).
 │   ├── security/            # XSS sanitizer, CORS helpers
 │   └── rate-limit/          # Upstash rate limiter factory
 │
-├── actions/                 # Next.js Server Actions (movies.ts, etc.)
-├── hooks/                   # Custom React hooks (useMovies, useCommandPalette)
+├── actions/                 # Next.js Server Actions (vinyls.ts, etc.)
+├── hooks/                   # Custom React hooks (useVinyls, useCommandPalette)
 │
 ├── tests/
 │   ├── e2e/                 # Playwright E2E test files
@@ -208,7 +207,8 @@ This portfolio is explicitly built with AI pair programming (Cursor + Claude). T
 | JAG-001 | Project Initialization                                  | ✅ Done    |
 | JAG-002 | Core UI, HeroUI & Dev Experience                        | ✅ Done    |
 | JAG-003 | Personal Branding, Content Refinement & Interactive Lab | ✅ Done    |
-| JAG-004 | _TBD_                                                   | 🔜 Planned |
+| JAG-004 | Vinyl Collection Pivot & Live DB Connection             | ✅ Done    |
+| JAG-005 | _TBD (Discogs API Integration)_                         | 🔜 Planned |
 
 ---
 

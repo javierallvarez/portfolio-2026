@@ -123,6 +123,6 @@ test.describe("Smoke Tests", () => {
 
   test("interactive lab page loads and renders its heading", async ({ page }) => {
     await page.goto("/interactive-lab");
-    await expect(page.locator("h1")).toContainText("Interactive Lab");
+    await expect(page.locator("h1")).toContainText("Vinyl Collection");
   });
 });
