@@ -28,22 +28,23 @@ catalogue number for records in the collection.
 
 ### Schema design
 
-| Column      | Type                         | Notes                                    |
-| ----------- | ---------------------------- | ---------------------------------------- |
-| `id`        | `uuid` PK                    | `defaultRandom()`                        |
-| `title`     | `varchar(255)` NOT NULL      | Album / release title                    |
-| `artist`    | `varchar(255)` NOT NULL      | Primary artist or band                   |
-| `year`      | `integer` NOT NULL           | Original release year                    |
-| `coverUrl`  | `varchar(500)`               | Discogs / CDN cover image URL (JAG-005)  |
-| `status`    | `vinyl_status` enum NOT NULL | `'in_collection'` or `'wishlist'`        |
-| `createdAt` | `timestamp` NOT NULL         | `defaultNow()`                           |
-| `updatedAt` | `timestamp` NOT NULL         | `defaultNow()` (updated via application) |
+| Column      | Type                         | Notes                                                                       |
+| ----------- | ---------------------------- | --------------------------------------------------------------------------- |
+| `id`        | `uuid` PK                    | `defaultRandom()`                                                           |
+| `title`     | `varchar(255)` NOT NULL      | Album / release title                                                       |
+| `artist`    | `varchar(255)` NOT NULL      | Primary artist or band                                                      |
+| `year`      | `integer` NOT NULL           | Original release year                                                       |
+| `coverUrl`  | `varchar(500)`               | Discogs / CDN cover image URL (JAG-005)                                     |
+| `status`    | `vinyl_status` enum NOT NULL | `'in_collection'` or `'recommended'` (renamed from `'wishlist'` in JAG-005) |
+| `createdAt` | `timestamp` NOT NULL         | `defaultNow()`                                                              |
+| `updatedAt` | `timestamp` NOT NULL         | `defaultNow()` (updated via application)                                    |
 
 ### Status enum & public submissions
 
-Public visitors may submit records to the **Community Wishlist**. The `status` field Zod schema
-hard-codes `'wishlist'` as the only value accepted for public inserts. Admin operations
-(setting `'in_collection'`) are gated server-side and reserved for future authenticated flows.
+Public visitors may submit records to the **Community Recommendations** list. The `status` field
+Zod schema hard-codes `'recommended'` as the only value accepted for public inserts (renamed from
+`'wishlist'` in JAG-005). Admin operations (setting `'in_collection'`) are gated behind Clerk
+authentication.
 
 ### Migration strategy
 
@@ -100,7 +101,7 @@ README.md                          ← spec index updated
 
 - [x] `vinyls` table and `vinyl_status` enum created in Drizzle schema
 - [x] Old `movies` table, validation, action, hook, and fixtures removed
-- [x] `createVinylSchema` enforces `status: 'wishlist'` for public submissions
+- [x] `createVinylSchema` enforces `status: 'recommended'` for public submissions (renamed from `'wishlist'` in JAG-005)
 - [x] `updateVinylSchema` allows `status` to be set freely (admin path)
 - [x] DOMPurify sanitization applied to all string fields before DB write
 - [x] Rate limit keys updated to `vinyls:create` / `vinyls:read`
@@ -120,7 +121,7 @@ The next ticket will:
 
 - Integrate the Discogs REST API to search and auto-populate vinyl metadata
 - Use the `coverUrl` column to store the Discogs CDN image URL
-- Add a server-side enrichment step that fires after a wishlist submission
+- Add a server-side enrichment step that fires after a community recommendation submission
 - Display cover art in the collection grid with a fallback placeholder
 
 ---

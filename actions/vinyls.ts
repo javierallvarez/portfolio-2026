@@ -1,13 +1,19 @@
 "use server";
 
+import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { vinyls } from "@/lib/db/schema";
-import { createVinylSchema, updateVinylSchema, deleteVinylSchema } from "@/lib/validations/vinyl";
+import {
+  createVinylSchema,
+  adminCreateVinylSchema,
+  updateVinylSchema,
+  deleteVinylSchema,
+} from "@/lib/validations/vinyl";
 import { sanitizeObject } from "@/lib/security/sanitize";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { eq } from "drizzle-orm";
-import type { CreateVinylInput, UpdateVinylInput, DeleteVinylInput } from "@/lib/validations/vinyl";
+import type { UpdateVinylInput, DeleteVinylInput } from "@/lib/validations/vinyl";
 
 // ─── Response Shape ────────────────────────────────────────────────────────────
 
@@ -15,12 +21,28 @@ export type ActionResult<T = undefined> =
   | { success: true; data?: T }
   | { success: false; error: string; fieldErrors?: Record<string, string[]> };
 
-// ─── Create (public — status always 'wishlist') ───────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
-export async function createVinylAction(input: CreateVinylInput): Promise<ActionResult> {
+async function requireAuth(): Promise<{ userId: string } | { error: ActionResult }> {
+  const { userId } = await auth();
+  if (!userId) return { error: { success: false, error: "Unauthorized" } };
+  return { userId };
+}
+
+// ─── Create ───────────────────────────────────────────────────────────────────
+//
+// RBAC:
+//   - Anonymous visitors  → status forced to "recommended" (community recommendation)
+//   - Authenticated admin → any status, defaults to "in_collection"
+
+export async function createVinylAction(input: Record<string, unknown>): Promise<ActionResult> {
   await checkRateLimit("vinyls:create");
 
-  const parsed = createVinylSchema.safeParse(input);
+  const { userId } = await auth();
+
+  const schema = userId ? adminCreateVinylSchema : createVinylSchema;
+  const parsed = schema.safeParse(input);
+
   if (!parsed.success) {
     return {
       success: false,
@@ -37,9 +59,12 @@ export async function createVinylAction(input: CreateVinylInput): Promise<Action
   return { success: true };
 }
 
-// ─── Update (admin) ───────────────────────────────────────────────────────────
+// ─── Update (admin only) ──────────────────────────────────────────────────────
 
 export async function updateVinylAction(input: UpdateVinylInput): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return authResult.error;
+
   await checkRateLimit("vinyls:create");
 
   const parsed = updateVinylSchema.safeParse(input);
@@ -60,9 +85,12 @@ export async function updateVinylAction(input: UpdateVinylInput): Promise<Action
   return { success: true };
 }
 
-// ─── Delete ───────────────────────────────────────────────────────────────────
+// ─── Delete (admin only) ──────────────────────────────────────────────────────
 
 export async function deleteVinylAction(input: DeleteVinylInput): Promise<ActionResult> {
+  const authResult = await requireAuth();
+  if ("error" in authResult) return authResult.error;
+
   await checkRateLimit("vinyls:create");
 
   const parsed = deleteVinylSchema.safeParse(input);
@@ -76,7 +104,7 @@ export async function deleteVinylAction(input: DeleteVinylInput): Promise<Action
   return { success: true };
 }
 
-// ─── Read ─────────────────────────────────────────────────────────────────────
+// ─── Read (public) ────────────────────────────────────────────────────────────
 
 export async function getVinylsAction() {
   await checkRateLimit("vinyls:read");

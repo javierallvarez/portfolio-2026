@@ -21,18 +21,18 @@ export const testVinyls: NewVinyl[] = [
     title: "Blue",
     artist: "Joni Mitchell",
     year: 1971,
-    status: "wishlist",
+    status: "recommended",
   },
 ];
 
 export const invalidVinylFixtures = {
-  emptyTitle: { title: "", artist: "Test Artist", year: 2020, status: "wishlist" as const },
-  futureYear: { title: "Test", artist: "Test Artist", year: 2099, status: "wishlist" as const },
+  emptyTitle: { title: "", artist: "Test Artist", year: 2020, status: "recommended" as const },
+  futureYear: { title: "Test", artist: "Test Artist", year: 2099, status: "recommended" as const },
   invalidStatus: { title: "Test", artist: "Test Artist", year: 2020, status: "invalid" },
   xssTitle: {
     title: '<script>alert("xss")</script>',
     artist: "Test Artist",
     year: 2020,
-    status: "wishlist" as const,
+    status: "recommended" as const,
   },
 };

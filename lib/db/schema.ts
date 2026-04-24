@@ -2,7 +2,7 @@ import { pgTable, varchar, integer, timestamp, uuid, pgEnum } from "drizzle-orm/
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
-export const vinylStatusEnum = pgEnum("vinyl_status", ["in_collection", "wishlist"]);
+export const vinylStatusEnum = pgEnum("vinyl_status", ["in_collection", "recommended"]);
 
 // ─── Vinyls Table ─────────────────────────────────────────────────────────────
 
@@ -13,7 +13,7 @@ export const vinyls = pgTable("vinyls", {
   year: integer("year").notNull(),
   // Reserved for Discogs CDN cover art — populated in JAG-005
   coverUrl: varchar("cover_url", { length: 500 }),
-  status: vinylStatusEnum("status").notNull().default("wishlist"),
+  status: vinylStatusEnum("status").notNull().default("recommended"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
