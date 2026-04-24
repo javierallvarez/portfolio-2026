@@ -106,7 +106,7 @@ jobs:
           path: .next/
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
 
       - name: Run Playwright tests
         run: npm run test:e2e

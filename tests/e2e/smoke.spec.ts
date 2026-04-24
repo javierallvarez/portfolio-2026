@@ -34,17 +34,23 @@ test.describe("Smoke Tests", () => {
     }) => {
       await page.goto("/");
       const nav = page.locator("header nav");
-      await expect(nav.getByRole("link", { name: "Home" })).toBeVisible();
-      await expect(nav.getByRole("link", { name: "Interactive Lab" })).toBeVisible();
-      await expect(nav.getByRole("link", { name: "Under the Hood" })).toBeVisible();
+      // Links are CSS-hidden on mobile (hidden sm:flex) but still in the DOM.
+      // We use includeHidden + toBeAttached to test routing correctness on all viewports.
+      await expect(nav.getByRole("link", { name: "Home", includeHidden: true })).toBeAttached();
+      await expect(
+        nav.getByRole("link", { name: "Interactive Lab", includeHidden: true }),
+      ).toBeAttached();
+      await expect(
+        nav.getByRole("link", { name: "Under the Hood", includeHidden: true }),
+      ).toBeAttached();
     });
 
     test("Home nav link is marked aria-current='page' on the homepage", async ({ page }) => {
       await page.goto("/");
-      await expect(page.locator("header nav").getByRole("link", { name: "Home" })).toHaveAttribute(
-        "aria-current",
-        "page",
-      );
+      // includeHidden so this passes on the mobile viewport where the link is CSS-hidden.
+      await expect(
+        page.locator("header nav").getByRole("link", { name: "Home", includeHidden: true }),
+      ).toHaveAttribute("aria-current", "page");
     });
 
     test("renders a theme-toggle button", async ({ page }) => {
