@@ -29,11 +29,12 @@ function NowSpinningCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean })
 
       <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* Spinning disc + cover */}
-        <div className="relative flex-shrink-0">
-          {/* Outer spinning ring */}
-          <div className="animate-spin-slow h-28 w-28 rounded-full border-4 border-dashed border-teal-400/40" />
-          {/* Cover art overlaid in center */}
-          <div className="absolute inset-2 overflow-hidden rounded-full shadow-md">
+        <div className="relative h-28 w-28 flex-shrink-0">
+          {/* Static outer ring with gentle pulse — acts as the platter rim */}
+          <div className="absolute inset-0 animate-pulse rounded-full border-4 border-dashed border-teal-400/40" />
+
+          {/* The record itself spins — cover art + grooves illusion */}
+          <div className="animate-spin-slow absolute inset-2 overflow-hidden rounded-full shadow-md">
             {vinyl.coverUrl ? (
               <Image
                 src={vinyl.coverUrl}
@@ -49,9 +50,10 @@ function NowSpinningCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean })
               </div>
             )}
           </div>
-          {/* Centre hole */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="h-3 w-3 rounded-full bg-teal-400/60 ring-2 ring-teal-400/20" />
+
+          {/* Centre spindle hole — stays fixed on top of the rotating record */}
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+            <div className="h-3 w-3 rounded-full bg-teal-400/70 shadow ring-2 ring-teal-400/20" />
           </div>
         </div>
 
@@ -237,8 +239,8 @@ export default async function InteractiveLabPage() {
           {/* Home setup photo */}
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-lg">
             <Image
-              src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800&auto=format&fit=crop&q=80"
-              alt="Vinyl turntable and home audio setup"
+              src="/vinyl_collection.jpeg"
+              alt="Javier's vinyl collection"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
