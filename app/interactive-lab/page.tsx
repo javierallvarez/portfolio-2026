@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
 import { Chip } from "@heroui/react";
+import { Disc3, Music2 } from "lucide-react";
 import { db } from "@/lib/db";
 import { vinyls } from "@/lib/db/schema";
 import { VinylSearch } from "@/components/vinyls/vinyl-search";
 import { VinylDeleteButton } from "@/components/vinyls/vinyl-delete-button";
+import { VinylNowSpinningButton } from "@/components/vinyls/vinyl-now-spinning-button";
 import type { Vinyl } from "@/lib/db/schema";
 
 export const metadata: Metadata = {
@@ -13,6 +15,74 @@ export const metadata: Metadata = {
   description:
     "A live laboratory powered by a real vinyl record collection. Demonstrates PostgreSQL with Drizzle ORM, optimistic UI, rate limiting, and strict Zod validation in Next.js.",
 };
+
+// ─── Now Spinning spotlight ───────────────────────────────────────────────────
+
+function NowSpinningCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-teal-400/30 bg-gradient-to-br from-teal-400/10 via-cyan-400/5 to-transparent p-6 shadow-lg">
+      {/* Radial glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full bg-teal-400/15 blur-3xl"
+      />
+
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
+        {/* Spinning disc + cover */}
+        <div className="relative h-28 w-28 flex-shrink-0">
+          {/* Static outer ring with gentle pulse — acts as the platter rim */}
+          <div className="absolute inset-0 animate-pulse rounded-full border-4 border-dashed border-teal-400/40" />
+
+          {/* The record itself spins — cover art + grooves illusion */}
+          <div className="animate-spin-slow absolute inset-2 overflow-hidden rounded-full shadow-md">
+            {vinyl.coverUrl ? (
+              <Image
+                src={vinyl.coverUrl}
+                alt={`${vinyl.title} cover art`}
+                fill
+                sizes="96px"
+                className="object-cover"
+                unoptimized
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-teal-400/20">
+                <Disc3 size={32} className="text-teal-400" aria-hidden="true" />
+              </div>
+            )}
+          </div>
+
+          {/* Centre spindle hole — stays fixed on top of the rotating record */}
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+            <div className="h-3 w-3 rounded-full bg-teal-400/70 shadow ring-2 ring-teal-400/20" />
+          </div>
+        </div>
+
+        {/* Info */}
+        <div className="flex-1 space-y-1">
+          <p className="text-xs font-semibold tracking-widest text-teal-400 uppercase">
+            Now Spinning
+          </p>
+          <h2 className="text-foreground font-serif text-2xl leading-tight font-normal">
+            {vinyl.title}
+          </h2>
+          <p className="text-default-500 text-base">{vinyl.artist}</p>
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            {vinyl.year && <span className="text-default-400 text-sm">{vinyl.year}</span>}
+            {vinyl.genre && (
+              <Chip size="sm" variant="primary">
+                {vinyl.genre}
+              </Chip>
+            )}
+            {isAdmin && (
+              <VinylNowSpinningButton vinylId={vinyl.id} title={vinyl.title} isCurrentlySpinning />
+            )}
+            {isAdmin && <VinylDeleteButton vinylId={vinyl.id} title={vinyl.title} />}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── Vinyl Card ───────────────────────────────────────────────────────────────
 
@@ -32,10 +102,10 @@ function VinylCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
           />
         ) : (
           <div
-            className="bg-content3 text-default-400 flex h-full w-full items-center justify-center rounded-lg text-xs"
+            className="bg-content3 text-default-400 flex h-full w-full items-center justify-center rounded-lg"
             aria-label="No cover art"
           >
-            🎵
+            <Music2 size={20} aria-hidden="true" />
           </div>
         )}
       </div>
@@ -48,10 +118,20 @@ function VinylCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
           {vinyl.year && <p className="text-default-400 text-xs">{vinyl.year}</p>}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Chip size="sm" variant={vinyl.status === "in_collection" ? "primary" : "secondary"}>
             {vinyl.status === "in_collection" ? "In Collection" : "Recommended"}
           </Chip>
+
+          {vinyl.genre && <span className="text-default-400 text-xs">{vinyl.genre}</span>}
+
+          {isAdmin && vinyl.status === "in_collection" && (
+            <VinylNowSpinningButton
+              vinylId={vinyl.id}
+              title={vinyl.title}
+              isCurrentlySpinning={false}
+            />
+          )}
 
           {isAdmin && <VinylDeleteButton vinylId={vinyl.id} title={vinyl.title} />}
         </div>
@@ -107,8 +187,20 @@ export default async function InteractiveLabPage() {
     // DB unavailable — fall through with empty list
   }
 
-  const collection = allVinyls.filter((v) => v.status === "in_collection");
+  const nowSpinning = allVinyls.find((v) => v.isNowSpinning) ?? null;
+  const collection = allVinyls.filter((v) => v.status === "in_collection" && !v.isNowSpinning);
   const recommended = allVinyls.filter((v) => v.status === "recommended");
+
+  // Group collection by genre for the genre-organised view
+  const byGenre = collection.reduce<Record<string, Vinyl[]>>((acc, v) => {
+    const key = v.genre?.trim() || "Other";
+    (acc[key] ??= []).push(v);
+    return acc;
+  }, {});
+  // Sort genres alphabetically, "Other" last
+  const sortedGenres = Object.keys(byGenre).sort((a, b) =>
+    a === "Other" ? 1 : b === "Other" ? -1 : a.localeCompare(b),
+  );
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
@@ -122,8 +214,8 @@ export default async function InteractiveLabPage() {
         <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
           {/* Text content */}
           <div>
-            <h1 className="text-foreground text-3xl font-bold tracking-tight sm:text-4xl">
-              Vinyl Collection &amp; Recommendations
+            <h1 className="text-foreground font-serif text-3xl font-normal tracking-tight sm:text-4xl">
+              Vinyl Collection &amp; <span className="gradient-heading">Recommendations</span>
             </h1>
             <p className="text-muted mt-4 text-base leading-relaxed sm:text-lg">
               I collect vinyl records and love showing off my home audio setup — a warm, analogue
@@ -140,16 +232,15 @@ export default async function InteractiveLabPage() {
               <span className="text-foreground font-medium">My collection</span> is what I own and
               spin at home. The{" "}
               <span className="text-foreground font-medium">Community Recommendations</span> section
-              is open to everyone — search for an album below and recommend it. Go ahead, convince
-              me to buy your favourite record. 🎶
+              is open to everyone — search for an album below and recommend it.
             </p>
           </div>
 
           {/* Home setup photo */}
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-lg">
             <Image
-              src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=800&auto=format&fit=crop&q=80"
-              alt="Vinyl turntable and home audio setup"
+              src="/vinyl_collection.jpeg"
+              alt="Javier's vinyl collection"
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -159,6 +250,13 @@ export default async function InteractiveLabPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Now Spinning ── */}
+      {nowSpinning && (
+        <section className="mt-10" aria-label="Now spinning">
+          <NowSpinningCard vinyl={nowSpinning} isAdmin={isAdmin} />
+        </section>
+      )}
 
       {/* ── Discogs Search ── */}
       <section className="mt-10" aria-label="Search and add vinyl records">
@@ -173,13 +271,29 @@ export default async function InteractiveLabPage() {
         <VinylSearch isAdmin={isAdmin} />
       </section>
 
-      {/* ── Collection ── */}
+      {/* ── Collection (grouped by genre) ── */}
       <section className="mt-12" aria-label="Javier's vinyl collection">
-        <SectionHeading label="Javier's Collection" count={collection.length} dotColor="primary" />
-        {collection.length > 0 ? (
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {collection.map((vinyl) => (
-              <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} />
+        <SectionHeading
+          label="Javier's Collection"
+          count={collection.length + (nowSpinning?.status === "in_collection" ? 1 : 0)}
+          dotColor="primary"
+        />
+
+        {sortedGenres.length > 0 ? (
+          <div className="mt-4 space-y-8">
+            {sortedGenres.map((genre) => (
+              <div key={genre}>
+                <p className="text-default-400 mb-3 flex items-center gap-2 text-xs font-semibold tracking-widest uppercase">
+                  <Disc3 size={12} className="text-teal-400" aria-hidden="true" />
+                  {genre}
+                  <span className="text-default-300">({byGenre[genre].length})</span>
+                </p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {byGenre[genre].map((vinyl) => (
+                    <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         ) : (

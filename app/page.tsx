@@ -1,3 +1,4 @@
+import { Wrench, Bot, ShieldCheck } from "lucide-react";
 import { HeroActions } from "@/components/hero-actions";
 
 export default function HomePage() {
@@ -11,11 +12,8 @@ export default function HomePage() {
 
       <section className="mx-auto flex max-w-4xl flex-col items-center px-6 pt-20 pb-24 text-center sm:pt-32">
         {/* Headline */}
-        <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-          Software Engineer{" "}
-          <span className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-transparent">
-            building for humans
-          </span>
+        <h1 className="text-foreground font-serif text-4xl font-normal tracking-tight sm:text-6xl lg:text-7xl">
+          Software Engineer <span className="gradient-heading">building for humans</span>
         </h1>
 
         {/* Subheading */}
@@ -57,7 +55,7 @@ export default function HomePage() {
               key={card.title}
               className="bg-surface rounded-2xl border border-[--border-color,oklch(0%_0_0_/_8%)] p-6 shadow-sm"
             >
-              <div className="mb-3 text-2xl">{card.icon}</div>
+              <div className="mb-3">{card.icon}</div>
               <h3 className="text-foreground mb-2 font-semibold">{card.title}</h3>
               <p className="text-muted text-sm leading-relaxed">{card.description}</p>
             </div>
@@ -70,21 +68,21 @@ export default function HomePage() {
 
 const FEATURE_CARDS = [
   {
-    icon: "🔧",
+    icon: <Wrench size={22} className="text-teal-400" />,
     title: "Internal Tooling & Automation",
     description:
       "Designing ad-hoc scripts and internal apps. As a Slack and Google Workspace admin, I automate workflows that save hundreds of hours for the company.",
   },
   {
-    icon: "🤖",
+    icon: <Bot size={22} className="text-teal-400" />,
     title: "AI-Transparent",
     description:
       "AI pair programming is used as a multiplier — and disclosed in every PR via a dedicated AI Contribution table.",
   },
   {
-    icon: "🔒",
+    icon: <ShieldCheck size={22} className="text-teal-400" />,
     title: "Security-First",
     description:
       "Zod validation, DOMPurify XSS sanitization, CORS allowlisting, and rate limiting on every mutating endpoint.",
   },
-] as const;
+];

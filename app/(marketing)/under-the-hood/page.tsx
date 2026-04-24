@@ -1,4 +1,14 @@
 import type { Metadata } from "next";
+import {
+  Cloud,
+  Database,
+  Zap,
+  CheckCircle2,
+  ShieldCheck,
+  Globe,
+  Lock,
+  KeyRound,
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Under the Hood",
@@ -10,7 +20,9 @@ export const metadata: Metadata = {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">{children}</h2>
+    <h2 className="text-foreground font-serif text-2xl font-normal tracking-tight sm:text-3xl">
+      {children}
+    </h2>
   );
 }
 
@@ -38,7 +50,7 @@ function ArchNode({
   sublabel,
   accent = false,
 }: {
-  icon: string;
+  icon: React.ReactNode;
   label: string;
   sublabel?: string;
   accent?: boolean;
@@ -46,9 +58,9 @@ function ArchNode({
   return (
     <div className="flex flex-col items-center gap-1 text-center">
       <div
-        className={`flex h-14 w-14 items-center justify-center rounded-xl text-2xl shadow-sm ${
+        className={`flex h-14 w-14 items-center justify-center rounded-xl shadow-sm ${
           accent
-            ? "from-primary/20 to-secondary/20 border-primary/30 border bg-gradient-to-br"
+            ? "border border-teal-400/30 bg-gradient-to-br from-teal-400/20 to-cyan-400/20"
             : "bg-content2 border-divider border"
         }`}
       >
@@ -97,31 +109,67 @@ function ArchitectureDiagram() {
     <div className="overflow-x-auto">
       {/* Desktop: horizontal flow */}
       <div className="hidden min-w-0 items-center justify-center gap-3 sm:flex">
-        <ArchNode icon="🌍" label="User" />
+        <ArchNode icon={<Globe size={22} className="text-default-500" />} label="User" />
         <ArrowRight />
-        <ArchNode icon="⚡" label="CloudFront" sublabel="CDN + TLS" accent />
+        <ArchNode
+          icon={<Zap size={22} className="text-teal-400" />}
+          label="CloudFront"
+          sublabel="CDN + TLS"
+          accent
+        />
         <ArrowRight />
         {/* Fork */}
         <div className="flex flex-col items-center gap-4">
-          <ArchNode icon="🗄️" label="S3" sublabel="Static assets" />
-          <ArchNode icon="λ" label="Lambda" sublabel="SSR / API" accent />
+          <ArchNode
+            icon={<Cloud size={22} className="text-default-500" />}
+            label="S3"
+            sublabel="Static assets"
+          />
+          <ArchNode
+            icon={<span className="font-mono text-base font-bold text-teal-400">λ</span>}
+            label="Lambda"
+            sublabel="SSR / API"
+            accent
+          />
         </div>
         <ArrowRight />
-        <ArchNode icon="🐘" label="Neon" sublabel="PostgreSQL" />
+        <ArchNode
+          icon={<Database size={22} className="text-default-500" />}
+          label="Neon"
+          sublabel="PostgreSQL"
+        />
       </div>
 
       {/* Mobile: vertical flow */}
       <div className="flex flex-col items-center gap-1 sm:hidden">
-        <ArchNode icon="🌍" label="User" />
+        <ArchNode icon={<Globe size={22} className="text-default-500" />} label="User" />
         <ArrowDown />
-        <ArchNode icon="⚡" label="CloudFront" sublabel="CDN + TLS" accent />
+        <ArchNode
+          icon={<Zap size={22} className="text-teal-400" />}
+          label="CloudFront"
+          sublabel="CDN + TLS"
+          accent
+        />
         <ArrowDown />
         <div className="flex items-start gap-6">
-          <ArchNode icon="🗄️" label="S3" sublabel="Static" />
-          <ArchNode icon="λ" label="Lambda" sublabel="SSR / API" accent />
+          <ArchNode
+            icon={<Cloud size={22} className="text-default-500" />}
+            label="S3"
+            sublabel="Static"
+          />
+          <ArchNode
+            icon={<span className="font-mono text-base font-bold text-teal-400">λ</span>}
+            label="Lambda"
+            sublabel="SSR / API"
+            accent
+          />
         </div>
         <ArrowDown />
-        <ArchNode icon="🐘" label="Neon" sublabel="PostgreSQL" />
+        <ArchNode
+          icon={<Database size={22} className="text-default-500" />}
+          label="Neon"
+          sublabel="PostgreSQL"
+        />
       </div>
     </div>
   );
@@ -275,8 +323,8 @@ export default function UnderTheHoodPage() {
     <div className="mx-auto max-w-5xl space-y-20 px-4 py-16">
       {/* ── Hero ── */}
       <div>
-        <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl">
-          Under the Hood
+        <h1 className="text-foreground font-serif text-4xl font-normal tracking-tight sm:text-5xl">
+          Under the <span className="gradient-heading">Hood</span>
         </h1>
         <p className="text-default-500 mt-4 max-w-2xl text-lg leading-relaxed">
           A transparent look at the architecture, infrastructure-as-code, CI/CD pipeline, and
@@ -529,38 +577,38 @@ export default function UnderTheHoodPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           {[
             {
-              icon: "✅",
+              icon: <CheckCircle2 size={15} className="text-teal-400" />,
               title: "Input validation",
               body: "Zod schemas on every Server Action and API route. The same schema validates client-side forms and server-side payloads.",
             },
             {
-              icon: "🛡️",
+              icon: <ShieldCheck size={15} className="text-teal-400" />,
               title: "XSS prevention",
               body: "A zero-dependency regex sanitizer strips all HTML tags and null bytes before any string reaches the database.",
             },
             {
-              icon: "🚦",
+              icon: <Zap size={15} className="text-teal-400" />,
               title: "Rate limiting",
               body: "Upstash Redis sliding-window limiter on all mutating endpoints. Anonymous and authenticated limits are configured separately.",
             },
             {
-              icon: "🔑",
+              icon: <KeyRound size={15} className="text-teal-400" />,
               title: "RBAC (Clerk)",
               body: "Anonymous users can only recommend vinyls. The admin (me) can add to collection, update, and delete — enforced server-side.",
             },
             {
-              icon: "🌐",
+              icon: <Globe size={15} className="text-teal-400" />,
               title: "CORS allowlist",
               body: "lib/security/cors.ts enforces an explicit origin allowlist. Unknown origins receive a 403 before any handler runs.",
             },
             {
-              icon: "🔒",
+              icon: <Lock size={15} className="text-teal-400" />,
               title: "No secrets in code",
               body: "All credentials live in .env (gitignored) and GitHub Secrets. .env.example documents the required variables without values.",
             },
           ].map((item) => (
             <Card key={item.title}>
-              <p className="text-foreground mb-1 text-sm font-semibold">
+              <p className="text-foreground mb-1 flex items-center gap-1.5 text-sm font-semibold">
                 {item.icon} {item.title}
               </p>
               <p className="text-default-500 text-xs leading-relaxed">{item.body}</p>

@@ -31,6 +31,8 @@ export const vinylBaseSchema = z.object({
 
   coverUrl: z.string().url("Must be a valid URL").max(500).optional().or(z.literal("")),
 
+  genre: z.string().max(255).optional().or(z.literal("")),
+
   status: z.enum(vinylStatusValues, {
     error: "Status must be 'in_collection' or 'recommended'",
   }),

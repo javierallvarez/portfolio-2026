@@ -3,8 +3,10 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Modal, SearchField, Kbd, toast } from "@heroui/react";
+import { Kbd, toast } from "@heroui/react";
+import { Home, FlaskConical, Settings, Sun, Moon, FileText, Bell, Search } from "lucide-react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
+import { AutomationConsole } from "@/components/ui/automation-console";
 
 // ─── Command Definitions ───────────────────────────────────────────────────────
 
@@ -15,11 +17,11 @@ interface Command {
   label: string;
   description?: string;
   category: CommandCategory;
-  icon: string;
+  icon: React.ReactNode;
   action: () => void;
 }
 
-function useCommands(): Command[] {
+function useCommands(onOpenConsole: () => void): Command[] {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
 
@@ -29,7 +31,7 @@ function useCommands(): Command[] {
         id: "nav-home",
         label: "Go to Home",
         category: "Navigate" as const,
-        icon: "🏠",
+        icon: <Home size={16} />,
         action: () => router.push("/"),
       },
       {
@@ -37,7 +39,7 @@ function useCommands(): Command[] {
         label: "Go to Interactive Lab",
         description: "Live database interactions, optimistic UI, and full-stack validation",
         category: "Navigate" as const,
-        icon: "🧪",
+        icon: <FlaskConical size={16} />,
         action: () => router.push("/interactive-lab"),
       },
       {
@@ -45,14 +47,14 @@ function useCommands(): Command[] {
         label: "Go to Under the Hood",
         description: "Architecture, CI/CD and spec-driven process",
         category: "Navigate" as const,
-        icon: "⚙️",
+        icon: <Settings size={16} />,
         action: () => router.push("/under-the-hood"),
       },
       {
         id: "toggle-theme",
         label: theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode",
         category: "Theme" as const,
-        icon: theme === "dark" ? "☀️" : "🌙",
+        icon: theme === "dark" ? <Sun size={16} /> : <Moon size={16} />,
         action: () => setTheme(theme === "dark" ? "light" : "dark"),
       },
       {
@@ -60,9 +62,9 @@ function useCommands(): Command[] {
         label: "Download CV",
         description: "Get the latest resume",
         category: "Actions" as const,
-        icon: "📄",
+        icon: <FileText size={16} />,
         action: () => {
-          toast.info("CV download coming soon — check back after JAG-005!");
+          toast.success("Javier's CV was successfully prepared and downloaded. (Simulated)");
         },
       },
       {
@@ -70,15 +72,11 @@ function useCommands(): Command[] {
         label: "Run Slack Webhook (Simulated)",
         description: "Simulates a Google Workspace automation with Slack notification",
         category: "Automations (Mock)" as const,
-        icon: "🔔",
-        action: () => {
-          toast.success(
-            "Ping! 🚀 Simulated Google Workspace task completed and team notified via Slack.",
-          );
-        },
+        icon: <Bell size={16} />,
+        action: onOpenConsole,
       },
     ],
-    [router, theme, setTheme],
+    [router, theme, setTheme, onOpenConsole],
   );
 }
 
@@ -101,16 +99,16 @@ function CommandItem({ command, isHighlighted, onSelect, onMouseEnter }: Command
       onMouseEnter={onMouseEnter}
       className={[
         "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors",
-        isHighlighted ? "bg-primary/10 text-primary" : "text-foreground hover:bg-surface-secondary",
+        isHighlighted ? "bg-primary/10 text-primary" : "text-foreground hover:bg-content2",
       ].join(" ")}
     >
-      <span className="bg-surface flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-base">
+      <span className="bg-content2 text-default-500 flex h-8 w-8 shrink-0 items-center justify-center rounded-md">
         {command.icon}
       </span>
       <span className="flex min-w-0 flex-col">
         <span className="truncate font-medium">{command.label}</span>
         {command.description && (
-          <span className="text-muted truncate text-xs">{command.description}</span>
+          <span className="text-default-400 truncate text-xs">{command.description}</span>
         )}
       </span>
     </button>
@@ -123,8 +121,19 @@ export function CommandPalette() {
   const state = useCommandPalette();
   const [query, setQuery] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(0);
-  const listRef = useRef<HTMLDivElement>(null);
-  const commands = useCommands();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // ── Automation Console state ──
+  const [consoleOpen, setConsoleOpen] = useState(false);
+  // Incrementing runKey forces ConsoleSimulation to remount fresh each time
+  const [consoleRunKey, setConsoleRunKey] = useState(0);
+
+  const openConsole = useCallback(() => {
+    setConsoleRunKey((k) => k + 1);
+    setConsoleOpen(true);
+  }, []);
+
+  const commands = useCommands(openConsole);
 
   // ── Register global ⌘K / Ctrl+K shortcut ──
   useEffect(() => {
@@ -137,6 +146,15 @@ export function CommandPalette() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [state]);
+
+  // ── Auto-focus input whenever the palette opens ──
+  useEffect(() => {
+    if (state.isOpen) {
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
+    }
+  }, [state.isOpen]);
 
   // ── Filter + group commands ──
   const grouped = useMemo(() => {
@@ -173,13 +191,13 @@ export function CommandPalette() {
   const handleSelect = useCallback(
     (command: Command) => {
       state.close();
-      // Small delay so modal exit animation completes before navigation
+      // Small delay so palette exit animation completes before the action runs
       setTimeout(() => command.action(), 80);
     },
     [state],
   );
 
-  // Arrow key + Enter navigation within the palette
+  // ── Arrow key + Enter + Escape navigation ──
   useEffect(() => {
     if (!state.isOpen) return;
 
@@ -193,87 +211,131 @@ export function CommandPalette() {
       } else if (e.key === "Enter" && flat[highlightedIndex]) {
         e.preventDefault();
         handleSelect(flat[highlightedIndex]);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        state.close();
       }
     }
 
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [state.isOpen, flat, highlightedIndex, handleSelect]);
+  }, [state, flat, highlightedIndex, handleSelect]);
 
   return (
-    <Modal state={state}>
-      <Modal.Backdrop isDismissable />
-      <Modal.Container placement="top" size="lg" className="mt-[10vh]">
-        <Modal.Dialog aria-label="Command palette">
-          {/* ── Search Input ── */}
-          <div className="border-b border-[--border-color,oklch(0%_0_0_/_8%)] p-3">
-            <SearchField
-              aria-label="Search commands"
-              value={query}
-              onChange={setQuery}
-              autoFocus
-              fullWidth
-            >
-              <SearchField.Group>
-                <SearchField.SearchIcon />
-                <SearchField.Input placeholder="Search commands…" className="text-sm" />
-                {query && <SearchField.ClearButton />}
-              </SearchField.Group>
-            </SearchField>
-          </div>
-
-          {/* ── Command List ── */}
+    <>
+      {/* ── Palette overlay ── */}
+      {state.isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          {/* Backdrop */}
           <div
-            ref={listRef}
-            role="listbox"
-            aria-label="Commands"
-            className="max-h-[60vh] overflow-y-auto overscroll-contain p-2"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            aria-hidden="true"
+            onClick={state.close}
+          />
+
+          {/* Palette panel */}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Command palette"
+            className="bg-background border-divider relative z-10 w-full max-w-lg overflow-hidden rounded-xl border shadow-2xl"
           >
-            {grouped.length === 0 && (
-              <p className="text-muted px-3 py-8 text-center text-sm">
-                No commands found for &ldquo;{query}&rdquo;
-              </p>
-            )}
+            {/* ── Search Input ── */}
+            <div className="border-divider flex items-center gap-3 border-b px-4 py-3">
+              <Search size={16} className="text-default-400 shrink-0" aria-hidden="true" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search commands…"
+                aria-label="Search commands"
+                className="placeholder:text-default-400 min-w-0 flex-1 bg-transparent text-sm outline-none"
+              />
+              {query && (
+                <button
+                  type="button"
+                  onClick={() => setQuery("")}
+                  aria-label="Clear search"
+                  className="text-default-400 hover:text-foreground transition-colors"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
+              )}
+            </div>
 
-            {grouped.map(([category, cmds]) => (
-              <div key={category} className="mb-2 last:mb-0">
-                <p className="text-muted mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
-                  {category}
+            {/* ── Command List ── */}
+            <div
+              role="listbox"
+              aria-label="Commands"
+              className="max-h-[60vh] overflow-y-auto overscroll-contain p-2"
+            >
+              {grouped.length === 0 && (
+                <p className="text-default-400 px-3 py-8 text-center text-sm">
+                  No commands found for &ldquo;{query}&rdquo;
                 </p>
-                {cmds.map((cmd) => {
-                  const absoluteIndex = flat.indexOf(cmd);
-                  return (
-                    <CommandItem
-                      key={cmd.id}
-                      command={cmd}
-                      isHighlighted={absoluteIndex === highlightedIndex}
-                      onSelect={() => handleSelect(cmd)}
-                      onMouseEnter={() => setHighlightedIndex(absoluteIndex)}
-                    />
-                  );
-                })}
-              </div>
-            ))}
-          </div>
+              )}
 
-          {/* ── Footer keyboard hints ── */}
-          <div className="text-muted flex items-center gap-3 border-t border-[--border-color,oklch(0%_0_0_/_8%)] px-4 py-2.5 text-xs">
-            <span className="flex items-center gap-1">
-              <Kbd className="text-xs">↑</Kbd>
-              <Kbd className="text-xs">↓</Kbd>
-              to navigate
-            </span>
-            <span className="flex items-center gap-1">
-              <Kbd className="text-xs">↵</Kbd>
-              to select
-            </span>
-            <span className="flex items-center gap-1">
-              <Kbd className="text-xs">Esc</Kbd>
-              to close
-            </span>
+              {grouped.map(([category, cmds]) => (
+                <div key={category} className="mb-2 last:mb-0">
+                  <p className="text-default-400 mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
+                    {category}
+                  </p>
+                  {cmds.map((cmd) => {
+                    const absoluteIndex = flat.indexOf(cmd);
+                    return (
+                      <CommandItem
+                        key={cmd.id}
+                        command={cmd}
+                        isHighlighted={absoluteIndex === highlightedIndex}
+                        onSelect={() => handleSelect(cmd)}
+                        onMouseEnter={() => setHighlightedIndex(absoluteIndex)}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+
+            {/* ── Footer keyboard hints ── */}
+            <div className="text-default-400 border-divider flex items-center gap-3 border-t px-4 py-2.5 text-xs">
+              <span className="flex items-center gap-1">
+                <Kbd className="text-xs">↑</Kbd>
+                <Kbd className="text-xs">↓</Kbd>
+                to navigate
+              </span>
+              <span className="flex items-center gap-1">
+                <Kbd className="text-xs">↵</Kbd>
+                to select
+              </span>
+              <span className="flex items-center gap-1">
+                <Kbd className="text-xs">Esc</Kbd>
+                to close
+              </span>
+            </div>
           </div>
-        </Modal.Dialog>
-      </Modal.Container>
-    </Modal>
+        </div>
+      )}
+
+      {/* ── Automation Console — rendered outside palette so it outlives it ── */}
+      <AutomationConsole
+        isOpen={consoleOpen}
+        runKey={consoleRunKey}
+        onClose={() => setConsoleOpen(false)}
+      />
+    </>
   );
 }
