@@ -1,36 +1,24 @@
-import { pgTable, text, integer, timestamp, uuid, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, varchar, integer, timestamp, uuid, pgEnum } from "drizzle-orm/pg-core";
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
-export const genreEnum = pgEnum("genre", [
-  "action",
-  "comedy",
-  "drama",
-  "horror",
-  "sci-fi",
-  "thriller",
-  "romance",
-  "animation",
-  "documentary",
-  "other",
-]);
+export const vinylStatusEnum = pgEnum("vinyl_status", ["in_collection", "wishlist"]);
 
-// ─── Movies Table ─────────────────────────────────────────────────────────────
+// ─── Vinyls Table ─────────────────────────────────────────────────────────────
 
-export const movies = pgTable("movies", {
+export const vinyls = pgTable("vinyls", {
   id: uuid("id").defaultRandom().primaryKey(),
-  title: text("title").notNull(),
-  director: text("director").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  artist: varchar("artist", { length: 255 }).notNull(),
   year: integer("year").notNull(),
-  genre: genreEnum("genre").notNull().default("other"),
-  synopsis: text("synopsis"),
-  posterUrl: text("poster_url"),
-  rating: integer("rating"), // 1–10
+  // Reserved for Discogs CDN cover art — populated in JAG-005
+  coverUrl: varchar("cover_url", { length: 500 }),
+  status: vinylStatusEnum("status").notNull().default("wishlist"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // ─── Inferred Types ───────────────────────────────────────────────────────────
 
-export type Movie = typeof movies.$inferSelect;
-export type NewMovie = typeof movies.$inferInsert;
+export type Vinyl = typeof vinyls.$inferSelect;
+export type NewVinyl = typeof vinyls.$inferInsert;

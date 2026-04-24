@@ -11,13 +11,13 @@
  * ```ts
  * import { checkRateLimit } from "@/lib/rate-limit";
  *
- * export async function createMovieAction(data: CreateMovieInput) {
- *   await checkRateLimit("movies:create");
+ * export async function createVinylAction(data: CreateVinylInput) {
+ *   await checkRateLimit("vinyls:create");
  *   // ... rest of the action
  * }
  * ```
  *
- * TODO (JAG-002): Install @upstash/ratelimit and uncomment the implementation below
+ * TODO (JAG-006): Install @upstash/ratelimit and uncomment the implementation below
  *                 once UPSTASH_REDIS_REST_URL and TOKEN are configured.
  */
 
@@ -30,17 +30,17 @@
 // });
 
 // const limiters = {
-//   "movies:create": new Ratelimit({
+//   "vinyls:create": new Ratelimit({
 //     redis,
 //     limiter: Ratelimit.slidingWindow(10, "1 m"), // 10 creates per minute
 //   }),
-//   "movies:read": new Ratelimit({
+//   "vinyls:read": new Ratelimit({
 //     redis,
 //     limiter: Ratelimit.slidingWindow(100, "1 m"), // 100 reads per minute
 //   }),
 // } as const;
 
-// type LimiterKey = keyof typeof limiters;
+// type LimiterKey = keyof typeof limiters; // "vinyls:create" | "vinyls:read"
 
 // export async function checkRateLimit(key: LimiterKey, identifier?: string) {
 //   const id = identifier ?? "global";
