@@ -86,10 +86,27 @@ function SectionHeading({
 // ─── Page ────────────────────────────────────────────────────────────────────
 
 export default async function InteractiveLabPage() {
-  const { userId } = await auth();
+  // Gracefully degrade when Clerk is unavailable (e.g. rate-limited handshake
+  // or a dummy publishableKey in CI). Treat as unauthenticated rather than
+  // crashing the render.
+  let userId: string | null = null;
+  try {
+    ({ userId } = await auth());
+  } catch {
+    // Clerk unavailable — treat as unauthenticated
+  }
   const isAdmin = !!userId;
 
-  const allVinyls = await db.select().from(vinyls).orderBy(vinyls.createdAt);
+  // Gracefully degrade when the database is unreachable (e.g. CI with a stub
+  // DATABASE_URL). The page still renders — heading, hero, search — just with
+  // empty collection/recommendation lists instead of a 500 error boundary.
+  let allVinyls: Vinyl[] = [];
+  try {
+    allVinyls = await db.select().from(vinyls).orderBy(vinyls.createdAt);
+  } catch {
+    // DB unavailable — fall through with empty list
+  }
+
   const collection = allVinyls.filter((v) => v.status === "in_collection");
   const recommended = allVinyls.filter((v) => v.status === "recommended");
 
