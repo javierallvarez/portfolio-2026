@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button, Kbd } from "@heroui/react";
+import { Bot } from "lucide-react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
+import { useCareerChatDrawer } from "@/hooks/use-career-chat-drawer";
 import { useIsClient } from "@/hooks/use-is-client";
 
 const NAV_LINKS = [
@@ -58,6 +60,7 @@ export function Navbar() {
   const { theme, setTheme } = useTheme();
   const { isSignedIn } = useAuth();
   const palette = useCommandPalette();
+  const { open: openChat } = useCareerChatDrawer();
 
   // next-themes resolves the theme from localStorage, which is unavailable during
   // SSR. Without this guard the aria-label and icon differ between the server
@@ -124,6 +127,27 @@ export function Navbar() {
               </button>
             </SignInButton>
           )}
+          {/* AI Career Agent chat trigger */}
+          <button
+            type="button"
+            onClick={openChat}
+            className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-teal-500 ring-1 ring-teal-500/30 transition-colors hover:bg-teal-500/10 sm:flex"
+            aria-label="Chat with Javier's AI"
+          >
+            <Bot size={14} aria-hidden="true" />
+            <span>Ask my AI</span>
+          </button>
+          {/* Mobile: icon-only AI chat button */}
+          <Button
+            variant="ghost"
+            isIconOnly
+            onPress={openChat}
+            aria-label="Chat with Javier's AI"
+            className="h-9 w-9 rounded-md text-teal-500 sm:hidden"
+          >
+            <Bot size={18} aria-hidden="true" />
+          </Button>
+
           {/* Theme toggle — rendered client-side only to avoid SSR hydration mismatch */}
           {isClient ? (
             <Button

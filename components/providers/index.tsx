@@ -3,6 +3,7 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Toast } from "@heroui/react";
 import type { ReactNode } from "react";
+import { CareerChatDrawerProvider } from "@/hooks/use-career-chat-drawer";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -17,6 +18,9 @@ interface ProvidersProps {
  *
  * Toast.Provider must live here so toasts can be triggered from anywhere in the tree
  * via the `toast()` singleton without prop-drilling.
+ *
+ * CareerChatDrawerProvider renders the AI chat drawer once at the root so any
+ * component (Navbar, CommandPalette) can open it via useCareerChatDrawer().
  */
 export function Providers({ children }: ProvidersProps) {
   return (
@@ -26,8 +30,10 @@ export function Providers({ children }: ProvidersProps) {
       enableSystem
       disableTransitionOnChange
     >
-      {children}
-      <Toast.Provider placement="bottom end" />
+      <CareerChatDrawerProvider>
+        {children}
+        <Toast.Provider placement="bottom end" />
+      </CareerChatDrawerProvider>
     </NextThemesProvider>
   );
 }

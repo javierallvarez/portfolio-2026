@@ -62,7 +62,10 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${dmSerifDisplay.variable} h-full antialiased`}
       >
-        <body className="bg-background text-foreground flex min-h-full flex-col">
+        <body
+          className="bg-background text-foreground flex min-h-full flex-col"
+          suppressHydrationWarning
+        >
           <Providers>
             <DeveloperGreeting />
             <Navbar />

@@ -147,7 +147,7 @@ function SectionHeading({
   count,
   dotColor,
 }: {
-  label: string;
+  label: React.ReactNode;
   count: number;
   dotColor: "primary" | "secondary";
 }) {
@@ -218,21 +218,22 @@ export default async function InteractiveLabPage() {
               Vinyl Collection &amp; <span className="gradient-heading">Recommendations</span>
             </h1>
             <p className="text-muted mt-4 text-base leading-relaxed sm:text-lg">
-              I collect vinyl records and love showing off my home audio setup — a warm, analogue
-              corner of my flat that I&apos;m constantly adding to. But this page isn&apos;t just an
-              excuse to talk about records.
+              I spent years as an{" "}
+              <span className="text-foreground font-medium">Electronic Music Producer</span> and{" "}
+              <span className="text-foreground font-medium">Record Label Director</span>, and sound
+              still runs through everything I do — including the records that fill this collection.
             </p>
             <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
-              It&apos;s a <span className="text-foreground font-medium">live laboratory</span>{" "}
-              demonstrating complex relational database interactions (PostgreSQL + Drizzle ORM),
-              optimistic UI updates, rate limiting, and strict data validation in Next.js — all
-              backed by a real Neon database.
+              But it&apos;s also a{" "}
+              <span className="text-foreground font-medium">live PostgreSQL database</span>{" "}
+              demonstrating real-world full-stack architecture: Drizzle ORM, optimistic UI, rate
+              limiting, Zod validation, Clerk RBAC, and Discogs API integration — all running
+              against a live Neon database.
             </p>
             <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
-              <span className="text-foreground font-medium">My collection</span> is what I own and
-              spin at home. The{" "}
-              <span className="text-foreground font-medium">Community Recommendations</span> section
-              is open to everyone — search for an album below and recommend it.
+              Go ahead —{" "}
+              <span className="text-foreground font-medium">test the DB architecture</span> and drop
+              a recommendation below. What record should be in my collection?
             </p>
           </div>
 
@@ -274,7 +275,11 @@ export default async function InteractiveLabPage() {
       {/* ── Collection (grouped by genre) ── */}
       <section className="mt-12" aria-label="Javier's vinyl collection">
         <SectionHeading
-          label="Javier's Collection"
+          label={
+            <>
+              Javier&apos;s <span className="gradient-heading">Collection</span>
+            </>
+          }
           count={collection.length + (nowSpinning?.status === "in_collection" ? 1 : 0)}
           dotColor="primary"
         />
@@ -306,7 +311,11 @@ export default async function InteractiveLabPage() {
       {/* ── Community Recommendations ── */}
       <section className="mt-12" aria-label="Community recommendations">
         <SectionHeading
-          label="Community Recommendations"
+          label={
+            <>
+              Community <span className="gradient-heading">Recommendations</span>
+            </>
+          }
           count={recommended.length}
           dotColor="secondary"
         />
