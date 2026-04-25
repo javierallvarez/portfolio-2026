@@ -1,6 +1,7 @@
 "use server";
 
 import { searchDiscogs, type DiscogsResult } from "@/lib/external/discogs";
+import { trackEventAction } from "@/actions/telemetry";
 
 export interface SearchDiscogsResult {
   data: DiscogsResult[] | null;
@@ -20,6 +21,7 @@ export async function searchDiscogsAction(query: string): Promise<SearchDiscogsR
 
   try {
     const results = await searchDiscogs(query.trim());
+    void trackEventAction("discogs_searched");
     return { data: results, error: null };
   } catch (err) {
     const message = err instanceof Error ? err.message : "Search failed";

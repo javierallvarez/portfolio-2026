@@ -4,7 +4,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Kbd } from "@heroui/react";
-import { Home, FlaskConical, Settings, Sun, Moon, Bot, Bell, Search } from "lucide-react";
+import { Home, FlaskConical, Wrench, Settings, Sun, Moon, Bot, Bell, Search } from "lucide-react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
 import { useCareerChatDrawer } from "@/hooks/use-career-chat-drawer";
 import { AutomationConsole } from "@/components/ui/automation-console";
@@ -42,6 +42,14 @@ function useCommands(onOpenConsole: () => void, onOpenChat: () => void): Command
         category: "Navigate" as const,
         icon: <FlaskConical size={16} />,
         action: () => router.push("/interactive-lab"),
+      },
+      {
+        id: "nav-tools",
+        label: "Go to Developer Utilities",
+        description: "Password Generator, Cron Translator — all tracked in PostgreSQL",
+        category: "Navigate" as const,
+        icon: <Wrench size={16} />,
+        action: () => router.push("/tools"),
       },
       {
         id: "nav-under-the-hood",
