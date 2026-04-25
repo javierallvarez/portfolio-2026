@@ -8,7 +8,10 @@ import {
   Globe,
   Lock,
   KeyRound,
+  KeySquare,
+  BarChart3,
 } from "lucide-react";
+import { getTelemetryStatsAction } from "@/actions/telemetry";
 
 export const metadata: Metadata = {
   title: "Under the Hood",
@@ -323,7 +326,8 @@ const TECH_STACK = [
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
-export default function UnderTheHoodPage() {
+export default async function UnderTheHoodPage() {
+  const telemetry = await getTelemetryStatsAction();
   return (
     <div className="mx-auto max-w-5xl space-y-20 px-4 py-16">
       {/* ── Hero ── */}
@@ -633,6 +637,70 @@ export default function UnderTheHoodPage() {
                 {item.icon} {item.title}
               </p>
               <p className="text-default-500 text-xs leading-relaxed">{item.body}</p>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Live DB Telemetry ── */}
+      <section aria-labelledby="telemetry-heading" className="space-y-6">
+        <div>
+          <SectionTitle>
+            Live{" "}
+            <span id="telemetry-heading" className="gradient-heading">
+              Telemetry
+            </span>
+          </SectionTitle>
+          <Prose>
+            <p>
+              Every tool interaction on the{" "}
+              <a href="/tools" className="text-teal-400 underline-offset-2 hover:underline">
+                Developer Utilities
+              </a>{" "}
+              page and every Discogs search in the Interactive Lab appends an anonymous row to the{" "}
+              <code className="bg-content2 rounded px-1 py-0.5 font-mono text-xs">
+                telemetry_events
+              </code>{" "}
+              table in Neon PostgreSQL. Counts below are live — no caching, fresh on every page
+              load.
+            </p>
+          </Prose>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[
+            {
+              icon: <KeySquare size={20} className="text-teal-400" />,
+              label: "Passwords Generated",
+              value: telemetry.password_generated,
+              description: "via Password Generator",
+            },
+            {
+              icon: <BarChart3 size={20} className="text-teal-400" />,
+              label: "Cron Expressions Translated",
+              value: telemetry.cron_translated,
+              description: "via Cron Translator",
+            },
+            {
+              icon: <Database size={20} className="text-teal-400" />,
+              label: "Discogs Searches",
+              value: telemetry.discogs_searched,
+              description: "via Interactive Lab",
+            },
+          ].map((stat) => (
+            <Card key={stat.label}>
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 ring-1 ring-teal-500/20">
+                  {stat.icon}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-foreground font-serif text-3xl leading-none font-normal">
+                    {stat.value.toLocaleString()}
+                  </p>
+                  <p className="text-foreground mt-1 text-sm font-medium">{stat.label}</p>
+                  <p className="text-default-400 text-xs">{stat.description}</p>
+                </div>
+              </div>
             </Card>
           ))}
         </div>

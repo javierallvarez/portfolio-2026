@@ -25,3 +25,16 @@ export const vinyls = pgTable("vinyls", {
 
 export type Vinyl = typeof vinyls.$inferSelect;
 export type NewVinyl = typeof vinyls.$inferInsert;
+
+// ─── Telemetry Events Table ───────────────────────────────────────────────────
+// Append-only event log. Each row records a single anonymous interaction.
+// Run `npm run db:push` after adding this table to apply it to Neon.
+
+export const telemetryEvents = pgTable("telemetry_events", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  eventType: varchar("event_type", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export type TelemetryEvent = typeof telemetryEvents.$inferSelect;
+export type NewTelemetryEvent = typeof telemetryEvents.$inferInsert;
