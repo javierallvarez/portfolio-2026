@@ -3,9 +3,10 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import { Kbd, toast } from "@heroui/react";
-import { Home, FlaskConical, Settings, Sun, Moon, FileText, Bell, Search } from "lucide-react";
+import { Kbd } from "@heroui/react";
+import { Home, FlaskConical, Settings, Sun, Moon, Bot, Bell, Search } from "lucide-react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
+import { useCareerChatDrawer } from "@/hooks/use-career-chat-drawer";
 import { AutomationConsole } from "@/components/ui/automation-console";
 
 // ─── Command Definitions ───────────────────────────────────────────────────────
@@ -21,7 +22,7 @@ interface Command {
   action: () => void;
 }
 
-function useCommands(onOpenConsole: () => void): Command[] {
+function useCommands(onOpenConsole: () => void, onOpenChat: () => void): Command[] {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
 
@@ -58,14 +59,12 @@ function useCommands(onOpenConsole: () => void): Command[] {
         action: () => setTheme(theme === "dark" ? "light" : "dark"),
       },
       {
-        id: "download-cv",
-        label: "Download CV",
-        description: "Get the latest resume",
+        id: "ask-ai",
+        label: "Ask my AI Career Agent",
+        description: "Chat with Javier's AI about his career, projects, and tech stack",
         category: "Actions" as const,
-        icon: <FileText size={16} />,
-        action: () => {
-          toast.success("Javier's CV was successfully prepared and downloaded. (Simulated)");
-        },
+        icon: <Bot size={16} />,
+        action: onOpenChat,
       },
       {
         id: "run-slack-webhook",
@@ -76,7 +75,7 @@ function useCommands(onOpenConsole: () => void): Command[] {
         action: onOpenConsole,
       },
     ],
-    [router, theme, setTheme, onOpenConsole],
+    [router, theme, setTheme, onOpenConsole, onOpenChat],
   );
 }
 
@@ -133,7 +132,10 @@ export function CommandPalette() {
     setConsoleOpen(true);
   }, []);
 
-  const commands = useCommands(openConsole);
+  // ── AI Career Chat ──
+  const { open: openChat } = useCareerChatDrawer();
+
+  const commands = useCommands(openConsole, openChat);
 
   // ── Register global ⌘K / Ctrl+K shortcut ──
   useEffect(() => {

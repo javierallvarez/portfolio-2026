@@ -266,8 +266,8 @@ const TECH_STACK = [
   },
   {
     layer: "Language",
-    tech: "TypeScript (strict)",
-    why: "`any` is a lint error; types as living documentation",
+    tech: "TypeScript (strict) + Python",
+    why: "`any` is a lint error; Python handles backend APIs (Flask), Jenkins pipelines, and advanced automation scripts",
   },
   {
     layer: "Styling",
@@ -293,6 +293,11 @@ const TECH_STACK = [
     layer: "External API",
     tech: "Discogs REST API",
     why: "Server-side token; client never touches the secret",
+  },
+  {
+    layer: "AI",
+    tech: "Vercel AI SDK + Gemini 2.5 Flash",
+    why: "Streaming text via `streamText` → `toTextStreamResponse()`; Upstash Redis rate-limits the chat route to 5 req/min per IP",
   },
   {
     layer: "Testing",
@@ -336,7 +341,10 @@ export default function UnderTheHoodPage() {
       <section aria-labelledby="infra-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            <span id="infra-heading">Infrastructure &amp; Deployment</span>
+            Infrastructure &amp;{" "}
+            <span id="infra-heading" className="gradient-heading">
+              Deployment
+            </span>
           </SectionTitle>
           <Prose>
             <p>
@@ -418,7 +426,10 @@ export default function UnderTheHoodPage() {
       <section aria-labelledby="cicd-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            <span id="cicd-heading">CI/CD Pipeline</span>
+            <span id="cicd-heading" className="gradient-heading">
+              CI/CD
+            </span>{" "}
+            Pipeline
           </SectionTitle>
           <Prose>
             <p>
@@ -483,7 +494,10 @@ export default function UnderTheHoodPage() {
       <section aria-labelledby="sdd-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            <span id="sdd-heading">Spec-Driven Development</span>
+            Spec-Driven{" "}
+            <span id="sdd-heading" className="gradient-heading">
+              Development
+            </span>
           </SectionTitle>
           <Prose>
             <p>
@@ -528,7 +542,11 @@ export default function UnderTheHoodPage() {
       <section aria-labelledby="stack-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            <span id="stack-heading">Tech Stack &amp; Rationale</span>
+            Tech{" "}
+            <span id="stack-heading" className="gradient-heading">
+              Stack
+            </span>{" "}
+            &amp; Rationale
           </SectionTitle>
           <Prose>
             <p>Every technology choice has a documented reason — no cargo-culting.</p>
@@ -567,7 +585,10 @@ export default function UnderTheHoodPage() {
       <section aria-labelledby="security-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            <span id="security-heading">Security Model</span>
+            <span id="security-heading" className="gradient-heading">
+              Security
+            </span>{" "}
+            Model
           </SectionTitle>
           <Prose>
             <p>Security is layered — no single control is relied upon exclusively.</p>
@@ -589,7 +610,7 @@ export default function UnderTheHoodPage() {
             {
               icon: <Zap size={15} className="text-teal-400" />,
               title: "Rate limiting",
-              body: "Upstash Redis sliding-window limiter on all mutating endpoints. Anonymous and authenticated limits are configured separately.",
+              body: "Upstash Redis sliding-window limiter on all mutating endpoints. The AI Chat route is aggressively capped at 5 requests per minute per IP to prevent abuse and protect billing quotas. Anonymous and authenticated limits are configured separately.",
             },
             {
               icon: <KeyRound size={15} className="text-teal-400" />,

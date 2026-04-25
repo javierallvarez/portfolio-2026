@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useRef, useEffect } from "react";
 import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 import { Button, toast } from "@heroui/react";
 import { searchDiscogsAction } from "@/actions/search";
 import { createVinylAction } from "@/actions/vinyls";
@@ -113,7 +114,21 @@ export function VinylSearch({ isAdmin }: VinylSearchProps) {
     <div className="space-y-4">
       {/* ── Search input ── */}
       <div ref={wrapperRef} className="relative max-w-xl">
-        <div className="border-divider bg-content1 focus-within:ring-primary/50 flex items-center gap-2 rounded-lg border px-3 py-2 transition-all focus-within:ring-2">
+        {/* Floating call-to-action badge + bouncing arrow */}
+        {!query && (
+          <div className="mb-2 flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-400/10 px-3 py-1 text-xs font-semibold text-teal-500 ring-1 ring-teal-400/30">
+              ✨ Try the DB: Recommend a vinyl!
+            </span>
+            <ChevronDown size={14} className="animate-bounce text-teal-400" aria-hidden="true" />
+          </div>
+        )}
+
+        {/* Input wrapper with teal glow */}
+        <div
+          className="border-divider bg-content1 flex items-center gap-2 rounded-lg border px-3 py-2.5 transition-all focus-within:ring-2 focus-within:ring-teal-400/50"
+          style={{ boxShadow: query ? "none" : "0 0 15px rgba(45,212,191,0.3)" }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -135,7 +150,7 @@ export function VinylSearch({ isAdmin }: VinylSearchProps) {
             value={query}
             onChange={handleQueryChange}
             onFocus={() => results.length > 0 && setShowResults(true)}
-            placeholder="Search Discogs… e.g. 'Miles Davis Kind of Blue'"
+            placeholder="Search Discogs for an album or artist…"
             aria-label="Search Discogs for vinyl records"
             disabled={isSubmitting}
             className="placeholder:text-default-400 min-w-0 flex-1 bg-transparent text-sm outline-none disabled:cursor-not-allowed disabled:opacity-50"

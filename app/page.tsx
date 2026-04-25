@@ -13,7 +13,10 @@ export default function HomePage() {
       <section className="mx-auto flex max-w-4xl flex-col items-center px-6 pt-20 pb-24 text-center sm:pt-32">
         {/* Headline */}
         <h1 className="text-foreground font-serif text-4xl font-normal tracking-tight sm:text-6xl lg:text-7xl">
-          Software Engineer <span className="gradient-heading">building for humans</span>
+          Software Engineer{" "}
+          <span className="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+            building for humans
+          </span>
         </h1>
 
         {/* Subheading */}

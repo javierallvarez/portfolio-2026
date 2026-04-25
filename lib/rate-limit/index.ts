@@ -1,62 +1,78 @@
 /**
  * Rate Limiting Strategy
  * ─────────────────────
- * Implementation uses Upstash Redis with a sliding window algorithm via the
- * `@upstash/ratelimit` package (add with: npm i @upstash/ratelimit @upstash/redis).
- *
- * This file provides a factory function to create rate limiters with different
- * configurations per route (e.g., more permissive for reads, strict for writes).
+ * Uses Upstash Redis with a sliding window algorithm. When UPSTASH_REDIS_REST_URL
+ * is not configured (e.g. CI / local without .env.local) the module falls back to
+ * a no-op stub so the rest of the application keeps working.
  *
  * Usage in a Server Action or Route Handler:
  * ```ts
  * import { checkRateLimit } from "@/lib/rate-limit";
  *
- * export async function createVinylAction(data: CreateVinylInput) {
- *   await checkRateLimit("vinyls:create");
- *   // ... rest of the action
- * }
+ * const { success, remaining } = await checkRateLimit("chat:send", clientIp);
+ * if (!success) return new Response("Rate limit exceeded", { status: 429 });
  * ```
- *
- * TODO (JAG-006): Install @upstash/ratelimit and uncomment the implementation below
- *                 once UPSTASH_REDIS_REST_URL and TOKEN are configured.
  */
 
-// import { Ratelimit } from "@upstash/ratelimit";
-// import { Redis } from "@upstash/redis";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
-// const redis = new Redis({
-//   url: process.env.UPSTASH_REDIS_REST_URL!,
-//   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-// });
+// ─── Upstash client ────────────────────────────────────────────────────────────
 
-// const limiters = {
-//   "vinyls:create": new Ratelimit({
-//     redis,
-//     limiter: Ratelimit.slidingWindow(10, "1 m"), // 10 creates per minute
-//   }),
-//   "vinyls:read": new Ratelimit({
-//     redis,
-//     limiter: Ratelimit.slidingWindow(100, "1 m"), // 100 reads per minute
-//   }),
-// } as const;
+const url = process.env.UPSTASH_REDIS_REST_URL ?? "";
+const token = process.env.UPSTASH_REDIS_REST_TOKEN ?? "";
+const isConfigured = url.startsWith("https://") && token !== "" && token !== "your-upstash-token";
 
-// type LimiterKey = keyof typeof limiters; // "vinyls:create" | "vinyls:read"
+const redis = isConfigured ? new Redis({ url, token }) : null;
 
-// export async function checkRateLimit(key: LimiterKey, identifier?: string) {
-//   const id = identifier ?? "global";
-//   const { success, limit, remaining, reset } = await limiters[key].limit(id);
-//   if (!success) {
-//     throw new Error(`Rate limit exceeded. Limit: ${limit}, resets at ${new Date(reset)}`);
-//   }
-//   return { remaining };
-// }
+// ─── Limiters ─────────────────────────────────────────────────────────────────
+
+function makeRatelimit(requests: number, window: `${number} ${"s" | "m" | "h" | "d"}`) {
+  if (!redis) return null;
+  return new Ratelimit({ redis, limiter: Ratelimit.slidingWindow(requests, window) });
+}
+
+const limiters = {
+  /** Vinyl creation — 10 per minute */
+  "vinyls:create": makeRatelimit(10, "1 m"),
+  /** Vinyl reads — 100 per minute */
+  "vinyls:read": makeRatelimit(100, "1 m"),
+  /** AI career chat — 5 per minute per IP */
+  "chat:send": makeRatelimit(5, "1 m"),
+} as const;
+
+type LimiterKey = keyof typeof limiters;
+
+// ─── Public API ───────────────────────────────────────────────────────────────
+
+export interface RateLimitResult {
+  success: boolean;
+  remaining: number;
+  limit: number;
+  reset: number;
+}
 
 /**
- * Temporary no-op stub — replace with the implementation above once Upstash is configured.
+ * Check the rate limit for a given key and identifier (usually an IP address).
+ * When Upstash is not configured the function always returns success so the
+ * rest of the application keeps working in local / CI environments.
  */
 export async function checkRateLimit(
-  _key: string,
-  _identifier?: string,
-): Promise<{ remaining: number }> {
-  return { remaining: 999 };
+  key: LimiterKey,
+  identifier = "global",
+): Promise<RateLimitResult> {
+  const limiter = limiters[key];
+
+  if (!limiter) {
+    // Upstash not configured — no-op fallback
+    return { success: true, remaining: 999, limit: 999, reset: 0 };
+  }
+
+  const result = await limiter.limit(identifier);
+  return {
+    success: result.success,
+    remaining: result.remaining,
+    limit: result.limit,
+    reset: result.reset,
+  };
 }
