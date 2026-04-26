@@ -126,11 +126,7 @@ export function useTheme(): ThemeContextValue {
 
   // useSyncExternalStore gives us tearing-safe reads from localStorage.
   // getServerSnapshot returns "system" so SSR and client initial render match.
-  const theme = useSyncExternalStore(
-    _subscribe,
-    _readStored,
-    () => "system" as Theme,
-  );
+  const theme = useSyncExternalStore(_subscribe, _readStored, () => "system" as Theme);
 
   const resolvedTheme = useSyncExternalStore(
     _subscribe,
