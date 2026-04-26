@@ -62,6 +62,19 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${dmSerifDisplay.variable} h-full antialiased`}
       >
+        {/*
+         * Inline theme-init script runs synchronously before first paint to prevent FOUC.
+         * Lives in the Server Component <head> so React never touches it — avoids the
+         * React 19 "Encountered a script tag in a client component" console.error that
+         * next-themes v0.4.x triggers by injecting the same script inside ThemeProvider.
+         */}
+        <head>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var t=localStorage.getItem('theme');var dark=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.toggle('dark',dark);}catch(e){}})()`,
+            }}
+          />
+        </head>
         <body
           className="bg-background text-foreground flex min-h-full flex-col"
           suppressHydrationWarning

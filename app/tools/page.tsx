@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { PasswordGenerator } from "@/components/tools/password-generator";
 import { CronTranslator } from "@/components/tools/cron-translator";
+import { JwtDecoder } from "@/components/tools/jwt-decoder";
+import { JsonFormatter } from "@/components/tools/json-formatter";
 
 export const metadata: Metadata = {
   title: "Developer Utilities",
@@ -31,6 +33,8 @@ export default function ToolsPage() {
       <div className="grid gap-6 sm:grid-cols-2">
         <PasswordGenerator />
         <CronTranslator />
+        <JwtDecoder />
+        <JsonFormatter />
       </div>
 
       {/* ── Callout ── */}
