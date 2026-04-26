@@ -2,7 +2,7 @@
 
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/hooks/use-theme";
 import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 import { Button, Kbd } from "@heroui/react";
 import { Bot } from "lucide-react";

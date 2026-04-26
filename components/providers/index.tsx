@@ -1,9 +1,9 @@
 "use client";
 
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Toast } from "@heroui/react";
 import type { ReactNode } from "react";
 import { CareerChatDrawerProvider } from "@/hooks/use-career-chat-drawer";
+import { ThemeProvider } from "@/hooks/use-theme";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -24,16 +24,11 @@ interface ProvidersProps {
  */
 export function Providers({ children }: ProvidersProps) {
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    <ThemeProvider>
       <CareerChatDrawerProvider>
         {children}
         <Toast.Provider placement="bottom end" />
       </CareerChatDrawerProvider>
-    </NextThemesProvider>
+    </ThemeProvider>
   );
 }

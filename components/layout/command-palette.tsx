@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/hooks/use-theme";
 import { Kbd } from "@heroui/react";
 import { Home, FlaskConical, Wrench, Settings, Sun, Moon, Bot, Bell, Search } from "lucide-react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
