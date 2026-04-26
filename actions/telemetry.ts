@@ -6,7 +6,12 @@ import { count } from "drizzle-orm";
 
 // ─── Known event types ────────────────────────────────────────────────────────
 
-export type EventType = "password_generated" | "cron_translated" | "discogs_searched";
+export type EventType =
+  | "password_generated"
+  | "cron_translated"
+  | "discogs_searched"
+  | "jwt_decoded"
+  | "json_formatted";
 
 // ─── Track ────────────────────────────────────────────────────────────────────
 
@@ -28,6 +33,8 @@ export interface TelemetryStats {
   password_generated: number;
   cron_translated: number;
   discogs_searched: number;
+  jwt_decoded: number;
+  json_formatted: number;
 }
 
 /**
@@ -39,6 +46,8 @@ export async function getTelemetryStatsAction(): Promise<TelemetryStats> {
     password_generated: 0,
     cron_translated: 0,
     discogs_searched: 0,
+    jwt_decoded: 0,
+    json_formatted: 0,
   };
 
   try {

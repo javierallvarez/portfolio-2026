@@ -10,6 +10,7 @@ import {
   KeyRound,
   KeySquare,
   BarChart3,
+  Braces,
 } from "lucide-react";
 import { getTelemetryStatsAction } from "@/actions/telemetry";
 
@@ -667,7 +668,7 @@ export default async function UnderTheHoodPage() {
           </Prose>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
           {[
             {
               icon: <KeySquare size={20} className="text-teal-400" />,
@@ -686,6 +687,18 @@ export default async function UnderTheHoodPage() {
               label: "Discogs Searches",
               value: telemetry.discogs_searched,
               description: "via Interactive Lab",
+            },
+            {
+              icon: <KeyRound size={20} className="text-teal-400" />,
+              label: "JWTs Decoded",
+              value: telemetry.jwt_decoded,
+              description: "via JWT Decoder",
+            },
+            {
+              icon: <Braces size={20} className="text-teal-400" />,
+              label: "JSONs Formatted",
+              value: telemetry.json_formatted,
+              description: "via JSON Formatter",
             },
           ].map((stat) => (
             <Card key={stat.label}>
