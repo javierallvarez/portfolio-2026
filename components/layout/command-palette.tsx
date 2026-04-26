@@ -4,7 +4,18 @@ import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "@/hooks/use-theme";
 import { Kbd } from "@heroui/react";
-import { Home, FlaskConical, Wrench, Settings, Sun, Moon, Bot, Bell, Search } from "lucide-react";
+import {
+  Home,
+  FlaskConical,
+  Wrench,
+  Settings,
+  Sun,
+  Moon,
+  Bot,
+  Bell,
+  Search,
+  Cog,
+} from "lucide-react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
 import { useCareerChatDrawer } from "@/hooks/use-career-chat-drawer";
 import { AutomationConsole } from "@/components/ui/automation-console";
@@ -50,6 +61,15 @@ function useCommands(onOpenConsole: () => void, onOpenChat: () => void): Command
         category: "Navigate" as const,
         icon: <Wrench size={16} />,
         action: () => router.push("/tools"),
+      },
+      {
+        id: "nav-internal-tooling",
+        label: "Go to Internal Tooling & Automations",
+        description:
+          "IAM provisioning pipelines, reporting automation — Python, Jenkins, Slack, GWS",
+        category: "Navigate" as const,
+        icon: <Cog size={16} />,
+        action: () => router.push("/internal-tooling"),
       },
       {
         id: "nav-under-the-hood",

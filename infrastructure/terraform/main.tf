@@ -289,16 +289,9 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   # Enforce HTTPS at the CloudFront level; redirect HTTP → HTTPS.
   viewer_certificate {
-    dynamic "acm_certificate" {
-      for_each = var.acm_certificate_arn != "" ? [1] : []
-      content {
-        acm_certificate_arn      = var.acm_certificate_arn
-        ssl_support_method       = "sni-only"
-        minimum_protocol_version = "TLSv1.2_2021"
-      }
-    }
-
-    # Fall back to the default CloudFront certificate when no custom domain is configured.
+    acm_certificate_arn            = var.acm_certificate_arn != "" ? var.acm_certificate_arn : null
+    ssl_support_method             = var.acm_certificate_arn != "" ? "sni-only" : null
+    minimum_protocol_version       = var.acm_certificate_arn != "" ? "TLSv1.2_2021" : "TLSv1"
     cloudfront_default_certificate = var.acm_certificate_arn == ""
   }
 

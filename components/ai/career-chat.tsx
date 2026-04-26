@@ -185,7 +185,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
               </div>
 
               <a
-                href="https://www.linkedin.com/in/javierallvarez/"
+                href="https://www.linkedin.com/in/javier-álvarez-07783a111"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-1 inline-flex items-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-teal-400"
