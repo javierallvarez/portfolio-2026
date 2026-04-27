@@ -31,7 +31,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
           <div className="flex justify-center lg:justify-start">
             <div className="relative aspect-square w-[min(100%,280px)] shrink-0 overflow-hidden rounded-full border-4 border-teal-400/35 shadow-[0_20px_50px_-12px_oklch(0.2_0.08_200_/_0.35)] ring-1 ring-teal-500/20">
               <Image
-                src="/javier-avatar.png"
+                src="/javi-avatar.png"
                 alt={bio.avatarAlt}
                 width={280}
                 height={280}

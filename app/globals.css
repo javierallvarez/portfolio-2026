@@ -4,75 +4,6 @@
  */
 @import "@heroui/styles";
 
-/* Softer light palette (zinc-adjacent) — anti-flashbang vs default HeroUI light.
- * Light tokens ONLY on explicit light / non-dark <html>: never bare `:root` alone (it matches
- * `html.dark` with the same specificity as `.dark` from HeroUI and loses by source order). */
-@layer base {
-  :root:not(.dark):not([data-theme="dark"]),
-  :root.light,
-  :root[data-theme="light"],
-  :root[data-theme="default"],
-  html.light,
-  html[data-theme="light"],
-  html[data-theme="default"] {
-    --background: oklch(0.985 0.004 285);
-    --foreground: oklch(0.19 0.012 285);
-    --surface: oklch(0.998 0.003 285);
-    --surface-foreground: var(--foreground);
-    --surface-secondary: oklch(0.972 0.006 285);
-    --surface-secondary-foreground: var(--foreground);
-    --surface-tertiary: oklch(0.958 0.008 285);
-    --surface-tertiary-foreground: var(--foreground);
-    --overlay: oklch(0.998 0.003 285);
-    --overlay-foreground: var(--foreground);
-    --muted: oklch(0.48 0.018 285);
-    --default: oklch(0.966 0.006 285);
-    --default-foreground: var(--foreground);
-    --border: oklch(0.9 0.008 285);
-    --separator: oklch(0.928 0.007 285);
-    --segment: oklch(0.998 0.003 285);
-    --segment-foreground: var(--foreground);
-    --field-background: oklch(0.998 0.003 285);
-    --field-foreground: var(--foreground);
-    --scrollbar: oklch(0.88 0.01 285);
-    --surface-shadow:
-      0 2px 6px 0 oklch(0.2 0.02 285 / 0.05), 0 1px 2px 0 oklch(0.2 0.02 285 / 0.04),
-      0 0 1px 0 oklch(0.2 0.02 285 / 0.04);
-    --overlay-shadow:
-      0 4px 12px 0 oklch(0.2 0.02 285 / 0.06), 0 2px 4px 0 oklch(0.2 0.02 285 / 0.05);
-    --field-shadow: var(--surface-shadow);
-  }
-
-  /* Dark: re-declare on <html> so specificity beats HeroUI `.dark` / `[data-theme="dark"]`. */
-  html.dark,
-  html[data-theme="dark"] {
-    color-scheme: dark;
-    --background: #0a0a0a !important;
-    --foreground: #fafafa !important;
-    --surface: oklch(0.2103 0.0059 285.89);
-    --surface-foreground: var(--foreground);
-    --surface-secondary: oklch(0.257 0.0037 286.14);
-    --surface-secondary-foreground: var(--foreground);
-    --surface-tertiary: oklch(0.2721 0.0024 247.91);
-    --surface-tertiary-foreground: var(--foreground);
-    --overlay: oklch(0.2103 0.0059 285.89);
-    --overlay-foreground: var(--foreground);
-    --muted: oklch(70.5% 0.015 286.067);
-    --scrollbar: oklch(70.5% 0.015 286.067);
-    --default: oklch(27.4% 0.006 286.033);
-    --default-foreground: var(--foreground);
-    --field-background: oklch(0.2103 0.0059 285.89);
-    --field-foreground: var(--foreground);
-    --segment: oklch(0.3964 0.01 285.93);
-    --segment-foreground: var(--foreground);
-    --border: oklch(28% 0.006 286.033);
-    --separator: oklch(25% 0.006 286.033);
-    --surface-shadow: 0 0 0 0 transparent inset;
-    --overlay-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.3) inset;
-    --field-shadow: 0 0 0 0 transparent inset;
-  }
-}
-
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -91,4 +22,71 @@
   .animate-spin-slow {
     animation: spin 4s linear infinite;
   }
+}
+
+/*
+ * Design tokens — UNLAYERED on purpose.
+ * HeroUI ships light/dark variables inside `@import … layer(theme)` (and nested `@layer base`
+ * in that file). Rules in named layers never beat unlayered rules, so these always win.
+ *
+ * Light: never target `html[data-theme="default"]` alone — it can coexist with `class="dark"`
+ * from some stacks and would tie-specificity with our dark block. Only non-dark html.
+ * Dark: keep last so background/foreground stay correct.
+ */
+html:not(.dark):not([data-theme="dark"]),
+html.light:not(.dark),
+html[data-theme="light"]:not(.dark) {
+  --background: oklch(0.985 0.004 285);
+  --foreground: oklch(0.19 0.012 285);
+  --surface: oklch(0.998 0.003 285);
+  --surface-foreground: var(--foreground);
+  --surface-secondary: oklch(0.972 0.006 285);
+  --surface-secondary-foreground: var(--foreground);
+  --surface-tertiary: oklch(0.958 0.008 285);
+  --surface-tertiary-foreground: var(--foreground);
+  --overlay: oklch(0.998 0.003 285);
+  --overlay-foreground: var(--foreground);
+  --muted: oklch(0.48 0.018 285);
+  --default: oklch(0.966 0.006 285);
+  --default-foreground: var(--foreground);
+  --border: oklch(0.9 0.008 285);
+  --separator: oklch(0.928 0.007 285);
+  --segment: oklch(0.998 0.003 285);
+  --segment-foreground: var(--foreground);
+  --field-background: oklch(0.998 0.003 285);
+  --field-foreground: var(--foreground);
+  --scrollbar: oklch(0.88 0.01 285);
+  --surface-shadow:
+    0 2px 6px 0 oklch(0.2 0.02 285 / 0.05), 0 1px 2px 0 oklch(0.2 0.02 285 / 0.04),
+    0 0 1px 0 oklch(0.2 0.02 285 / 0.04);
+  --overlay-shadow: 0 4px 12px 0 oklch(0.2 0.02 285 / 0.06), 0 2px 4px 0 oklch(0.2 0.02 285 / 0.05);
+  --field-shadow: var(--surface-shadow);
+}
+
+html.dark,
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0a0a0a !important;
+  --foreground: #fafafa !important;
+  --surface: oklch(0.2103 0.0059 285.89);
+  --surface-foreground: var(--foreground);
+  --surface-secondary: oklch(0.257 0.0037 286.14);
+  --surface-secondary-foreground: var(--foreground);
+  --surface-tertiary: oklch(0.2721 0.0024 247.91);
+  --surface-tertiary-foreground: var(--foreground);
+  --overlay: oklch(0.2103 0.0059 285.89);
+  --overlay-foreground: var(--foreground);
+  --muted: oklch(70.5% 0.015 286.067);
+  --scrollbar: oklch(70.5% 0.015 286.067);
+  --default: oklch(27.4% 0.006 286.033);
+  --default-foreground: var(--foreground);
+  --field-background: oklch(0.2103 0.0059 285.89);
+  --field-foreground: var(--foreground);
+  --segment: oklch(0.3964 0.01 285.93);
+  --segment-foreground: var(--foreground);
+  --border: oklch(28% 0.006 286.033);
+  --separator: oklch(25% 0.006 286.033);
+  --surface-shadow: 0 0 0 0 transparent inset;
+  --overlay-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+  --field-shadow: 0 0 0 0 transparent inset;
 }
