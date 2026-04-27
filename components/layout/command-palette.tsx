@@ -57,7 +57,7 @@ function useCommands(onOpenConsole: () => void, onOpenChat: () => void): Command
       {
         id: "nav-tools",
         label: "Go to Developer Utilities",
-        description: "Password Generator, Cron Translator — all tracked in PostgreSQL",
+        description: "Password Generator, Cron Translator, all tracked in PostgreSQL",
         category: "Navigate" as const,
         icon: <Wrench size={16} />,
         action: () => router.push("/tools"),
@@ -66,7 +66,7 @@ function useCommands(onOpenConsole: () => void, onOpenChat: () => void): Command
         id: "nav-internal-tooling",
         label: "Go to Internal Tooling & Automations",
         description:
-          "IAM provisioning pipelines, reporting automation — Python, Jenkins, Slack, GWS",
+          "IAM provisioning pipelines, reporting automation. Python, Jenkins, Slack, GWS",
         category: "Navigate" as const,
         icon: <Cog size={16} />,
         action: () => router.push("/internal-tooling"),

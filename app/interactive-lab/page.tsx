@@ -8,10 +8,11 @@ import { vinyls } from "@/lib/db/schema";
 import { VinylSearch } from "@/components/vinyls/vinyl-search";
 import { VinylDeleteButton } from "@/components/vinyls/vinyl-delete-button";
 import { VinylNowSpinningButton } from "@/components/vinyls/vinyl-now-spinning-button";
+import { VinylSommelier } from "@/components/interactive-lab/vinyl-sommelier";
 import type { Vinyl } from "@/lib/db/schema";
 
 export const metadata: Metadata = {
-  title: "Interactive Lab — Vinyl Collection",
+  title: "Interactive Lab · Vinyl Collection",
   description:
     "A live laboratory powered by a real vinyl record collection. Demonstrates PostgreSQL with Drizzle ORM, optimistic UI, rate limiting, and strict Zod validation in Next.js.",
 };
@@ -221,17 +222,17 @@ export default async function InteractiveLabPage() {
               I spent years as an{" "}
               <span className="text-foreground font-medium">Electronic Music Producer</span> and{" "}
               <span className="text-foreground font-medium">Record Label Director</span>, and sound
-              still runs through everything I do — including the records that fill this collection.
+              still runs through everything I do, including the records that fill this collection.
             </p>
             <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
               But it&apos;s also a{" "}
               <span className="text-foreground font-medium">live PostgreSQL database</span>{" "}
               demonstrating real-world full-stack architecture: Drizzle ORM, optimistic UI, rate
-              limiting, Zod validation, Clerk RBAC, and Discogs API integration — all running
-              against a live Neon database.
+              limiting, Zod validation, Clerk RBAC, and Discogs API integration, all running against
+              a live Neon database.
             </p>
             <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
-              Go ahead —{" "}
+              Go ahead,{" "}
               <span className="text-foreground font-medium">test the DB architecture</span> and drop
               a recommendation below. What record should be in my collection?
             </p>
@@ -258,6 +259,11 @@ export default async function InteractiveLabPage() {
           <NowSpinningCard vinyl={nowSpinning} isAdmin={isAdmin} />
         </section>
       )}
+
+      {/* ── Vinyl Sommelier ── */}
+      <section className="mt-10" aria-label="Vinyl Sommelier">
+        <VinylSommelier />
+      </section>
 
       {/* ── Discogs Search ── */}
       <section className="mt-10" aria-label="Search and add vinyl records">
@@ -303,7 +309,7 @@ export default async function InteractiveLabPage() {
           </div>
         ) : (
           <p className="text-default-400 mt-4 text-sm">
-            No records in the collection yet — check back soon!
+            No records in the collection yet. Check back soon!
           </p>
         )}
       </section>

@@ -28,15 +28,15 @@ const iamNodes: FlowNode[] = [
   },
   {
     icon: Globe,
-    label: "Action — Identity",
+    label: "Action · Identity",
     title: "Google Workspace Admin API",
     description:
-      "Creates the corporate Google account, assigns it to the correct OU, and adds it to the relevant Google Groups — all in a single atomic sequence.",
+      "Creates the corporate Google account, assigns it to the correct OU, and adds it to the relevant Google Groups, all in a single atomic sequence.",
     tech: ["GWS Admin SDK", "OAuth 2.0", "Service Account"],
   },
   {
     icon: MessageSquare,
-    label: "Action — Comms",
+    label: "Action · Comms",
     title: "Slack API",
     description:
       "Sends a personalised Block Kit welcome DM to the new hire and posts a provisioning-complete notification to the IT channel with a summary card.",
@@ -64,7 +64,7 @@ const reportingNodes: FlowNode[] = [
   {
     icon: BarChart2,
     label: "Action",
-    title: "Slack Webhook — Rich Report",
+    title: "Slack Webhook · Rich Report",
     description:
       "Posts a formatted Block Kit message to per-team channels with charts, trend indicators, and direct links to dashboards. Zero manual effort, every day.",
     tech: ["Slack Incoming Webhooks", "Block Kit"],
@@ -107,8 +107,8 @@ export default function InternalToolingPage() {
           </h2>
           <p className="text-default-500 max-w-xl text-sm leading-relaxed">
             Zero-touch onboarding pipeline integrating HR webhooks with Google Workspace and Slack.
-            A new hire is fully provisioned — account, groups, and welcome message — before they
-            walk through the door.
+            A new hire is fully provisioned (account, groups, and welcome message) before they walk
+            through the door.
           </p>
         </div>
 

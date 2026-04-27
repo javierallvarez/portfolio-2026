@@ -112,7 +112,7 @@ export function JwtDecoder() {
       {isInvalid && (
         <div className="border-danger/40 bg-danger/5 text-danger flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm">
           <AlertCircle size={14} className="shrink-0" />
-          Invalid JWT — must have exactly three base64url-encoded segments separated by dots.
+          Invalid JWT. Must have exactly three base64url-encoded segments separated by dots.
         </div>
       )}
 

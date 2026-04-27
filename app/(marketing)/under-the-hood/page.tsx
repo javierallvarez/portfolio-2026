@@ -353,7 +353,7 @@ export default async function UnderTheHoodPage() {
           </SectionTitle>
           <Prose>
             <p>
-              The live site runs on <strong>Vercel + Neon</strong> for cost-efficiency — zero
+              The live site runs on <strong>Vercel + Neon</strong> for cost-efficiency. Zero
               infrastructure to operate and a generous free tier that fits a portfolio workload.
               However, enterprise roles demand AWS fluency, so the repository includes
               production-grade <strong>Terraform manifests</strong> that define the same
@@ -382,7 +382,7 @@ export default async function UnderTheHoodPage() {
               {
                 icon: "🗄️",
                 title: "S3 + OAC",
-                body: "Immutable static bundle behind a private bucket. CloudFront accesses it via Origin Access Control — no public bucket URL.",
+                body: "Immutable static bundle behind a private bucket. CloudFront accesses it via Origin Access Control, with no public bucket URL.",
               },
               {
                 icon: "λ",
@@ -421,7 +421,7 @@ export default async function UnderTheHoodPage() {
             <code className="font-mono">/infrastructure/terraform/</code> in the repository. They
             define an S3 bucket, a CloudFront distribution with two cache behaviors (static long-TTL
             vs. SSR passthrough), a Lambda function with a Function URL, and all IAM roles. No state
-            backend is configured to avoid free-tier surprises — a production setup would add an S3
+            backend is configured to avoid free-tier surprises. A production setup would add an S3
             backend with DynamoDB state locking.
           </p>
         </div>
@@ -439,7 +439,7 @@ export default async function UnderTheHoodPage() {
           <Prose>
             <p>
               Every push to any branch triggers the GitHub Actions workflow. PRs cannot be merged
-              while any job is red — there is no manual override.
+              while any job is red. There is no manual override.
             </p>
           </Prose>
         </div>
@@ -523,7 +523,7 @@ export default async function UnderTheHoodPage() {
               ["IDEA", "Identify the feature or fix needed"],
               ["SPEC", "Write /specs/JAG-XXX-title.md with acceptance criteria"],
               ["BRANCH", "git checkout -b feat/JAG-XXX-short-title"],
-              ["IMPLEMENT", "Build against the spec — AI pair-programming, always reviewed"],
+              ["IMPLEMENT", "Build against the spec. AI pair-programming, always reviewed"],
               ["PR", "Open PR using the PULL_REQUEST_TEMPLATE (includes AI Contribution table)"],
               ["CI", "GitHub Actions: lint → build → Playwright E2E"],
               ["MERGE", "Squash merge to main with JAG-XXX in the commit message"],
@@ -554,7 +554,7 @@ export default async function UnderTheHoodPage() {
             &amp; Rationale
           </SectionTitle>
           <Prose>
-            <p>Every technology choice has a documented reason — no cargo-culting.</p>
+            <p>Every technology choice has a documented reason. No cargo-culting.</p>
           </Prose>
         </div>
 
@@ -596,7 +596,7 @@ export default async function UnderTheHoodPage() {
             Model
           </SectionTitle>
           <Prose>
-            <p>Security is layered — no single control is relied upon exclusively.</p>
+            <p>Security is layered. No single control is relied upon exclusively.</p>
           </Prose>
         </div>
 
@@ -620,7 +620,7 @@ export default async function UnderTheHoodPage() {
             {
               icon: <KeyRound size={15} className="text-teal-400" />,
               title: "RBAC (Clerk)",
-              body: "Anonymous users can only recommend vinyls. The admin (me) can add to collection, update, and delete — enforced server-side.",
+              body: "Anonymous users can only recommend vinyls. The admin (me) can add to collection, update, and delete. Enforced server-side.",
             },
             {
               icon: <Globe size={15} className="text-teal-400" />,
@@ -662,8 +662,7 @@ export default async function UnderTheHoodPage() {
               <code className="bg-content2 rounded px-1 py-0.5 font-mono text-xs">
                 telemetry_events
               </code>{" "}
-              table in Neon PostgreSQL. Counts below are live — no caching, fresh on every page
-              load.
+              table in Neon PostgreSQL. Counts below are live, fresh on every page load.
             </p>
           </Prose>
         </div>

@@ -80,7 +80,7 @@ const FEATURE_CARDS = [
     icon: <Bot size={22} className="text-teal-400" />,
     title: "AI-Transparent",
     description:
-      "AI pair programming is used as a multiplier — and disclosed in every PR via a dedicated AI Contribution table.",
+      "AI pair programming is used as a multiplier, and it's disclosed in every PR via a dedicated AI Contribution table.",
   },
   {
     icon: <ShieldCheck size={22} className="text-teal-400" />,
