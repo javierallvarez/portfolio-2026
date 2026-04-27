@@ -1,5 +1,5 @@
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { streamText } from "ai";
+import { streamText, type ModelMessage } from "ai";
 import { headers } from "next/headers";
 import { SYSTEM_PROMPT } from "@/lib/ai/knowledge-base";
 import { checkRateLimit } from "@/lib/rate-limit";
@@ -41,12 +41,30 @@ export async function POST(req: Request) {
   // ── Stream response ────────────────────────────────────────────────────────
   try {
     const google = createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY });
-    const { messages } = await req.json();
+    const { messages, currentPath } = (await req.json()) as {
+      messages: unknown;
+      currentPath?: string;
+    };
+
+    if (!Array.isArray(messages)) {
+      return new Response("Invalid request: messages must be an array.", {
+        status: 400,
+        headers: { "Content-Type": "text/plain; charset=utf-8" },
+      });
+    }
+
+    const path = typeof currentPath === "string" && currentPath.startsWith("/") ? currentPath : "/";
+
+    const contextAwarePrompt =
+      SYSTEM_PROMPT +
+      "\n\nCRITICAL CONTEXT: The user is currently browsing the path: '" +
+      path +
+      "'. Use this context to personalize your responses if it makes sense (e.g., if they are on /internal-tooling, assume they might be curious about your automation work).";
 
     const result = streamText({
       model: google("gemini-2.5-flash"),
-      system: SYSTEM_PROMPT,
-      messages,
+      system: contextAwarePrompt,
+      messages: messages as ModelMessage[],
       maxOutputTokens: 600,
     });
 

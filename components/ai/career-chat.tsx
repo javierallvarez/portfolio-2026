@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { Bot, User, Send, X, Sparkles, ExternalLink } from "lucide-react";
 import { useCareerChat } from "@/hooks/use-career-chat";
 
@@ -11,14 +12,89 @@ interface CareerChatProps {
   onClose: () => void;
 }
 
-// ─── Suggested Starters ────────────────────────────────────────────────────────
+// ─── Path-aware UX (starters + placeholder) ───────────────────────────────────
 
-const STARTERS = [
-  "What are Javier's soft skills?",
-  "Tell me about his role at Adevinta.",
-  "What tech stack does he use?",
-  "How does his music career influence his code?",
-];
+function getChatStarters(pathname: string): string[] {
+  const p = pathname || "/";
+  if (p === "/internal-tooling" || p.startsWith("/internal-tooling/")) {
+    return ["Explain the HR webhook pipeline.", "Why use Python & Jenkins?"];
+  }
+  if (p === "/tools" || p.startsWith("/tools/")) {
+    return ["How does the Password Generator work?", "Is the JWT decoder secure?"];
+  }
+  if (p === "/under-the-hood" || p.startsWith("/under-the-hood/")) {
+    return ["Explain the database telemetry.", "Why Upstash for rate limiting?"];
+  }
+  if (p === "/interactive-lab" || p.startsWith("/interactive-lab/")) {
+    return ["Ask the Sommelier for a vinyl.", "How does the RAG system work?"];
+  }
+  return ["What are Javier's soft skills?", "Summarize his CV."];
+}
+
+function getChatPlaceholder(pathname: string): string {
+  const p = pathname || "/";
+  if (p === "/internal-tooling" || p.startsWith("/internal-tooling/")) {
+    return "Ask about this system architecture…";
+  }
+  if (p === "/tools" || p.startsWith("/tools/")) {
+    return "Ask about these developer utilities…";
+  }
+  if (p === "/under-the-hood" || p.startsWith("/under-the-hood/")) {
+    return "Ask about this stack, telemetry, or security…";
+  }
+  if (p === "/interactive-lab" || p.startsWith("/interactive-lab/")) {
+    return "Ask about vinyls, Discogs, or the Sommelier…";
+  }
+  return "Ask about Javier's career…";
+}
+
+/** Empty-state blurb: names the current section so context-awareness is obvious. */
+function ChatEmptyIntro({ pathname }: { pathname: string }) {
+  const p = pathname || "/";
+
+  if (p === "/tools" || p.startsWith("/tools/")) {
+    return (
+      <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
+        I see you&apos;re exploring Javier&apos;s{" "}
+        <strong className="font-medium text-zinc-200">Developer Utilities</strong>. I can explain
+        how the JWT Decoder is secured or how the Password Generator works.
+      </p>
+    );
+  }
+  if (p === "/internal-tooling" || p.startsWith("/internal-tooling/")) {
+    return (
+      <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
+        I see you&apos;re looking at Javier&apos;s{" "}
+        <strong className="font-medium text-zinc-200">Automation Architecture</strong>. Want to
+        know more about the Jenkins pipeline or Slack webhooks?
+      </p>
+    );
+  }
+  if (p === "/under-the-hood" || p.startsWith("/under-the-hood/")) {
+    return (
+      <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
+        I see you&apos;re on <strong className="font-medium text-zinc-200">Under the Hood</strong>
+        , Javier&apos;s technical deep dive. Ask about Terraform, CI/CD, live database telemetry,
+        or how this site is wired together.
+      </p>
+    );
+  }
+  if (p === "/interactive-lab" || p.startsWith("/interactive-lab/")) {
+    return (
+      <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
+        I see you&apos;re in the <strong className="font-medium text-zinc-200">Interactive Lab</strong>
+        , the live vinyl collection and Discogs integration. Ask about the Vinyl Sommelier, Neon +
+        Drizzle, or how recommendations work.
+      </p>
+    );
+  }
+  return (
+    <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
+      Hi! I&apos;m Javier&apos;s AI. I can navigate this portfolio with you. Ask me about his
+      career or the tech stack behind this very website!
+    </p>
+  );
+}
 
 // ─── Message Bubble ────────────────────────────────────────────────────────────
 
@@ -67,10 +143,14 @@ function MessageBubble({
 // ─── Career Chat Drawer ────────────────────────────────────────────────────────
 
 export function CareerChat({ isOpen, onClose }: CareerChatProps) {
+  const pathname = usePathname();
   const { messages, input, setInput, isStreaming, sendMessage, appendAndSend, reset } =
-    useCareerChat();
+    useCareerChat(pathname);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const starters = useMemo(() => getChatStarters(pathname), [pathname]);
+  const inputPlaceholder = useMemo(() => getChatPlaceholder(pathname), [pathname]);
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -128,7 +208,9 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
             <p className="font-serif text-base leading-tight font-normal text-white">
               Ask Javier&apos;s <span className="gradient-heading">AI Agent</span>
             </p>
-            <p className="truncate text-xs text-zinc-500">Career · Projects · Tech Stack</p>
+            <p className="truncate text-xs text-zinc-500">
+              Career · Projects · Knows this page
+            </p>
           </div>
           <div className="flex items-center gap-1.5">
             {messages.length > 0 && (
@@ -164,14 +246,12 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
                 <p className="font-serif text-lg font-normal text-white">
                   Hi! I&apos;m Javier&apos;s AI
                 </p>
-                <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
-                  Ask me anything about his career, projects, tech stack, or engineering philosophy.
-                </p>
+                <ChatEmptyIntro pathname={pathname} />
               </div>
 
               {/* Starter chips */}
               <div className="mt-1 flex flex-wrap justify-center gap-2">
-                {STARTERS.map((s) => (
+                {starters.map((s) => (
                   <button
                     key={s}
                     type="button"
@@ -214,7 +294,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
         <div className="border-t border-zinc-800 p-3">
           {/* Persistent starter chips — always visible, scrollable on small screens */}
           <div className="mb-2.5 flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {STARTERS.map((s) => (
+            {starters.map((s) => (
               <button
                 key={s}
                 type="button"
@@ -233,7 +313,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask about Javier's career…"
+              placeholder={inputPlaceholder}
               disabled={isStreaming}
               className="max-h-32 flex-1 resize-none bg-transparent text-sm text-zinc-100 placeholder-zinc-500 outline-none disabled:opacity-50"
               style={{ lineHeight: "1.5" }}

@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState, useCallback } from "react";
 import type { ReactNode } from "react";
-import { CareerChat } from "@/components/ai/career-chat";
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -29,7 +28,6 @@ export function CareerChatDrawerProvider({ children }: { children: ReactNode }) 
   return (
     <CareerChatDrawerContext.Provider value={{ open, close, isOpen }}>
       {children}
-      <CareerChat isOpen={isOpen} onClose={close} />
     </CareerChatDrawerContext.Provider>
   );
 }

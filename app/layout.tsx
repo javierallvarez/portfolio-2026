@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { CommandPalette } from "@/components/layout/command-palette";
 import { DeveloperGreeting } from "@/components/layout/developer-greeting";
+import { CareerChatHost } from "@/components/ai/career-chat-host";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -85,6 +86,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
             <CommandPalette />
+            <CareerChatHost />
           </Providers>
         </body>
       </html>
