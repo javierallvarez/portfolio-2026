@@ -23,7 +23,7 @@ function newId() {
   return `msg-${++msgIdCounter}-${Date.now()}`;
 }
 
-export function useCareerChat(): UseCareerChatReturn {
+export function useCareerChat(currentPath: string): UseCareerChatReturn {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -31,6 +31,8 @@ export function useCareerChat(): UseCareerChatReturn {
   // Stable ref so dispatchText can read current messages without being a dep
   const messagesRef = useRef<ChatMessage[]>(messages);
   messagesRef.current = messages;
+  const pathRef = useRef(currentPath);
+  pathRef.current = currentPath;
 
   const dispatchText = useCallback(
     async (text: string) => {
@@ -54,7 +56,10 @@ export function useCareerChat(): UseCareerChatReturn {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: history }),
+          body: JSON.stringify({
+            messages: history,
+            currentPath: pathRef.current || "/",
+          }),
           signal: abortRef.current.signal,
         });
 

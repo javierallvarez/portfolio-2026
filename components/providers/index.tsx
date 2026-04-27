@@ -19,8 +19,9 @@ interface ProvidersProps {
  * Toast.Provider must live here so toasts can be triggered from anywhere in the tree
  * via the `toast()` singleton without prop-drilling.
  *
- * CareerChatDrawerProvider renders the AI chat drawer once at the root so any
- * component (Navbar, CommandPalette) can open it via useCareerChatDrawer().
+ * CareerChatDrawerProvider supplies open/close state; the drawer UI is mounted
+ * from app/layout.tsx via <CareerChatHost /> so it stays outside <main> and
+ * survives navigation (usePathname stays in sync on every route).
  */
 export function Providers({ children }: ProvidersProps) {
   return (
