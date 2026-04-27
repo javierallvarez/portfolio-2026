@@ -83,12 +83,12 @@ test.describe("Smoke Tests", () => {
   // ── Homepage hero section ─────────────────────────────────────────────────
 
   test.describe("Homepage hero section", () => {
-    test("renders the bio headline", async ({ page }) => {
+    test("renders the hero headline", async ({ page }) => {
       await page.goto("/en");
-      await expect(page.locator("h1")).toContainText("Hi, I'm Javier");
+      await expect(page.locator("h1")).toContainText("Making developers' lives easier");
     });
 
-    test("renders Adevinta in the bio", async ({ page }) => {
+    test("renders Adevinta in the hero", async ({ page }) => {
       await page.goto("/en");
       await expect(page.getByText(/Adevinta/).first()).toBeVisible();
     });
@@ -102,7 +102,7 @@ test.describe("Smoke Tests", () => {
 
     test("renders a CV CTA button", async ({ page }) => {
       await page.goto("/en");
-      await expect(page.getByRole("button", { name: /view full cv/i })).toBeVisible();
+      await expect(page.getByRole("button", { name: /download pdf.*print/i })).toBeVisible();
     });
 
     test("renders all three feature cards", async ({ page }) => {
@@ -118,6 +118,11 @@ test.describe("Smoke Tests", () => {
   test("under-the-hood page loads and renders its heading", async ({ page }) => {
     await page.goto("/en/under-the-hood");
     await expect(page.locator("h1")).toContainText("Under the Hood");
+  });
+
+  test("cv page loads and shows name in header", async ({ page }) => {
+    await page.goto("/en/cv");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Javier Álvarez");
   });
 
   test("interactive lab page loads and renders its heading", async ({ page }) => {

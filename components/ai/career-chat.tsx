@@ -30,6 +30,9 @@ function getChatStarters(pathname: string): string[] {
   if (p === "/interactive-lab" || p.startsWith("/interactive-lab/")) {
     return ["Ask the Sommelier for a vinyl.", "How does the RAG system work?"];
   }
+  if (p === "/cv" || p.startsWith("/cv/")) {
+    return ["Summarize Javier's experience at Adevinta.", "What projects are on the CV?"];
+  }
   return ["What are Javier's soft skills?", "Summarize his CV."];
 }
 
@@ -46,6 +49,9 @@ function getChatPlaceholder(pathname: string): string {
   }
   if (p === "/interactive-lab" || p.startsWith("/interactive-lab/")) {
     return "Ask about vinyls, Discogs, or the Sommelier…";
+  }
+  if (p === "/cv" || p.startsWith("/cv/")) {
+    return "Ask about this CV, stack, or projects…";
   }
   return "Ask about Javier's career…";
 }
@@ -88,6 +94,15 @@ function ChatEmptyIntro({ pathname }: { pathname: string }) {
         <strong className="font-medium text-zinc-200">Interactive Lab</strong>, the live vinyl
         collection and Discogs integration. Ask about the Vinyl Sommelier, Neon + Drizzle, or how
         recommendations work.
+      </p>
+    );
+  }
+  if (p === "/cv" || p.startsWith("/cv/")) {
+    return (
+      <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
+        You&apos;re on Javier&apos;s formal{" "}
+        <strong className="font-medium text-zinc-200">CV</strong> page — experience, stack, and
+        projects in one place. Use the print button at the top for a clean paper copy.
       </p>
     );
   }
@@ -197,7 +212,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
       <button
         type="button"
         tabIndex={-1}
-        className="fixed inset-0 z-[150] cursor-default border-0 bg-black/40 p-0 backdrop-blur-sm outline-none focus-visible:ring-2 focus-visible:ring-teal-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
+        className="fixed inset-0 z-[150] cursor-default border-0 bg-black/40 p-0 backdrop-blur-sm outline-none focus-visible:ring-2 focus-visible:ring-teal-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 print:hidden"
         aria-label="Close career chat"
         onClick={onClose}
       />
@@ -207,7 +222,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
         role="dialog"
         aria-label="AI Career Chat"
         aria-modal="true"
-        className="fixed inset-y-0 right-0 z-[160] flex w-full flex-col bg-zinc-900 shadow-2xl sm:w-[420px]"
+        className="fixed inset-y-0 right-0 z-[160] flex w-full flex-col bg-zinc-900 shadow-2xl sm:w-[420px] print:hidden"
       >
         {/* ── Header ── */}
         <div className="flex items-center gap-3 border-b border-zinc-800 px-4 py-3.5">

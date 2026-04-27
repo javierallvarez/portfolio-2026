@@ -5,6 +5,7 @@
     "tools": "Tools",
     "automations": "Automations",
     "underTheHood": "Under the Hood",
+    "cv": "CV",
     "signIn": "Sign In",
     "askAi": "Ask my AI",
     "askAiAria": "Chat with Javier's AI",
@@ -32,20 +33,24 @@
     "copyrightHeartAria": "love",
     "home": "Home",
     "interactiveLab": "Interactive Lab",
-    "underTheHood": "Under the Hood"
+    "underTheHood": "Under the Hood",
+    "cv": "CV"
+  },
+  "hero": {
+    "headline": "Making developers' lives easier.",
+    "subheadline": "Hi, I'm Javier. Software Engineer at Adevinta.",
+    "description": "I build internal tools, automate the boring stuff, and connect APIs so my team can focus on what actually matters (and go home on time). If a task can be automated with a script, it shouldn't be a meeting."
   },
   "bio": {
     "greeting": "Hi, I'm Javier",
     "headlineRole": "Software Engineer at Adevinta",
-    "p1": "I'm a Software Engineer at Adevinta with a soft spot for Productivity Engineering — the work that turns \"it's just five minutes\" into hundreds of hours saved for real humans.",
+    "p1": "I'm a Software Engineer at Adevinta with a soft spot for Productivity Engineering: the work that turns \"it's just five minutes\" into hundreds of hours saved for real humans.",
     "p2": "I spend my days building internal tools, wiring up automations, and smoothing the sharp edges so other engineers can ship without wrestling the toolchain. When I'm not debugging pipelines or Slack webhooks, I'm usually digging through crates for vinyl, curating playlists, or convincing myself that one more synth plugin is absolutely a business expense.",
     "petFamily": "Outside of coding, I share my home with a large animal family: three adopted Spanish greyhounds (galgas) and two cats.",
-    "p3": "If that sounds like your kind of organized chaos — pull up a chair. The coffee is metaphorical, but the welcome is real.",
+    "p3": "If that sounds like your kind of organized chaos: pull up a chair. The coffee is metaphorical, but the welcome is real.",
     "avatarAlt": "Portrait of Javier Álvarez (placeholder)",
-    "ctaCv": "View Full CV (PDF)",
-    "ctaLinkedIn": "Connect on LinkedIn",
-    "cvToastTitle": "CV PDF is on the way",
-    "cvToastDescription": "I'm polishing the PDF; until it lands here, LinkedIn is the quickest place to say hello."
+    "ctaCv": "Download PDF / Print",
+    "ctaLinkedIn": "Connect on LinkedIn"
   },
   "features": {
     "internal": {
@@ -85,7 +90,9 @@
       "internalTooling": "Go to Internal Tooling & Automations",
       "internalToolingDesc": "IAM provisioning pipelines, reporting automation. Python, Jenkins, Slack, GWS",
       "underTheHood": "Go to Under the Hood",
-      "underTheHoodDesc": "Architecture, CI/CD and spec-driven process"
+      "underTheHoodDesc": "Architecture, CI/CD and spec-driven process",
+      "cv": "Go to CV",
+      "cvDesc": "Formal résumé — experience, skills, projects, print-friendly"
     },
     "themeLight": "Switch to Light Mode",
     "themeDark": "Switch to Dark Mode",
@@ -95,6 +102,64 @@
     "slackWebhookDesc": "Simulates a Google Workspace automation with Slack notification"
   },
   "pages": {
+    "cv": {
+      "metaTitle": "CV",
+      "metaDescription": "Professional CV — Javier Álvarez, Software Engineer at Adevinta.",
+      "printPdf": "Download PDF / Print",
+      "name": "Javier Álvarez",
+      "role": "Software Engineer at Adevinta",
+      "tagline": "Internal tooling, automation, and productivity engineering — turning \"five minutes\" into hundreds of hours saved for real teams.",
+      "avatarAlt": "Portrait of Javier Álvarez",
+      "linkedinLabel": "LinkedIn",
+      "githubLabel": "GitHub",
+      "portfolioLabel": "Portfolio home",
+      "experienceTitle": "Experience",
+      "experienceCompany": "Adevinta",
+      "experienceRole": "Software Engineer — Internal Tooling & Productivity Engineering",
+      "experiencePeriod": "2023 — present · Spain",
+      "experienceBullets": [
+        "Build and maintain internal developer tools, Slack automations, and Google Workspace integrations used across the engineering organisation.",
+        "Administer Slack and Google Workspace at scale: provisioning, policies, webhooks, and incident-friendly workflows.",
+        "Drive spec-driven delivery with CI/CD (GitHub Actions), TypeScript/Node services, Python (Flask, automation scripts), and PostgreSQL-backed systems."
+      ],
+      "skillsTitle": "Skills & stack",
+      "skillsIntro": "Representative stack from production work and from this portfolio codebase.",
+      "skillGroups": [
+        { "name": "Languages", "items": "TypeScript, JavaScript, Python, SQL" },
+        {
+          "name": "Frontend",
+          "items": "Next.js (App Router), React 19, Tailwind CSS v4, HeroUI v3"
+        },
+        {
+          "name": "Backend & data",
+          "items": "PostgreSQL (Neon), Drizzle ORM, Zod, REST, Vercel AI SDK, Gemini"
+        },
+        {
+          "name": "Platform & DevOps",
+          "items": "Vercel, GitHub Actions, Terraform (AWS demo), Clerk, Upstash rate limiting"
+        }
+      ],
+      "projectsTitle": "Projects",
+      "projects": [
+        {
+          "name": "Developer Utilities",
+          "body": "Password Generator, Cron Translator, JWT Decoder, and JSON Formatter — client-side tools with anonymous PostgreSQL telemetry."
+        },
+        {
+          "name": "Interactive Lab — Vinyl collection & AI Sommelier",
+          "body": "Full-stack app with Discogs, Drizzle, Clerk RBAC, and an AI sommelier that recommends records from a live collection."
+        },
+        {
+          "name": "Portfolio engineering site",
+          "body": "Spec-driven delivery, i18n (es/en), AI career agent, command palette, Playwright E2E, and the Under the Hood architecture narrative."
+        }
+      ],
+      "personalTitle": "Personal",
+      "personalParagraphs": [
+        "Outside of work I share my home with a large animal family: three adopted Spanish greyhounds (galgas) and two cats.",
+        "Music is a constant: years as an electronic producer and label director shaped how I think about product, pacing, and craft — still visible in the portfolio's vinyl lab."
+      ]
+    },
     "tools": {
       "title": "Developer",
       "titleAccent": "Utilities",

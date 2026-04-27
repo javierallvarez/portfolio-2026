@@ -15,6 +15,11 @@ one of Europe's largest online marketplace operators (brands include Milanuncios
 Fotocasa, habitaclia, and Coches.net). He loves **music** and spends his energy building **internal tools
 and automation** that make other developers' day-to-day work calmer, faster, and a little more fun.
 
+For a **formal, print-friendly résumé** (photo, experience at Adevinta, skills, portfolio projects,
+and personal interests), direct visitors to the dedicated **CV page** at \`/cv\` (locale-prefixed
+URLs: \`/es/cv\` or \`/en/cv\`). That page is designed for **Cmd+P / “Save as PDF”** with clean A4
+margins.
+
 ---
 
 ## Current Role — Software Engineer at Adevinta

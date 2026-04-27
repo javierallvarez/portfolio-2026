@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Wrench, Bot, ShieldCheck } from "lucide-react";
 import { BioCtas } from "@/components/home/bio-ctas";
 import type { Locale } from "@/lib/i18n/config";
@@ -9,7 +8,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
   const { lang: raw } = await params;
   const lang: Locale = isLocale(raw) ? raw : "es";
   const dict = await getDictionary(lang);
-  const { bio } = dict;
+  const { bio, hero } = dict;
 
   const featureIcons = {
     internal: <Wrench size={22} className="text-teal-400" />,
@@ -26,40 +25,19 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
         className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_80%_50%_at_50%_-20%,oklch(65%_0.18_270_/_12%),transparent)]"
       />
 
-      <section className="mx-auto max-w-5xl px-6 pt-16 pb-20 sm:pt-24">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,280px)_1fr] lg:items-start lg:gap-16">
-          <div className="flex justify-center lg:justify-start">
-            <div className="relative aspect-square w-[min(100%,280px)] shrink-0 overflow-hidden rounded-full border-4 border-teal-400/35 shadow-[0_20px_50px_-12px_oklch(0.2_0.08_200_/_0.35)] ring-1 ring-teal-500/20">
-              <Image
-                src="/javi-avatar.png"
-                alt={bio.avatarAlt}
-                width={280}
-                height={280}
-                priority
-                className="aspect-square h-full w-full object-cover"
-              />
-            </div>
-          </div>
-
-          <div className="min-w-0 text-center lg:text-left">
-            <h1 className="gradient-heading font-serif text-4xl font-normal tracking-tight sm:text-5xl">
-              {bio.greeting}
-            </h1>
-            <p className="text-muted mt-2 text-base font-medium sm:text-lg">{bio.headlineRole}</p>
-            <div className="text-muted mx-auto mt-6 max-w-2xl space-y-4 text-base leading-relaxed sm:text-lg lg:mx-0">
-              <p>{bio.p1}</p>
-              <p>{bio.p2}</p>
-              <p>{bio.petFamily}</p>
-              <p className="text-foreground/90">{bio.p3}</p>
-            </div>
-            <div className="flex justify-center lg:justify-start">
-              <BioCtas
-                ctaCv={bio.ctaCv}
-                ctaLinkedIn={bio.ctaLinkedIn}
-                cvToastTitle={bio.cvToastTitle}
-                cvToastDescription={bio.cvToastDescription}
-              />
-            </div>
+      <section className="mx-auto max-w-5xl px-6 pt-16 pb-20 sm:pt-28 sm:pb-24">
+        <div className="flex flex-col items-center text-center">
+          <h1 className="home-hero-headline mb-6 max-w-4xl bg-gradient-to-r from-zinc-900 to-zinc-500 bg-clip-text text-5xl font-black tracking-tighter text-balance text-transparent md:text-6xl lg:text-7xl dark:from-zinc-100 dark:to-zinc-500">
+            {hero.headline}
+          </h1>
+          <p className="mb-4 max-w-2xl text-2xl font-semibold text-zinc-700 md:text-3xl dark:text-zinc-300">
+            {hero.subheadline}
+          </p>
+          <p className="mb-8 max-w-2xl text-lg text-pretty text-zinc-600 md:text-xl dark:text-zinc-400">
+            {hero.description}
+          </p>
+          <div className="flex justify-center">
+            <BioCtas ctaCv={bio.ctaCv} ctaLinkedIn={bio.ctaLinkedIn} />
           </div>
         </div>
       </section>
