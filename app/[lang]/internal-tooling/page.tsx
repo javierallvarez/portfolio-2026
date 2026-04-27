@@ -51,7 +51,7 @@ export default async function InternalToolingPage({
           <p className="text-default-500 max-w-xl text-sm leading-relaxed">{t.iamIntro}</p>
         </div>
 
-        <div className="max-w-lg">
+        <div className="w-full max-w-lg overflow-x-auto pt-4 pr-2 pb-2 pl-4">
           <ArchitectureFlow nodes={iamNodes} />
         </div>
 
@@ -79,7 +79,7 @@ export default async function InternalToolingPage({
           <p className="text-default-500 max-w-xl text-sm leading-relaxed">{t.reportingIntro}</p>
         </div>
 
-        <div className="max-w-lg">
+        <div className="w-full max-w-lg overflow-x-auto pt-4 pr-2 pb-2 pl-4">
           <ArchitectureFlow nodes={reportingNodes} />
         </div>
 

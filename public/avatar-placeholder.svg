@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none" role="img" aria-labelledby="t">
+  <title id="t">Placeholder portrait</title>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5eead4"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <circle cx="160" cy="160" r="160" fill="url(#g)"/>
+  <text x="50%" y="54%" text-anchor="middle" fill="oklch(0.2 0.02 285)" font-family="ui-sans-serif, system-ui, sans-serif" font-size="88" font-weight="600" letter-spacing="-0.04em">JA</text>
+</svg>

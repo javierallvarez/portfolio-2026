@@ -229,48 +229,50 @@ export default async function InteractiveLabPage({
   return (
     <div className="mx-auto max-w-5xl px-4 py-16">
       {/* ── Hero ── */}
-      <div className="from-primary/10 via-surface to-secondary/10 relative isolate overflow-hidden rounded-2xl bg-gradient-to-br p-8 sm:p-12">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_70%_60%_at_60%_40%,oklch(65%_0.18_270_/_12%),transparent)]"
-        />
+      <div className="w-full overflow-x-auto [-webkit-overflow-scrolling:touch]">
+        <div className="from-primary/10 via-surface to-secondary/10 relative isolate min-w-0 overflow-hidden rounded-2xl bg-gradient-to-br p-8 sm:p-12">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 -z-10 [background:radial-gradient(ellipse_70%_60%_at_60%_40%,oklch(65%_0.18_270_/_12%),transparent)]"
+          />
 
-        <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
-          {/* Text content */}
-          <div>
-            <h1 className="text-foreground font-serif text-3xl font-normal tracking-tight sm:text-4xl">
-              {lab.h1Lead} <span className="gradient-heading">{lab.h1Accent}</span>
-            </h1>
-            <p className="text-muted mt-4 text-base leading-relaxed sm:text-lg">
-              {lab.heroP1Before}
-              <span className="text-foreground font-medium">{lab.heroP1Em1}</span>
-              {lab.heroP1Mid}
-              <span className="text-foreground font-medium">{lab.heroP1Em2}</span>
-              {lab.heroP1After}
-            </p>
-            <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
-              {lab.heroP2Before}
-              <span className="text-foreground font-medium">{lab.heroP2Em}</span>
-              {lab.heroP2After}
-            </p>
-            <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
-              {lab.heroP3Before}
-              <span className="text-foreground font-medium">{lab.heroP3Em}</span>
-              {lab.heroP3After}
-            </p>
-          </div>
+          <div className="grid min-w-0 gap-8 lg:grid-cols-2 lg:items-center">
+            {/* Text content */}
+            <div>
+              <h1 className="text-foreground font-serif text-3xl font-normal tracking-tight sm:text-4xl">
+                {lab.h1Lead} <span className="gradient-heading">{lab.h1Accent}</span>
+              </h1>
+              <p className="text-muted mt-4 text-base leading-relaxed sm:text-lg">
+                {lab.heroP1Before}
+                <span className="text-foreground font-medium">{lab.heroP1Em1}</span>
+                {lab.heroP1Mid}
+                <span className="text-foreground font-medium">{lab.heroP1Em2}</span>
+                {lab.heroP1After}
+              </p>
+              <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
+                {lab.heroP2Before}
+                <span className="text-foreground font-medium">{lab.heroP2Em}</span>
+                {lab.heroP2After}
+              </p>
+              <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
+                {lab.heroP3Before}
+                <span className="text-foreground font-medium">{lab.heroP3Em}</span>
+                {lab.heroP3After}
+              </p>
+            </div>
 
-          {/* Home setup photo */}
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-lg">
-            <Image
-              src="/vinyl_collection.jpeg"
-              alt={lab.heroImageAlt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
-            <div className="from-background/60 absolute inset-0 bg-gradient-to-t to-transparent" />
+            {/* Home setup photo */}
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-lg">
+              <Image
+                src="/vinyl_collection.jpeg"
+                alt={lab.heroImageAlt}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
+              <div className="from-background/60 absolute inset-0 bg-gradient-to-t to-transparent" />
+            </div>
           </div>
         </div>
       </div>

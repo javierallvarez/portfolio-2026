@@ -8,6 +8,7 @@ import { CommandPalette } from "@/components/layout/command-palette";
 import { DeveloperGreeting } from "@/components/layout/developer-greeting";
 import { CareerChatHost } from "@/components/ai/career-chat-host";
 import { SetHtmlLang } from "@/components/layout/set-html-lang";
+import { MobileDesktopHint } from "@/components/layout/mobile-desktop-hint";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -33,6 +34,10 @@ export default async function LangLayout({
       <main className="flex-1">{children}</main>
       <Footer footer={dict.footer} lang={lang} />
       <CommandPalette dict={dict.commandPalette} lang={lang} />
+      <MobileDesktopHint
+        message={dict.mobileHint.message}
+        dismissAria={dict.mobileHint.dismissAria}
+      />
       <CareerChatHost />
     </>
   );

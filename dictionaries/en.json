@@ -14,8 +14,17 @@
     "languageSwitcherAria": "Switch language",
     "languageEs": "ES",
     "languageEn": "EN",
+    "languageEsAria": "Site in Spanish",
+    "languageEnAria": "Site in English",
     "themeToLight": "Switch to light mode",
-    "themeToDark": "Switch to dark mode"
+    "themeToDark": "Switch to dark mode",
+    "menu": "Menu",
+    "menuOpenAria": "Open navigation menu",
+    "closeMenuAria": "Close navigation menu"
+  },
+  "mobileHint": {
+    "message": "📱 You're on mobile! For the full technical lab and diagrams, I recommend visiting from a desktop.",
+    "dismissAria": "Dismiss"
   },
   "footer": {
     "copyrightLead": "©",
@@ -25,23 +34,17 @@
     "interactiveLab": "Interactive Lab",
     "underTheHood": "Under the Hood"
   },
-  "hero": {
-    "titleLead": "Software Engineer",
-    "titleAccent": "building for humans",
-    "subtitleBefore": "Currently building awesome things alongside a brilliant team at",
-    "subtitleCompany": "Adevinta",
-    "subtitleAfter": "Passionate about crafting robust products and solving complex architectural challenges.",
-    "exploreLab": "Explore the Interactive Lab",
-    "openPalette": "Open Command Palette",
-    "chips": [
-      "Next.js 15",
-      "TypeScript",
-      "PostgreSQL",
-      "Drizzle ORM",
-      "HeroUI v3",
-      "Playwright",
-      "GitHub Actions"
-    ]
+  "bio": {
+    "greeting": "Hi, I'm Javier",
+    "headlineRole": "Software Engineer at Adevinta",
+    "p1": "I'm a Software Engineer at Adevinta with a soft spot for Productivity Engineering — the work that turns \"it's just five minutes\" into hundreds of hours saved for real humans.",
+    "p2": "I spend my days building internal tools, wiring up automations, and smoothing the sharp edges so other engineers can ship without wrestling the toolchain. When I'm not debugging pipelines or Slack webhooks, I'm usually digging through crates for vinyl, curating playlists, or convincing myself that one more synth plugin is absolutely a business expense.",
+    "p3": "If that sounds like your kind of organized chaos — pull up a chair. The coffee is metaphorical, but the welcome is real.",
+    "avatarAlt": "Portrait of Javier Álvarez (placeholder)",
+    "ctaCv": "View Full CV (PDF)",
+    "ctaLinkedIn": "Connect on LinkedIn",
+    "cvToastTitle": "CV PDF is on the way",
+    "cvToastDescription": "I'm polishing the PDF; until it lands here, LinkedIn is the quickest place to say hello."
   },
   "features": {
     "internal": {

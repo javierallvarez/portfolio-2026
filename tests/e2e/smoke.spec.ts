@@ -46,25 +46,23 @@ test.describe("Smoke Tests", () => {
       await expect(logo).toHaveAttribute("href", "/en");
     });
 
-    test("renders navigation links for Home, Interactive Lab, and Under the Hood", async ({
-      page,
-    }) => {
+    test("renders navigation links in the menu drawer (all viewports)", async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 720 });
       await page.goto("/en");
-      const nav = page.locator("header nav");
-      await expect(nav.getByRole("link", { name: "Home", includeHidden: true })).toBeAttached();
-      await expect(
-        nav.getByRole("link", { name: "Interactive Lab", includeHidden: true }),
-      ).toBeAttached();
-      await expect(
-        nav.getByRole("link", { name: "Under the Hood", includeHidden: true }),
-      ).toBeAttached();
+      await page.getByRole("button", { name: /open navigation menu/i }).click();
+      const drawer = page.getByRole("dialog", { name: "Menu" });
+      await expect(drawer.getByRole("link", { name: "Interactive Lab" })).toBeVisible();
+      await expect(drawer.getByRole("link", { name: "Tools" })).toBeVisible();
+      await expect(drawer.getByRole("link", { name: "Automations" })).toBeVisible();
+      await expect(drawer.getByRole("link", { name: "Under the Hood" })).toBeVisible();
     });
 
-    test("Home nav link is marked aria-current='page' on the homepage", async ({ page }) => {
+    test("home route marks the logo link with aria-current on the homepage", async ({ page }) => {
       await page.goto("/en");
-      await expect(
-        page.locator("header nav").getByRole("link", { name: "Home", includeHidden: true }),
-      ).toHaveAttribute("aria-current", "page");
+      await expect(page.locator("header nav").getByRole("link").first()).toHaveAttribute(
+        "aria-current",
+        "page",
+      );
     });
 
     test("renders a theme-toggle button", async ({ page }) => {
@@ -85,36 +83,26 @@ test.describe("Smoke Tests", () => {
   // ── Homepage hero section ─────────────────────────────────────────────────
 
   test.describe("Homepage hero section", () => {
-    test("renders the main headline", async ({ page }) => {
+    test("renders the bio headline", async ({ page }) => {
       await page.goto("/en");
-      await expect(page.locator("h1")).toContainText("Software Engineer");
+      await expect(page.locator("h1")).toContainText("Hi, I'm Javier");
     });
 
-    test("renders Adevinta in the subtitle", async ({ page }) => {
+    test("renders Adevinta in the bio", async ({ page }) => {
       await page.goto("/en");
-      await expect(page.getByText(/Adevinta/)).toBeVisible();
+      await expect(page.getByText(/Adevinta/).first()).toBeVisible();
     });
 
-    test("renders a 'Explore the Interactive Lab' CTA that links to localized lab", async ({
-      page,
-    }) => {
+    test("renders a LinkedIn CTA linking out", async ({ page }) => {
       await page.goto("/en");
-      const cta = page.getByRole("link", { name: /explore the interactive lab/i });
+      const cta = page.getByRole("link", { name: /connect on linkedin/i });
       await expect(cta).toBeVisible();
-      await expect(cta).toHaveAttribute("href", "/en/interactive-lab");
+      await expect(cta).toHaveAttribute("href", /07783a111/);
     });
 
-    test("renders an 'Open Command Palette' CTA button", async ({ page }) => {
+    test("renders a CV CTA button", async ({ page }) => {
       await page.goto("/en");
-      const paletteButtons = page.getByRole("button", { name: /open command palette/i });
-      await expect(paletteButtons.last()).toBeVisible();
-    });
-
-    test("renders tech-stack chips including Next.js 15 and HeroUI v3", async ({ page }) => {
-      await page.goto("/en");
-      await expect(page.getByText("Next.js 15")).toBeVisible();
-      await expect(page.getByText("HeroUI v3")).toBeVisible();
-      await expect(page.getByText("TypeScript")).toBeVisible();
+      await expect(page.getByRole("button", { name: /view full cv/i })).toBeVisible();
     });
 
     test("renders all three feature cards", async ({ page }) => {

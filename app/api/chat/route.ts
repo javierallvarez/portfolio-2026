@@ -3,6 +3,7 @@ import { streamText, type ModelMessage } from "ai";
 import { headers } from "next/headers";
 import { SYSTEM_PROMPT } from "@/lib/ai/knowledge-base";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { LINKEDIN_PROFILE_URL } from "@/lib/social";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
   // ── API key guard ──────────────────────────────────────────────────────────
   if (!process.env.GEMINI_API_KEY) {
     return new Response(
-      "The AI is currently resting. Please try again later or contact Javier on LinkedIn: https://www.linkedin.com/in/javierallvarez/",
+      `The AI is currently resting. Please try again later or contact Javier on LinkedIn: ${LINKEDIN_PROFILE_URL}`,
       { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8" } },
     );
   }
@@ -77,8 +78,8 @@ export async function POST(req: Request) {
         err.message.includes("429"));
 
     const message = isQuota
-      ? "The AI has reached its usage limit for now. Please try again in a few minutes or contact Javier on LinkedIn: https://www.linkedin.com/in/javierallvarez/"
-      : "The AI is currently resting. Please try again later or contact Javier on LinkedIn: https://www.linkedin.com/in/javierallvarez/";
+      ? `The AI has reached its usage limit for now. Please try again in a few minutes or contact Javier on LinkedIn: ${LINKEDIN_PROFILE_URL}`
+      : `The AI is currently resting. Please try again later or contact Javier on LinkedIn: ${LINKEDIN_PROFILE_URL}`;
 
     return new Response(message, {
       status: 200,
