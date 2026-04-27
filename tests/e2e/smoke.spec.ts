@@ -12,10 +12,17 @@ test.describe("Smoke Tests", () => {
     await expect(page).toHaveURL(/\/(es|en)\/?$/);
   });
 
-  test("Spanish accept-language sends home to /es", async ({ page, context }) => {
-    await context.setExtraHTTPHeaders({ "Accept-Language": "es-ES,es;q=0.9" });
-    await page.goto("/");
-    await expect(page).toHaveURL(/\/es\/?$/);
+  test("Spanish accept-language sends home to /es", async ({ browser }) => {
+    // Use a dedicated context with locale — setExtraHTTPHeaders alone can be merged
+    // behind the browser default Accept-Language (en-US first), which broke CI.
+    const context = await browser.newContext({ locale: "es-ES" });
+    const page = await context.newPage();
+    try {
+      await page.goto("/");
+      await expect(page).toHaveURL(/\/es\/?$/);
+    } finally {
+      await context.close();
+    }
   });
 
   test("homepage loads and has correct title", async ({ page }) => {

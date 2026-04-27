@@ -10,11 +10,45 @@ const KNOWN_PATH_FIRST_SEGMENT = new Set([
   "under-the-hood",
 ]);
 
+/**
+ * Parse Accept-Language into ranges with q-weights, sort by preference (higher q first),
+ * return the first supported locale (es | en). Falls back to defaultLocale.
+ */
 function getPreferredLocale(request: NextRequest): Locale {
   const header = request.headers.get("accept-language");
   if (!header) return defaultLocale;
   const primary = header.split(",")[0]?.trim().toLowerCase() ?? "";
-  if (primary.startsWith("en")) return "en";
+
+  const ranges: { base: string; q: number; order: number }[] = [];
+  let order = 0;
+  for (const rawPart of header.split(",")) {
+    const part = rawPart.trim();
+    if (!part) continue;
+    const [langPart, ...params] = part.split(";").map((s) => s.trim());
+    if (!langPart) continue;
+    const base = langPart.split("-")[0]?.toLowerCase() ?? "";
+    if (base !== "es" && base !== "en") continue;
+    let q = 1;
+    for (const p of params) {
+      const m = /^q\s*=\s*([\d.]+)/i.exec(p);
+      if (m?.[1]) {
+        const parsed = Number.parseFloat(m[1]);
+        if (!Number.isNaN(parsed)) q = parsed;
+      }
+    }
+    ranges.push({ base, q, order: order++ });
+  }
+
+  if (ranges.length === 0) return defaultLocale;
+
+  ranges.sort((a, b) => {
+    if (b.q !== a.q) return b.q - a.q;
+    return a.order - b.order;
+  });
+
+  const best = ranges[0]?.base;
+  if (best === "en") return "en";
+  if (best === "es") return "es";
   return defaultLocale;
 }
 
