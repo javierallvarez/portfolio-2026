@@ -293,11 +293,34 @@ export default async function UnderTheHoodPage({ params }: { params: Promise<{ l
             {uth.milestoneSection}
           </p>
           <SectionTitle>
-            <span id="milestone-heading">{uth.milestoneTitle}</span>
+            {uth.milestoneTitleBefore}{" "}
+            <span id="milestone-heading" className="gradient-heading">
+              {uth.milestoneTitleAccent}
+            </span>
           </SectionTitle>
           <Prose>
             <p>{uth.milestoneP1}</p>
             <p>{uth.milestoneP2}</p>
+          </Prose>
+        </div>
+      </section>
+
+      <section aria-labelledby="a11y-heading" className="space-y-4">
+        <div>
+          <SectionTitle>
+            {uth.a11yTitleBefore}{" "}
+            <span id="a11y-heading" className="gradient-heading">
+              {uth.a11yTitleAccent}
+            </span>
+          </SectionTitle>
+          <Prose>
+            <p>{uth.a11yWhy}</p>
+            <p className="text-foreground font-medium">{uth.a11yImplementedHeading}</p>
+            <ul className="text-default-600 list-disc space-y-2 pl-5">
+              {uth.a11yItems.map((item, i) => (
+                <li key={`a11y-${i}`}>{item}</li>
+              ))}
+            </ul>
           </Prose>
         </div>
       </section>

@@ -121,7 +121,11 @@ function MessageBubble({
           isUser ? "bg-teal-500" : "bg-zinc-700",
         ].join(" ")}
       >
-        {isUser ? <User size={14} /> : <Bot size={14} className="text-teal-400" />}
+        {isUser ? (
+          <User size={14} aria-hidden="true" />
+        ) : (
+          <Bot size={14} className="text-teal-400" aria-hidden="true" />
+        )}
       </div>
 
       {/* Bubble */}
@@ -189,11 +193,13 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
 
   return (
     <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-[150] bg-black/40 backdrop-blur-sm"
+      {/* Backdrop — button so keyboard / SR users get a named dismiss control */}
+      <button
+        type="button"
+        tabIndex={-1}
+        className="fixed inset-0 z-[150] cursor-default border-0 bg-black/40 p-0 backdrop-blur-sm outline-none focus-visible:ring-2 focus-visible:ring-teal-500/70 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
+        aria-label="Close career chat"
         onClick={onClose}
-        aria-hidden="true"
       />
 
       {/* Drawer */}
@@ -219,8 +225,8 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
               <button
                 type="button"
                 onClick={reset}
-                className="rounded-md px-2 py-1 text-xs text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
-                title="Clear chat"
+                className="rounded-md px-2 py-1 text-xs text-zinc-500 transition-colors outline-none hover:bg-zinc-800 hover:text-zinc-300 focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
+                aria-label="Clear conversation"
               >
                 Clear
               </button>
@@ -228,10 +234,10 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
             <button
               type="button"
               onClick={onClose}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
-              aria-label="Close chat"
+              className="flex h-8 w-8 items-center justify-center rounded-md text-zinc-500 transition-colors outline-none hover:bg-zinc-800 hover:text-zinc-300 focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900"
+              aria-label="Close career chat"
             >
-              <X size={16} />
+              <X size={16} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -259,7 +265,8 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
                     type="button"
                     onClick={() => void appendAndSend(s)}
                     disabled={isStreaming}
-                    className="rounded-full border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 transition-colors hover:border-teal-500/50 hover:text-teal-300 disabled:opacity-40"
+                    aria-label={`Ask: ${s}`}
+                    className="rounded-full border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs text-zinc-300 transition-colors outline-none hover:border-teal-500/50 hover:text-teal-300 focus-visible:ring-2 focus-visible:ring-teal-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 disabled:opacity-40"
                   >
                     {s}
                   </button>
@@ -302,7 +309,8 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
                 type="button"
                 onClick={() => void appendAndSend(s)}
                 disabled={isStreaming}
-                className="shrink-0 rounded-full border border-zinc-700 bg-zinc-800/60 px-3 py-1 text-[11px] text-zinc-400 transition-colors hover:border-teal-500/50 hover:bg-teal-500/5 hover:text-teal-300 disabled:opacity-40"
+                aria-label={`Ask: ${s}`}
+                className="shrink-0 rounded-full border border-zinc-700 bg-zinc-800/60 px-3 py-1 text-[11px] text-zinc-400 transition-colors outline-none hover:border-teal-500/50 hover:bg-teal-500/5 hover:text-teal-300 focus-visible:ring-2 focus-visible:ring-teal-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-900 disabled:opacity-40"
               >
                 {s}
               </button>
@@ -317,17 +325,17 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
               onKeyDown={handleKeyDown}
               placeholder={inputPlaceholder}
               disabled={isStreaming}
-              className="max-h-32 flex-1 resize-none bg-transparent text-sm text-zinc-100 placeholder-zinc-500 outline-none disabled:opacity-50"
+              className="max-h-32 flex-1 resize-none bg-transparent text-sm text-zinc-100 placeholder-zinc-500 outline-none focus-visible:ring-2 focus-visible:ring-teal-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-800 disabled:opacity-50"
               style={{ lineHeight: "1.5" }}
             />
             <button
               type="button"
               onClick={() => void sendMessage()}
               disabled={!input.trim() || isStreaming}
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-teal-500 text-white transition-opacity hover:bg-teal-400 disabled:opacity-40"
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-teal-500 text-white transition-opacity outline-none hover:bg-teal-400 focus-visible:ring-2 focus-visible:ring-teal-300 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-800 disabled:opacity-40"
               aria-label="Send message"
             >
-              <Send size={13} />
+              <Send size={13} aria-hidden="true" />
             </button>
           </div>
           <p className="mt-1.5 text-center text-[10px] text-zinc-600">

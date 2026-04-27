@@ -39,6 +39,7 @@
     "headlineRole": "Ingeniero de software en Adevinta",
     "p1": "Soy ingeniero de software en Adevinta y tengo debilidad por la productividad de ingeniería: esa parte del trabajo que convierte \"son solo cinco minutos\" en cientos de horas recuperadas para personas de verdad.",
     "p2": "Me dedico a herramientas internas, automatizaciones y a limar asperezas para que otros desarrolladores puedan entregar valor sin pelearse con el toolchain. Cuando no estoy depurando pipelines o webhooks de Slack, suelo rebuscar vinilos, armar playlists o convencerme de que un plugin de sintetizador más es un gasto totalmente justificado.",
+    "petFamily": "Fuera del código, comparto mi vida con una gran familia animal: he adoptado tres galgas españolas y dos gatos.",
     "p3": "Si te suena a tu caos organizado — pasa. El café es metafórico, pero la bienvenida es real.",
     "avatarAlt": "Retrato de Javier Álvarez (marcador de posición)",
     "ctaCv": "Ver CV completo (PDF)",
@@ -223,9 +224,19 @@
     },
     "underTheHood": {
       "milestoneSection": "Hito de arquitectura",
-      "milestoneTitle": "La refactorización i18n: por qué pasamos a rutas dinámicas",
+      "milestoneTitleBefore": "La refactorización i18n: por qué pasamos a",
+      "milestoneTitleAccent": "rutas dinámicas",
       "milestoneP1": "Aunque este portfolio empezó en un solo idioma, se reestructuró todo el directorio app alrededor del segmento dinámico [lang] para que español e inglés sean rutas de primer nivel, no un parche encima de URLs pensadas solo para un idioma. Esa decisión alinea layouts, diccionarios y navegación con lo que el App Router de Next.js espera de sitios internacionalizados y muestra escalabilidad y visión técnica.",
       "milestoneP2": "El español es el valor por defecto para la mayoría del público local; el inglés sigue disponible para alcance global. El middleware lee Accept-Language, cae en español cuando encaja mejor y redirige rutas sin prefijo (por ejemplo /tools) a /es/tools o /en/tools para que enlaces y marcadores siempre caigan dentro de un locale.",
+      "a11yTitleBefore": "Accesibilidad (a11y) como",
+      "a11yTitleAccent": "base",
+      "a11yWhy": "Por qué importa: la accesibilidad no es una función que se añade al final; es un requisito base para un software inclusivo.",
+      "a11yImplementedHeading": "Qué hemos implementado:",
+      "a11yItems": [
+        "Navegación por teclado: la paleta de comandos (⌘K) se reconstruyó para soportar flechas y Enter de punta a punta, con gestión estricta del foco (`aria-activedescendant`).",
+        "Lectores de pantalla: `aria-expanded`, `aria-controls` y `aria-label` en la interfaz dinámica — el cajón móvil y el chat de IA — para que el estado y el propósito queden explícitos.",
+        "Foco y contraste: anillos `focus-visible` para quien usa teclado y una paleta clara más suave para reducir fatiga visual (anti-flashbang), alineada con expectativas de contraste."
+      ],
       "heroH1Before": "Por ",
       "heroH1Accent": "dentro",
       "heroSubtitle": "Una mirada transparente a la arquitectura, infraestructura como código, pipeline de CI/CD y proceso de ingeniería detrás de este portfolio.",
