@@ -65,33 +65,34 @@ function ChatEmptyIntro({ pathname }: { pathname: string }) {
     return (
       <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
         I see you&apos;re looking at Javier&apos;s{" "}
-        <strong className="font-medium text-zinc-200">Automation Architecture</strong>. Want to
-        know more about the Jenkins pipeline or Slack webhooks?
+        <strong className="font-medium text-zinc-200">Automation Architecture</strong>. Want to know
+        more about the Jenkins pipeline or Slack webhooks?
       </p>
     );
   }
   if (p === "/under-the-hood" || p.startsWith("/under-the-hood/")) {
     return (
       <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
-        I see you&apos;re on <strong className="font-medium text-zinc-200">Under the Hood</strong>
-        , Javier&apos;s technical deep dive. Ask about Terraform, CI/CD, live database telemetry,
-        or how this site is wired together.
+        I see you&apos;re on <strong className="font-medium text-zinc-200">Under the Hood</strong>,
+        Javier&apos;s technical deep dive. Ask about Terraform, CI/CD, live database telemetry, or
+        how this site is wired together.
       </p>
     );
   }
   if (p === "/interactive-lab" || p.startsWith("/interactive-lab/")) {
     return (
       <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
-        I see you&apos;re in the <strong className="font-medium text-zinc-200">Interactive Lab</strong>
-        , the live vinyl collection and Discogs integration. Ask about the Vinyl Sommelier, Neon +
-        Drizzle, or how recommendations work.
+        I see you&apos;re in the{" "}
+        <strong className="font-medium text-zinc-200">Interactive Lab</strong>, the live vinyl
+        collection and Discogs integration. Ask about the Vinyl Sommelier, Neon + Drizzle, or how
+        recommendations work.
       </p>
     );
   }
   return (
     <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
-      Hi! I&apos;m Javier&apos;s AI. I can navigate this portfolio with you. Ask me about his
-      career or the tech stack behind this very website!
+      Hi! I&apos;m Javier&apos;s AI. I can navigate this portfolio with you. Ask me about his career
+      or the tech stack behind this very website!
     </p>
   );
 }
@@ -208,9 +209,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
             <p className="font-serif text-base leading-tight font-normal text-white">
               Ask Javier&apos;s <span className="gradient-heading">AI Agent</span>
             </p>
-            <p className="truncate text-xs text-zinc-500">
-              Career · Projects · Knows this page
-            </p>
+            <p className="truncate text-xs text-zinc-500">Career · Projects · Knows this page</p>
           </div>
           <div className="flex items-center gap-1.5">
             {messages.length > 0 && (
