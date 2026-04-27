@@ -31,7 +31,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
           <div className="flex justify-center lg:justify-start">
             <div className="relative aspect-square w-[min(100%,280px)] shrink-0 overflow-hidden rounded-full border-4 border-teal-400/35 shadow-[0_20px_50px_-12px_oklch(0.2_0.08_200_/_0.35)] ring-1 ring-teal-500/20">
               <Image
-                src="/avatar-placeholder.png"
+                src="/javier-avatar.png"
                 alt={bio.avatarAlt}
                 width={280}
                 height={280}
@@ -49,6 +49,7 @@ export default async function HomePage({ params }: { params: Promise<{ lang: str
             <div className="text-muted mx-auto mt-6 max-w-2xl space-y-4 text-base leading-relaxed sm:text-lg lg:mx-0">
               <p>{bio.p1}</p>
               <p>{bio.p2}</p>
+              <p>{bio.petFamily}</p>
               <p className="text-foreground/90">{bio.p3}</p>
             </div>
             <div className="flex justify-center lg:justify-start">

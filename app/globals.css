@@ -4,13 +4,17 @@
  */
 @import "@heroui/styles";
 
-/* Softer light palette (zinc-adjacent) — eases harsh white/black contrast vs default HeroUI light. */
+/* Softer light palette (zinc-adjacent) — anti-flashbang vs default HeroUI light.
+ * Light tokens ONLY on explicit light / non-dark <html>: never bare `:root` alone (it matches
+ * `html.dark` with the same specificity as `.dark` from HeroUI and loses by source order). */
 @layer base {
-  :root,
-  .light,
-  .default,
-  [data-theme="light"],
-  [data-theme="default"] {
+  :root:not(.dark):not([data-theme="dark"]),
+  :root.light,
+  :root[data-theme="light"],
+  :root[data-theme="default"],
+  html.light,
+  html[data-theme="light"],
+  html[data-theme="default"] {
     --background: oklch(0.985 0.004 285);
     --foreground: oklch(0.19 0.012 285);
     --surface: oklch(0.998 0.003 285);
@@ -37,6 +41,35 @@
     --overlay-shadow:
       0 4px 12px 0 oklch(0.2 0.02 285 / 0.06), 0 2px 4px 0 oklch(0.2 0.02 285 / 0.05);
     --field-shadow: var(--surface-shadow);
+  }
+
+  /* Dark: re-declare on <html> so specificity beats HeroUI `.dark` / `[data-theme="dark"]`. */
+  html.dark,
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --background: #0a0a0a !important;
+    --foreground: #fafafa !important;
+    --surface: oklch(0.2103 0.0059 285.89);
+    --surface-foreground: var(--foreground);
+    --surface-secondary: oklch(0.257 0.0037 286.14);
+    --surface-secondary-foreground: var(--foreground);
+    --surface-tertiary: oklch(0.2721 0.0024 247.91);
+    --surface-tertiary-foreground: var(--foreground);
+    --overlay: oklch(0.2103 0.0059 285.89);
+    --overlay-foreground: var(--foreground);
+    --muted: oklch(70.5% 0.015 286.067);
+    --scrollbar: oklch(70.5% 0.015 286.067);
+    --default: oklch(27.4% 0.006 286.033);
+    --default-foreground: var(--foreground);
+    --field-background: oklch(0.2103 0.0059 285.89);
+    --field-foreground: var(--foreground);
+    --segment: oklch(0.3964 0.01 285.93);
+    --segment-foreground: var(--foreground);
+    --border: oklch(28% 0.006 286.033);
+    --separator: oklch(25% 0.006 286.033);
+    --surface-shadow: 0 0 0 0 transparent inset;
+    --overlay-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+    --field-shadow: 0 0 0 0 transparent inset;
   }
 }
 

@@ -112,6 +112,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
               onClick={() => setNavDrawerOpen(false)}
             />
             <aside
+              id="site-nav-drawer"
               className="border-border bg-background fixed inset-y-0 right-0 z-[115] flex min-h-0 w-[min(100%,18rem)] flex-col border-l shadow-2xl"
               role="dialog"
               aria-modal="true"
@@ -124,7 +125,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
                   isIconOnly
                   onPress={() => setNavDrawerOpen(false)}
                   aria-label={nav.closeMenuAria}
-                  className="h-9 w-9 rounded-md"
+                  className="focus-visible:ring-offset-background h-9 w-9 rounded-md focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2"
                 >
                   <X size={18} aria-hidden="true" />
                 </Button>
@@ -142,7 +143,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
                       href={href}
                       onClick={() => setNavDrawerOpen(false)}
                       className={[
-                        "rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                        "focus-visible:ring-offset-background rounded-lg px-3 py-2.5 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2",
                         isActive
                           ? "bg-surface text-foreground"
                           : "text-muted hover:bg-surface hover:text-foreground",
@@ -170,7 +171,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
           <NextLink
             href={homeHref}
             aria-current={isHome ? "page" : undefined}
-            className="text-foreground min-w-0 shrink-0 text-sm font-semibold tracking-tight transition-opacity hover:opacity-70"
+            className="text-foreground focus-visible:ring-offset-background min-w-0 shrink-0 rounded-md text-sm font-semibold tracking-tight transition-opacity outline-none hover:opacity-70 focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2"
           >
             <span className="truncate">Javier Álvarez</span>
             <span className="text-muted ml-1.5 hidden sm:inline">/ portfolio</span>
@@ -189,7 +190,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
               <SignInButton mode="modal">
                 <button
                   type="button"
-                  className="text-muted hover:text-foreground max-w-[4.5rem] truncate rounded-md px-2 py-1.5 text-xs font-medium transition-colors sm:max-w-none sm:px-3 sm:text-sm"
+                  className="text-muted hover:text-foreground focus-visible:ring-offset-background max-w-[4.5rem] truncate rounded-md px-2 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 sm:max-w-none sm:px-3 sm:text-sm"
                 >
                   {nav.signIn}
                 </button>
@@ -198,7 +199,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
             <button
               type="button"
               onClick={openChat}
-              className="hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-teal-500 ring-1 ring-teal-500/30 transition-colors hover:bg-teal-500/10 lg:flex"
+              className="focus-visible:ring-offset-background hidden items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-teal-500 ring-1 ring-teal-500/30 transition-colors outline-none hover:bg-teal-500/10 focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 lg:flex"
               aria-label={nav.askAiAria}
             >
               <Bot size={14} aria-hidden="true" />
@@ -209,7 +210,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
               isIconOnly
               onPress={openChat}
               aria-label={nav.askAiAria}
-              className="h-9 w-9 shrink-0 rounded-md text-teal-500 lg:hidden"
+              className="focus-visible:ring-offset-background h-9 w-9 shrink-0 rounded-md text-teal-500 focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 lg:hidden"
             >
               <Bot size={18} aria-hidden="true" />
             </Button>
@@ -220,7 +221,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
                 isIconOnly
                 onPress={toggleTheme}
                 aria-label={isDark ? nav.themeToLight : nav.themeToDark}
-                className="h-9 w-9 shrink-0 rounded-md"
+                className="focus-visible:ring-offset-background h-9 w-9 shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2"
               >
                 {isDark ? <SunIcon /> : <MoonIcon />}
               </Button>
@@ -231,8 +232,9 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
             <button
               type="button"
               onClick={palette.open}
-              className="bg-surface text-muted hover:bg-surface-secondary hover:text-foreground hidden items-center gap-2 rounded-md border border-[--border-color,oklch(0%_0_0_/_12%)] px-3 py-1.5 text-sm transition-colors sm:flex"
+              className="bg-surface text-muted hover:bg-surface-secondary hover:text-foreground focus-visible:ring-offset-background hidden items-center gap-2 rounded-md border border-[--border-color,oklch(0%_0_0_/_12%)] px-3 py-1.5 text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 sm:flex"
               aria-label={nav.openPalette}
+              aria-keyshortcuts="Meta+K Control+K"
             >
               <span>{nav.search}</span>
               <span className="flex items-center gap-0.5">
@@ -246,7 +248,8 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
               isIconOnly
               onPress={palette.open}
               aria-label={nav.openPaletteMobileAria}
-              className="h-9 w-9 shrink-0 rounded-md sm:hidden"
+              aria-keyshortcuts="Meta+K Control+K"
+              className="focus-visible:ring-offset-background h-9 w-9 shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2 sm:hidden"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -272,7 +275,9 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
               isIconOnly
               onPress={() => setNavDrawerOpen(true)}
               aria-label={nav.menuOpenAria}
-              className="h-9 w-9 shrink-0 rounded-md"
+              aria-expanded={navDrawerOpen}
+              aria-controls={navDrawerOpen ? "site-nav-drawer" : undefined}
+              className="focus-visible:ring-offset-background h-9 w-9 shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2"
             >
               <Menu size={18} aria-hidden="true" />
             </Button>

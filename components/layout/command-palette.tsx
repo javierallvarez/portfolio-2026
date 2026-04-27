@@ -112,26 +112,32 @@ function useCommands(
   );
 }
 
+const LISTBOX_ID = "command-palette-listbox";
+const optionDomId = (commandId: string) => `palette-opt-${commandId}`;
+
 // ─── Command Item ──────────────────────────────────────────────────────────────
 
 interface CommandItemProps {
   command: Command;
-  isHighlighted: boolean;
+  isActive: boolean;
   onSelect: () => void;
   onMouseEnter: () => void;
 }
 
-function CommandItem({ command, isHighlighted, onSelect, onMouseEnter }: CommandItemProps) {
+function CommandItem({ command, isActive, onSelect, onMouseEnter }: CommandItemProps) {
   return (
     <button
       type="button"
+      id={optionDomId(command.id)}
       role="option"
-      aria-selected={isHighlighted}
+      aria-selected={isActive}
       onClick={onSelect}
       onMouseEnter={onMouseEnter}
       className={[
-        "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors",
-        isHighlighted ? "bg-primary/10 text-primary" : "text-foreground hover:bg-content2",
+        "focus-visible:ring-offset-background flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-500/60 focus-visible:ring-offset-2",
+        isActive
+          ? "bg-zinc-100 text-zinc-900 ring-1 ring-teal-500/25 dark:bg-zinc-800 dark:text-zinc-100"
+          : "text-foreground hover:bg-content2 focus-visible:bg-content2",
       ].join(" ")}
     >
       <span className="bg-content2 text-default-500 flex h-8 w-8 shrink-0 items-center justify-center rounded-md">
@@ -158,12 +164,12 @@ export function CommandPalette({
 }) {
   const state = useCommandPalette();
   const [query, setQuery] = useState("");
-  const [highlightedIndex, setHighlightedIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndexRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // ── Automation Console state ──
   const [consoleOpen, setConsoleOpen] = useState(false);
-  // Incrementing runKey forces ConsoleSimulation to remount fresh each time
   const [consoleRunKey, setConsoleRunKey] = useState(0);
 
   const openConsole = useCallback(() => {
@@ -171,10 +177,13 @@ export function CommandPalette({
     setConsoleOpen(true);
   }, []);
 
-  // ── AI Career Chat ──
   const { open: openChat } = useCareerChatDrawer();
 
   const commands = useCommands(lang, dict, openConsole, openChat);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
 
   // ── Register global ⌘K / Ctrl+K shortcut ──
   useEffect(() => {
@@ -216,72 +225,94 @@ export function CommandPalette({
 
   const flat = useMemo(() => grouped.flatMap(([, cmds]) => cmds), [grouped]);
 
-  // Reset highlight when query changes
   useEffect(() => {
-    setHighlightedIndex(0);
+    setActiveIndex(0);
   }, [query]);
 
-  // Reset state on close
+  useEffect(() => {
+    if (flat.length === 0) {
+      setActiveIndex(0);
+      return;
+    }
+    setActiveIndex((i) => Math.min(Math.max(i, 0), flat.length - 1));
+  }, [flat]);
+
   useEffect(() => {
     if (!state.isOpen) {
       setQuery("");
-      setHighlightedIndex(0);
+      setActiveIndex(0);
     }
   }, [state.isOpen]);
 
   const handleSelect = useCallback(
     (command: Command) => {
       state.close();
-      // Small delay so palette exit animation completes before the action runs
       setTimeout(() => command.action(), 80);
     },
     [state],
   );
 
-  // ── Arrow key + Enter + Escape navigation ──
+  // Keep highlighted row in view when moving with keyboard
   useEffect(() => {
-    if (!state.isOpen) return;
+    if (!state.isOpen || flat.length === 0) return;
+    const cmd = flat[activeIndex];
+    if (!cmd) return;
+    const el = document.getElementById(optionDomId(cmd.id));
+    el?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }, [activeIndex, flat, state.isOpen]);
 
-    function handleKey(e: KeyboardEvent) {
+  /** Capture on the dialog so arrows / Enter run before the input’s default caret movement. */
+  const handlePaletteKeyDownCapture = useCallback(
+    (e: React.KeyboardEvent) => {
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setHighlightedIndex((i) => Math.min(i + 1, flat.length - 1));
-      } else if (e.key === "ArrowUp") {
+        if (flat.length === 0) return;
+        setActiveIndex((i) => Math.min(i + 1, flat.length - 1));
+        return;
+      }
+      if (e.key === "ArrowUp") {
         e.preventDefault();
-        setHighlightedIndex((i) => Math.max(i - 1, 0));
-      } else if (e.key === "Enter" && flat[highlightedIndex]) {
-        e.preventDefault();
-        handleSelect(flat[highlightedIndex]);
-      } else if (e.key === "Escape") {
+        if (flat.length === 0) return;
+        setActiveIndex((i) => Math.max(i - 1, 0));
+        return;
+      }
+      if (e.key === "Enter") {
+        const idx = activeIndexRef.current;
+        const cmd = flat[idx];
+        if (cmd) {
+          e.preventDefault();
+          handleSelect(cmd);
+        }
+        return;
+      }
+      if (e.key === "Escape") {
         e.preventDefault();
         state.close();
       }
-    }
+    },
+    [flat, handleSelect, state],
+  );
 
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, [state, flat, highlightedIndex, handleSelect]);
+  const activeDescendantId =
+    flat.length > 0 && flat[activeIndex] ? optionDomId(flat[activeIndex].id) : undefined;
 
   return (
     <>
-      {/* ── Palette overlay ── */}
       {state.isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             aria-hidden="true"
             onClick={state.close}
           />
 
-          {/* Palette panel */}
           <div
             role="dialog"
             aria-modal="true"
             aria-label={dict.ariaLabel}
+            onKeyDownCapture={handlePaletteKeyDownCapture}
             className="bg-background border-divider relative z-10 w-full max-w-lg overflow-hidden rounded-xl border shadow-2xl"
           >
-            {/* ── Search Input ── */}
             <div className="border-divider flex items-center gap-3 border-b px-4 py-3">
               <Search size={16} className="text-default-400 shrink-0" aria-hidden="true" />
               <input
@@ -290,15 +321,20 @@ export function CommandPalette({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={dict.searchPlaceholder}
+                role="combobox"
+                aria-expanded
+                aria-controls={LISTBOX_ID}
+                aria-autocomplete="list"
+                aria-activedescendant={activeDescendantId}
                 aria-label={dict.searchAria}
-                className="placeholder:text-default-400 min-w-0 flex-1 bg-transparent text-sm outline-none"
+                className="placeholder:text-default-400 focus-visible:ring-offset-background min-w-0 flex-1 bg-transparent text-sm outline-none focus-visible:ring-2 focus-visible:ring-teal-500/50 focus-visible:ring-offset-2"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery("")}
                   aria-label={dict.clearAria}
-                  className="text-default-400 hover:text-foreground transition-colors"
+                  className="text-default-400 hover:text-foreground focus-visible:ring-offset-background rounded-md p-1 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-teal-500/50 focus-visible:ring-offset-2"
                 >
                   <svg
                     width="14"
@@ -318,21 +354,29 @@ export function CommandPalette({
               )}
             </div>
 
-            {/* ── Command List ── */}
             <div
+              id={LISTBOX_ID}
               role="listbox"
               aria-label="Commands"
               className="max-h-[60vh] overflow-y-auto overscroll-contain p-2"
             >
               {grouped.length === 0 && (
-                <p className="text-default-400 px-3 py-8 text-center text-sm">
+                <p className="text-default-400 px-3 py-8 text-center text-sm" role="status">
                   {dict.noResults} &ldquo;{query}&rdquo;
                 </p>
               )}
 
-              {grouped.map(([category, cmds]) => (
-                <div key={category} className="mb-2 last:mb-0">
-                  <p className="text-default-400 mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase">
+              {grouped.map(([category, cmds], catIdx) => (
+                <div
+                  key={category}
+                  role="group"
+                  aria-labelledby={`palette-cat-${catIdx}`}
+                  className="mb-2 last:mb-0"
+                >
+                  <p
+                    id={`palette-cat-${catIdx}`}
+                    className="text-default-400 mb-1 px-3 text-[11px] font-semibold tracking-wider uppercase"
+                  >
                     {category}
                   </p>
                   {cmds.map((cmd) => {
@@ -341,9 +385,9 @@ export function CommandPalette({
                       <CommandItem
                         key={cmd.id}
                         command={cmd}
-                        isHighlighted={absoluteIndex === highlightedIndex}
+                        isActive={absoluteIndex === activeIndex}
                         onSelect={() => handleSelect(cmd)}
-                        onMouseEnter={() => setHighlightedIndex(absoluteIndex)}
+                        onMouseEnter={() => setActiveIndex(absoluteIndex)}
                       />
                     );
                   })}
@@ -351,7 +395,6 @@ export function CommandPalette({
               ))}
             </div>
 
-            {/* ── Footer keyboard hints ── */}
             <div className="text-default-400 border-divider flex items-center gap-3 border-t px-4 py-2.5 text-xs">
               <span className="flex items-center gap-1">
                 <Kbd className="text-xs">↑</Kbd>
@@ -371,7 +414,6 @@ export function CommandPalette({
         </div>
       )}
 
-      {/* ── Automation Console — rendered outside palette so it outlives it ── */}
       <AutomationConsole
         isOpen={consoleOpen}
         runKey={consoleRunKey}

@@ -39,6 +39,7 @@
     "headlineRole": "Software Engineer at Adevinta",
     "p1": "I'm a Software Engineer at Adevinta with a soft spot for Productivity Engineering — the work that turns \"it's just five minutes\" into hundreds of hours saved for real humans.",
     "p2": "I spend my days building internal tools, wiring up automations, and smoothing the sharp edges so other engineers can ship without wrestling the toolchain. When I'm not debugging pipelines or Slack webhooks, I'm usually digging through crates for vinyl, curating playlists, or convincing myself that one more synth plugin is absolutely a business expense.",
+    "petFamily": "Outside of coding, I share my home with a large animal family: three adopted Spanish greyhounds (galgas) and two cats.",
     "p3": "If that sounds like your kind of organized chaos — pull up a chair. The coffee is metaphorical, but the welcome is real.",
     "avatarAlt": "Portrait of Javier Álvarez (placeholder)",
     "ctaCv": "View Full CV (PDF)",
@@ -223,9 +224,19 @@
     },
     "underTheHood": {
       "milestoneSection": "Architectural Milestone",
-      "milestoneTitle": "The i18n refactor: why we moved to dynamic routing",
+      "milestoneTitleBefore": "The i18n refactor: why we moved to",
+      "milestoneTitleAccent": "dynamic routing",
       "milestoneP1": "Although this portfolio started as a single-language experience, the entire app directory was refactored around a dynamic [lang] segment so Spanish and English are first-class routes, not an afterthought. That structural choice keeps layouts, dictionaries, and navigation aligned with how Next.js App Router expects internationalized sites to behave and signals scalability and technical foresight.",
       "milestoneP2": "Spanish is the default for most local visitors; English remains available for global reach. Middleware reads Accept-Language, falls back to Spanish when it is a better fit, and redirects bare paths like /tools to /es/tools or /en/tools so bookmarks and shared links always resolve inside a locale.",
+      "a11yTitleBefore": "Accessibility (a11y) as a",
+      "a11yTitleAccent": "Baseline",
+      "a11yWhy": "Why it matters: Accessibility isn't a feature to add at the end; it's a baseline requirement for inclusive software.",
+      "a11yImplementedHeading": "What we implemented:",
+      "a11yItems": [
+        "Keyboard Navigation: The entire Command Palette (Cmd+K) was rebuilt to ensure complete arrow-key and Enter support via strict focus management (`aria-activedescendant`).",
+        "Screen Readers: Integrated `aria-expanded`, `aria-controls`, and `aria-label` across all dynamic UI elements like the mobile drawer and the AI chat interface.",
+        "Focus States & Contrast: Enforced `focus-visible` rings for keyboard users and adjusted the light theme to reduce eye strain (anti-flashbang), complying with visual contrast standards."
+      ],
       "heroH1Before": "Under the ",
       "heroH1Accent": "Hood",
       "heroSubtitle": "A transparent look at the architecture, infrastructure-as-code, CI/CD pipeline, and engineering process behind this portfolio.",
