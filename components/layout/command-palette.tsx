@@ -15,6 +15,7 @@ import {
   Bell,
   Search,
   Cog,
+  FileText,
 } from "lucide-react";
 import { useCommandPalette } from "@/hooks/use-command-palette";
 import { useCareerChatDrawer } from "@/hooks/use-career-chat-drawer";
@@ -51,6 +52,14 @@ function useCommands(
         category: dict.categories.navigate,
         icon: <Home size={16} />,
         action: () => router.push(withLocale(lang, "/")),
+      },
+      {
+        id: "nav-cv",
+        label: dict.nav.cv,
+        description: dict.nav.cvDesc,
+        category: dict.categories.navigate,
+        icon: <FileText size={16} />,
+        action: () => router.push(withLocale(lang, "/cv")),
       },
       {
         id: "nav-interactive-lab",
@@ -299,7 +308,7 @@ export function CommandPalette({
   return (
     <>
       {state.isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 print:hidden">
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             aria-hidden="true"

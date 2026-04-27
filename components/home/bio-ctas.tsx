@@ -1,26 +1,14 @@
 "use client";
 
 import NextLink from "next/link";
-import { Button } from "@heroui/react";
-import { toast } from "@heroui/react";
 import type { Dictionary } from "@/lib/get-dictionary";
 import { LINKEDIN_PROFILE_URL } from "@/lib/social";
+import { PrintPdfButton } from "@/components/cv/print-pdf-button";
 
-export function BioCtas({
-  ctaCv,
-  ctaLinkedIn,
-  cvToastTitle,
-  cvToastDescription,
-}: Pick<Dictionary["bio"], "ctaCv" | "ctaLinkedIn" | "cvToastTitle" | "cvToastDescription">) {
+export function BioCtas({ ctaCv, ctaLinkedIn }: Pick<Dictionary["bio"], "ctaCv" | "ctaLinkedIn">) {
   return (
-    <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-      <Button
-        variant="outline"
-        className="text-foreground w-full border-teal-500/40 sm:w-auto"
-        onPress={() => toast.info(cvToastTitle, { description: cvToastDescription })}
-      >
-        {ctaCv}
-      </Button>
+    <div className="flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
+      <PrintPdfButton label={ctaCv} className="w-full border-teal-500/40 sm:w-auto" />
       <NextLink
         href={LINKEDIN_PROFILE_URL}
         target="_blank"

@@ -31,7 +31,7 @@ export default async function LangLayout({
       <SetHtmlLang lang={lang} />
       <DeveloperGreeting />
       <Navbar nav={dict.nav} lang={lang} />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 print:min-h-0">{children}</main>
       <Footer footer={dict.footer} lang={lang} />
       <CommandPalette dict={dict.commandPalette} lang={lang} />
       <MobileDesktopHint

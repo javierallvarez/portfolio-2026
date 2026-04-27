@@ -25,6 +25,7 @@ const PRIORITY_NAV: readonly { path: string; labelKey: keyof Dictionary["nav"] }
 
 const DRAWER_NAV_LINKS: readonly { path: string; labelKey: keyof Dictionary["nav"] }[] = [
   { path: "/", labelKey: "home" },
+  { path: "/cv", labelKey: "cv" },
   ...PRIORITY_NAV,
 ] as const;
 
@@ -107,13 +108,13 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
           <>
             <button
               type="button"
-              className="fixed inset-0 z-[105] bg-black/45 backdrop-blur-[2px]"
+              className="fixed inset-0 z-[105] bg-black/45 backdrop-blur-[2px] print:hidden"
               aria-label={nav.closeMenuAria}
               onClick={() => setNavDrawerOpen(false)}
             />
             <aside
               id="site-nav-drawer"
-              className="border-border bg-background fixed inset-y-0 right-0 z-[115] flex min-h-0 w-[min(100%,18rem)] flex-col border-l shadow-2xl"
+              className="border-border bg-background fixed inset-y-0 right-0 z-[115] flex min-h-0 w-[min(100%,18rem)] flex-col border-l shadow-2xl print:hidden"
               role="dialog"
               aria-modal="true"
               aria-label={nav.menu}
@@ -163,7 +164,7 @@ export function Navbar({ nav, lang }: { nav: Dictionary["nav"]; lang: Locale }) 
 
   return (
     <>
-      <header className="bg-background/80 sticky top-0 z-40 border-b border-[--border-color,oklch(0%_0_0_/_8%)] backdrop-blur-md">
+      <header className="bg-background/80 sticky top-0 z-40 border-b border-[--border-color,oklch(0%_0_0_/_8%)] backdrop-blur-md print:hidden">
         <nav
           className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-4 sm:gap-3 sm:px-6"
           aria-label="Primary"

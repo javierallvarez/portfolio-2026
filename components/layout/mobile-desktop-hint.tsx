@@ -54,7 +54,7 @@ export function MobileDesktopHint({
   return (
     <div
       role="status"
-      className="border-border bg-surface text-foreground fixed right-4 bottom-4 left-4 z-50 rounded-xl border px-4 py-3 text-sm shadow-lg md:hidden"
+      className="border-border bg-surface text-foreground fixed right-4 bottom-4 left-4 z-50 rounded-xl border px-4 py-3 text-sm shadow-lg md:hidden print:hidden"
     >
       <div className="flex items-start gap-3">
         <p className="min-w-0 flex-1 leading-relaxed">{message}</p>

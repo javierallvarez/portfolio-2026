@@ -90,3 +90,27 @@ html[data-theme="dark"] {
   --overlay-shadow: 0 0 1px 0 rgba(255, 255, 255, 0.3) inset;
   --field-shadow: 0 0 0 0 transparent inset;
 }
+
+@media print {
+  @page {
+    margin: 15mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #171717 !important;
+  }
+
+  /* Gradient text is invisible in many print engines — use solid ink. */
+  .gradient-heading {
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: #0d9488 !important;
+  }
+
+  .home-hero-headline {
+    background: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    color: #18181b !important;
+  }
+}

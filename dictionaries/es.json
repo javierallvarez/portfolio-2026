@@ -5,6 +5,7 @@
     "tools": "Herramientas",
     "automations": "Automatizaciones",
     "underTheHood": "Por dentro",
+    "cv": "CV",
     "signIn": "Entrar",
     "askAi": "Pregunta a mi IA",
     "askAiAria": "Chatea con la IA de Javier",
@@ -32,7 +33,13 @@
     "copyrightHeartAria": "cariño",
     "home": "Inicio",
     "interactiveLab": "Laboratorio interactivo",
-    "underTheHood": "Por dentro"
+    "underTheHood": "Por dentro",
+    "cv": "CV"
+  },
+  "hero": {
+    "headline": "Haciendo la vida de los developers más fácil.",
+    "subheadline": "Hola, soy Javier. Software Engineer en Adevinta.",
+    "description": "Construyo herramientas internas, automatizo lo aburrido y conecto APIs para que mi equipo pueda centrarse en lo importante (y salir a su hora). Si algo se puede resolver con un script, no debería ser una reunión."
   },
   "bio": {
     "greeting": "Hola, soy Javier",
@@ -40,12 +47,10 @@
     "p1": "Soy ingeniero de software en Adevinta y tengo debilidad por la productividad de ingeniería: esa parte del trabajo que convierte \"son solo cinco minutos\" en cientos de horas recuperadas para personas de verdad.",
     "p2": "Me dedico a herramientas internas, automatizaciones y a limar asperezas para que otros desarrolladores puedan entregar valor sin pelearse con el toolchain. Cuando no estoy depurando pipelines o webhooks de Slack, suelo rebuscar vinilos, armar playlists o convencerme de que un plugin de sintetizador más es un gasto totalmente justificado.",
     "petFamily": "Fuera del código, comparto mi vida con una gran familia animal: he adoptado tres galgas españolas y dos gatos.",
-    "p3": "Si te suena a tu caos organizado — pasa. El café es metafórico, pero la bienvenida es real.",
+    "p3": "Si te suena a tu caos organizado: pasa. El café es metafórico, pero la bienvenida es real.",
     "avatarAlt": "Retrato de Javier Álvarez (marcador de posición)",
-    "ctaCv": "Ver CV completo (PDF)",
-    "ctaLinkedIn": "Conectar en LinkedIn",
-    "cvToastTitle": "El PDF del CV está en camino",
-    "cvToastDescription": "Lo estoy puliendo; mientras tanto, LinkedIn es el sitio más rápido para saludar."
+    "ctaCv": "Descargar PDF / Imprimir",
+    "ctaLinkedIn": "Conectar en LinkedIn"
   },
   "features": {
     "internal": {
@@ -85,7 +90,9 @@
       "internalTooling": "Ir a herramientas internas y automatizaciones",
       "internalToolingDesc": "Pipelines de aprovisionamiento IAM, informes. Python, Jenkins, Slack, GWS",
       "underTheHood": "Ir a Por dentro",
-      "underTheHoodDesc": "Arquitectura, CI/CD y proceso guiado por especificaciones"
+      "underTheHoodDesc": "Arquitectura, CI/CD y proceso guiado por especificaciones",
+      "cv": "Ir al CV",
+      "cvDesc": "Currículum formal — experiencia, habilidades, proyectos, listo para imprimir"
     },
     "themeLight": "Cambiar a modo claro",
     "themeDark": "Cambiar a modo oscuro",
@@ -95,6 +102,64 @@
     "slackWebhookDesc": "Simula una automatización de Google Workspace con notificación en Slack"
   },
   "pages": {
+    "cv": {
+      "metaTitle": "CV",
+      "metaDescription": "CV profesional — Javier Álvarez, ingeniero de software en Adevinta.",
+      "printPdf": "Descargar PDF / Imprimir",
+      "name": "Javier Álvarez",
+      "role": "Ingeniero de software en Adevinta",
+      "tagline": "Herramientas internas, automatización e ingeniería de productividad: convertir \"cinco minutos\" en cientos de horas recuperadas para equipos reales.",
+      "avatarAlt": "Retrato de Javier Álvarez",
+      "linkedinLabel": "LinkedIn",
+      "githubLabel": "GitHub",
+      "portfolioLabel": "Inicio del portfolio",
+      "experienceTitle": "Experiencia",
+      "experienceCompany": "Adevinta",
+      "experienceRole": "Ingeniero de software — herramientas internas e ingeniería de productividad",
+      "experiencePeriod": "2023 — actualidad · España",
+      "experienceBullets": [
+        "Desarrollo y mantenimiento de herramientas internas, automatizaciones en Slack e integraciones con Google Workspace para toda la organización de ingeniería.",
+        "Administración de Slack y Google Workspace a escala: aprovisionamiento, políticas, webhooks y flujos tolerantes a incidencias.",
+        "Entrega guiada por especificaciones con CI/CD (GitHub Actions), servicios TypeScript/Node, Python (Flask, scripts de automatización) y sistemas respaldados por PostgreSQL."
+      ],
+      "skillsTitle": "Habilidades y stack",
+      "skillsIntro": "Stack representativo del trabajo en producción y del código de este portfolio.",
+      "skillGroups": [
+        { "name": "Lenguajes", "items": "TypeScript, JavaScript, Python, SQL" },
+        {
+          "name": "Frontend",
+          "items": "Next.js (App Router), React 19, Tailwind CSS v4, HeroUI v3"
+        },
+        {
+          "name": "Backend y datos",
+          "items": "PostgreSQL (Neon), Drizzle ORM, Zod, REST, Vercel AI SDK, Gemini"
+        },
+        {
+          "name": "Plataforma y DevOps",
+          "items": "Vercel, GitHub Actions, Terraform (demo AWS), Clerk, rate limiting con Upstash"
+        }
+      ],
+      "projectsTitle": "Proyectos",
+      "projects": [
+        {
+          "name": "Utilidades para desarrolladores",
+          "body": "Generador de contraseñas, traductor de cron, decodificador JWT y formateador JSON — herramientas en cliente con telemetría anónima en PostgreSQL."
+        },
+        {
+          "name": "Laboratorio interactivo — Colección de vinilos y sommelier IA",
+          "body": "Aplicación full-stack con Discogs, Drizzle, RBAC con Clerk y un sommelier IA que recomienda discos desde una colección en vivo."
+        },
+        {
+          "name": "Sitio de ingeniería del portfolio",
+          "body": "Entrega guiada por specs, i18n (es/en), agente de carrera con IA, paleta de comandos, E2E con Playwright y la narrativa de arquitectura en Por dentro."
+        }
+      ],
+      "personalTitle": "Personal",
+      "personalParagraphs": [
+        "Fuera del trabajo comparto mi vida con una gran familia animal: tres galgas españolas adoptadas y dos gatos.",
+        "La música es constante: años como productor electrónico y director de sello marcan cómo pienso en producto, ritmo y oficio — visible en el laboratorio de vinilos del portfolio."
+      ]
+    },
     "tools": {
       "title": "Utilidades",
       "titleAccent": "para desarrolladores",
