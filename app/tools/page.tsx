@@ -7,7 +7,7 @@ import { JsonFormatter } from "@/components/tools/json-formatter";
 export const metadata: Metadata = {
   title: "Developer Utilities",
   description:
-    "Small, fast, client-side developer tools. Every interaction is tracked anonymously in PostgreSQL — live telemetry visible on the Under the Hood page.",
+    "Small, fast, client-side developer tools. Every interaction is tracked anonymously in PostgreSQL. Live telemetry is visible on the Under the Hood page.",
 };
 
 export default function ToolsPage() {
@@ -20,7 +20,7 @@ export default function ToolsPage() {
         </h1>
         <p className="text-default-500 mt-4 max-w-2xl text-base leading-relaxed sm:text-lg">
           Small, fast, and completely client-side tools. Every interaction is tracked anonymously in
-          our live <span className="text-foreground font-medium">PostgreSQL database</span> — the
+          our live <span className="text-foreground font-medium">PostgreSQL database</span>. The
           aggregate counts are visible in real time on the{" "}
           <a href="/under-the-hood" className="text-teal-400 underline-offset-2 hover:underline">
             Under the Hood
@@ -49,8 +49,8 @@ export default function ToolsPage() {
           <code className="bg-content2 rounded px-1 py-0.5 font-mono text-xs">
             telemetry_events
           </code>{" "}
-          table. No personal data, no fingerprinting — just an event type and a timestamp. Counts
-          are aggregated server-side on each page load.
+          table. No personal data, no fingerprinting. Just an event type and a timestamp. Counts are
+          aggregated server-side on each page load.
         </p>
       </div>
     </div>

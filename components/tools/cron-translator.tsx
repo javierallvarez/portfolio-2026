@@ -48,7 +48,9 @@ export function CronTranslator() {
         </div>
         <div>
           <p className="text-foreground font-serif text-base font-normal">Cron Translator</p>
-          <p className="text-default-400 text-xs">Paste any cron expression — get plain English</p>
+          <p className="text-default-400 text-xs">
+            Paste any cron expression and get plain English
+          </p>
         </div>
       </div>
 
