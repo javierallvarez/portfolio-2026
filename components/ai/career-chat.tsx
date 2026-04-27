@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Bot, User, Send, X, Sparkles, ExternalLink } from "lucide-react";
 import { useCareerChat } from "@/hooks/use-career-chat";
+import { stripLocale } from "@/lib/i18n/utils";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -145,13 +146,14 @@ function MessageBubble({
 
 export function CareerChat({ isOpen, onClose }: CareerChatProps) {
   const pathname = usePathname();
+  const logicalPath = stripLocale(pathname);
   const { messages, input, setInput, isStreaming, sendMessage, appendAndSend, reset } =
-    useCareerChat(pathname);
+    useCareerChat(logicalPath);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const starters = useMemo(() => getChatStarters(pathname), [pathname]);
-  const inputPlaceholder = useMemo(() => getChatPlaceholder(pathname), [pathname]);
+  const starters = useMemo(() => getChatStarters(logicalPath), [logicalPath]);
+  const inputPlaceholder = useMemo(() => getChatPlaceholder(logicalPath), [logicalPath]);
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -245,7 +247,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
                 <p className="font-serif text-lg font-normal text-white">
                   Hi! I&apos;m Javier&apos;s AI
                 </p>
-                <ChatEmptyIntro pathname={pathname} />
+                <ChatEmptyIntro pathname={logicalPath} />
               </div>
 
               {/* Starter chips */}

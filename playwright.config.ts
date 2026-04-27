@@ -43,7 +43,8 @@ export default defineConfig({
 
   webServer: {
     command: process.env.CI ? "npm run start" : "npm run dev",
-    url: "http://localhost:3000",
+    // Use a locale-prefixed URL so the readiness probe gets 200 (not a redirect from `/`).
+    url: "http://localhost:3000/en",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

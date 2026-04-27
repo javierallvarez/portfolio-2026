@@ -10,6 +10,10 @@ import { VinylDeleteButton } from "@/components/vinyls/vinyl-delete-button";
 import { VinylNowSpinningButton } from "@/components/vinyls/vinyl-now-spinning-button";
 import { VinylSommelier } from "@/components/interactive-lab/vinyl-sommelier";
 import type { Vinyl } from "@/lib/db/schema";
+import type { Dictionary } from "@/lib/get-dictionary";
+import type { Locale } from "@/lib/i18n/config";
+import { isLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/get-dictionary";
 
 export const metadata: Metadata = {
   title: "Interactive Lab · Vinyl Collection",
@@ -19,7 +23,17 @@ export const metadata: Metadata = {
 
 // ─── Now Spinning spotlight ───────────────────────────────────────────────────
 
-function NowSpinningCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
+type LabCopy = Dictionary["pages"]["interactiveLab"];
+
+function NowSpinningCard({
+  vinyl,
+  isAdmin,
+  lab,
+}: {
+  vinyl: Vinyl;
+  isAdmin: boolean;
+  lab: LabCopy;
+}) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-teal-400/30 bg-gradient-to-br from-teal-400/10 via-cyan-400/5 to-transparent p-6 shadow-lg">
       {/* Radial glow */}
@@ -61,7 +75,7 @@ function NowSpinningCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean })
         {/* Info */}
         <div className="flex-1 space-y-1">
           <p className="text-xs font-semibold tracking-widest text-teal-400 uppercase">
-            Now Spinning
+            {lab.nowSpinningBadge}
           </p>
           <h2 className="text-foreground font-serif text-2xl leading-tight font-normal">
             {vinyl.title}
@@ -87,7 +101,7 @@ function NowSpinningCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean })
 
 // ─── Vinyl Card ───────────────────────────────────────────────────────────────
 
-function VinylCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
+function VinylCard({ vinyl, isAdmin, lab }: { vinyl: Vinyl; isAdmin: boolean; lab: LabCopy }) {
   return (
     <article className="border-divider bg-content1 hover:bg-content2 flex gap-4 rounded-xl border p-4 transition-colors">
       {/* Cover art */}
@@ -104,7 +118,7 @@ function VinylCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
         ) : (
           <div
             className="bg-content3 text-default-400 flex h-full w-full items-center justify-center rounded-lg"
-            aria-label="No cover art"
+            aria-label={lab.noCoverAria}
           >
             <Music2 size={20} aria-hidden="true" />
           </div>
@@ -121,7 +135,7 @@ function VinylCard({ vinyl, isAdmin }: { vinyl: Vinyl; isAdmin: boolean }) {
 
         <div className="flex flex-wrap items-center gap-2">
           <Chip size="sm" variant={vinyl.status === "in_collection" ? "primary" : "secondary"}>
-            {vinyl.status === "in_collection" ? "In Collection" : "Recommended"}
+            {vinyl.status === "in_collection" ? lab.statusInCollection : lab.statusRecommended}
           </Chip>
 
           {vinyl.genre && <span className="text-default-400 text-xs">{vinyl.genre}</span>}
@@ -166,7 +180,16 @@ function SectionHeading({
 
 // ─── Page ────────────────────────────────────────────────────────────────────
 
-export default async function InteractiveLabPage() {
+export default async function InteractiveLabPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang: raw } = await params;
+  const lang: Locale = isLocale(raw) ? raw : "es";
+  const dict = await getDictionary(lang);
+  const lab = dict.pages.interactiveLab;
+
   // Gracefully degrade when Clerk is unavailable (e.g. rate-limited handshake
   // or a dummy publishableKey in CI). Treat as unauthenticated rather than
   // crashing the render.
@@ -216,25 +239,24 @@ export default async function InteractiveLabPage() {
           {/* Text content */}
           <div>
             <h1 className="text-foreground font-serif text-3xl font-normal tracking-tight sm:text-4xl">
-              Vinyl Collection &amp; <span className="gradient-heading">Recommendations</span>
+              {lab.h1Lead} <span className="gradient-heading">{lab.h1Accent}</span>
             </h1>
             <p className="text-muted mt-4 text-base leading-relaxed sm:text-lg">
-              I spent years as an{" "}
-              <span className="text-foreground font-medium">Electronic Music Producer</span> and{" "}
-              <span className="text-foreground font-medium">Record Label Director</span>, and sound
-              still runs through everything I do, including the records that fill this collection.
+              {lab.heroP1Before}
+              <span className="text-foreground font-medium">{lab.heroP1Em1}</span>
+              {lab.heroP1Mid}
+              <span className="text-foreground font-medium">{lab.heroP1Em2}</span>
+              {lab.heroP1After}
             </p>
             <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
-              But it&apos;s also a{" "}
-              <span className="text-foreground font-medium">live PostgreSQL database</span>{" "}
-              demonstrating real-world full-stack architecture: Drizzle ORM, optimistic UI, rate
-              limiting, Zod validation, Clerk RBAC, and Discogs API integration, all running against
-              a live Neon database.
+              {lab.heroP2Before}
+              <span className="text-foreground font-medium">{lab.heroP2Em}</span>
+              {lab.heroP2After}
             </p>
             <p className="text-muted mt-3 text-base leading-relaxed sm:text-lg">
-              Go ahead,{" "}
-              <span className="text-foreground font-medium">test the DB architecture</span> and drop
-              a recommendation below. What record should be in my collection?
+              {lab.heroP3Before}
+              <span className="text-foreground font-medium">{lab.heroP3Em}</span>
+              {lab.heroP3After}
             </p>
           </div>
 
@@ -242,7 +264,7 @@ export default async function InteractiveLabPage() {
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-lg">
             <Image
               src="/vinyl_collection.jpeg"
-              alt="Javier's vinyl collection"
+              alt={lab.heroImageAlt}
               fill
               className="object-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -255,35 +277,33 @@ export default async function InteractiveLabPage() {
 
       {/* ── Now Spinning ── */}
       {nowSpinning && (
-        <section className="mt-10" aria-label="Now spinning">
-          <NowSpinningCard vinyl={nowSpinning} isAdmin={isAdmin} />
+        <section className="mt-10" aria-label={lab.nowSpinningAria}>
+          <NowSpinningCard vinyl={nowSpinning} isAdmin={isAdmin} lab={lab} />
         </section>
       )}
 
       {/* ── Vinyl Sommelier ── */}
-      <section className="mt-10" aria-label="Vinyl Sommelier">
-        <VinylSommelier />
+      <section className="mt-10" aria-label={lab.sommelierAria}>
+        <VinylSommelier lab={lab} />
       </section>
 
       {/* ── Discogs Search ── */}
-      <section className="mt-10" aria-label="Search and add vinyl records">
+      <section className="mt-10" aria-label={lab.searchSectionAria}>
         <h2 className="text-foreground mb-1 text-lg font-semibold">
-          {isAdmin ? "Add to Your Collection" : "Recommend a Record"}
+          {isAdmin ? lab.titleAddCollection : lab.titleRecommendRecord}
         </h2>
         <p className="text-default-500 mb-4 text-sm">
-          {isAdmin
-            ? "Search Discogs and add records directly to your collection or recommendations."
-            : "Search Discogs and recommend an album you think should be here."}
+          {isAdmin ? lab.descAddCollection : lab.descRecommend}
         </p>
         <VinylSearch isAdmin={isAdmin} />
       </section>
 
       {/* ── Collection (grouped by genre) ── */}
-      <section className="mt-12" aria-label="Javier's vinyl collection">
+      <section className="mt-12" aria-label={lab.collectionAria}>
         <SectionHeading
           label={
             <>
-              Javier&apos;s <span className="gradient-heading">Collection</span>
+              {lab.collectionLead} <span className="gradient-heading">{lab.collectionAccent}</span>
             </>
           }
           count={collection.length + (nowSpinning?.status === "in_collection" ? 1 : 0)}
@@ -296,48 +316,42 @@ export default async function InteractiveLabPage() {
               <div key={genre}>
                 <p className="text-default-400 mb-3 flex items-center gap-2 text-xs font-semibold tracking-widest uppercase">
                   <Disc3 size={12} className="text-teal-400" aria-hidden="true" />
-                  {genre}
+                  {genre === "Other" ? lab.genreOther : genre}
                   <span className="text-default-300">({byGenre[genre].length})</span>
                 </p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {byGenre[genre].map((vinyl) => (
-                    <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} />
+                    <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} lab={lab} />
                   ))}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-default-400 mt-4 text-sm">
-            No records in the collection yet. Check back soon!
-          </p>
+          <p className="text-default-400 mt-4 text-sm">{lab.emptyCollection}</p>
         )}
       </section>
 
       {/* ── Community Recommendations ── */}
-      <section className="mt-12" aria-label="Community recommendations">
+      <section className="mt-12" aria-label={lab.recommendationsAria}>
         <SectionHeading
           label={
             <>
-              Community <span className="gradient-heading">Recommendations</span>
+              {lab.communityLead} <span className="gradient-heading">{lab.communityAccent}</span>
             </>
           }
           count={recommended.length}
           dotColor="secondary"
         />
-        <p className="text-default-500 mt-1 mb-4 text-sm">
-          Albums the community thinks Javier should own.
-        </p>
+        <p className="text-default-500 mt-1 mb-4 text-sm">{lab.communityBlurb}</p>
         {recommended.length > 0 ? (
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {recommended.map((vinyl) => (
-              <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} />
+              <VinylCard key={vinyl.id} vinyl={vinyl} isAdmin={isAdmin} lab={lab} />
             ))}
           </div>
         ) : (
-          <p className="text-default-400 mt-4 text-sm">
-            No recommendations yet — be the first to recommend an album above!
-          </p>
+          <p className="text-default-400 mt-4 text-sm">{lab.emptyRecommendations}</p>
         )}
       </section>
     </div>

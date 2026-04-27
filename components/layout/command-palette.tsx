@@ -19,21 +19,27 @@ import {
 import { useCommandPalette } from "@/hooks/use-command-palette";
 import { useCareerChatDrawer } from "@/hooks/use-career-chat-drawer";
 import { AutomationConsole } from "@/components/ui/automation-console";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/get-dictionary";
+import { withLocale } from "@/lib/i18n/utils";
 
 // ─── Command Definitions ───────────────────────────────────────────────────────
-
-type CommandCategory = "Navigate" | "Theme" | "Actions" | "Automations (Mock)";
 
 interface Command {
   id: string;
   label: string;
   description?: string;
-  category: CommandCategory;
+  category: string;
   icon: React.ReactNode;
   action: () => void;
 }
 
-function useCommands(onOpenConsole: () => void, onOpenChat: () => void): Command[] {
+function useCommands(
+  lang: Locale,
+  dict: Dictionary["commandPalette"],
+  onOpenConsole: () => void,
+  onOpenChat: () => void,
+): Command[] {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
 
@@ -41,69 +47,68 @@ function useCommands(onOpenConsole: () => void, onOpenChat: () => void): Command
     () => [
       {
         id: "nav-home",
-        label: "Go to Home",
-        category: "Navigate" as const,
+        label: dict.nav.home,
+        category: dict.categories.navigate,
         icon: <Home size={16} />,
-        action: () => router.push("/"),
+        action: () => router.push(withLocale(lang, "/")),
       },
       {
         id: "nav-interactive-lab",
-        label: "Go to Interactive Lab",
-        description: "Live database interactions, optimistic UI, and full-stack validation",
-        category: "Navigate" as const,
+        label: dict.nav.interactiveLab,
+        description: dict.nav.interactiveLabDesc,
+        category: dict.categories.navigate,
         icon: <FlaskConical size={16} />,
-        action: () => router.push("/interactive-lab"),
+        action: () => router.push(withLocale(lang, "/interactive-lab")),
       },
       {
         id: "nav-tools",
-        label: "Go to Developer Utilities",
-        description: "Password Generator, Cron Translator, all tracked in PostgreSQL",
-        category: "Navigate" as const,
+        label: dict.nav.tools,
+        description: dict.nav.toolsDesc,
+        category: dict.categories.navigate,
         icon: <Wrench size={16} />,
-        action: () => router.push("/tools"),
+        action: () => router.push(withLocale(lang, "/tools")),
       },
       {
         id: "nav-internal-tooling",
-        label: "Go to Internal Tooling & Automations",
-        description:
-          "IAM provisioning pipelines, reporting automation. Python, Jenkins, Slack, GWS",
-        category: "Navigate" as const,
+        label: dict.nav.internalTooling,
+        description: dict.nav.internalToolingDesc,
+        category: dict.categories.navigate,
         icon: <Cog size={16} />,
-        action: () => router.push("/internal-tooling"),
+        action: () => router.push(withLocale(lang, "/internal-tooling")),
       },
       {
         id: "nav-under-the-hood",
-        label: "Go to Under the Hood",
-        description: "Architecture, CI/CD and spec-driven process",
-        category: "Navigate" as const,
+        label: dict.nav.underTheHood,
+        description: dict.nav.underTheHoodDesc,
+        category: dict.categories.navigate,
         icon: <Settings size={16} />,
-        action: () => router.push("/under-the-hood"),
+        action: () => router.push(withLocale(lang, "/under-the-hood")),
       },
       {
         id: "toggle-theme",
-        label: theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode",
-        category: "Theme" as const,
+        label: theme === "dark" ? dict.themeLight : dict.themeDark,
+        category: dict.categories.theme,
         icon: theme === "dark" ? <Sun size={16} /> : <Moon size={16} />,
         action: () => setTheme(theme === "dark" ? "light" : "dark"),
       },
       {
         id: "ask-ai",
-        label: "Ask my AI Career Agent",
-        description: "Chat with Javier's AI about his career, projects, and tech stack",
-        category: "Actions" as const,
+        label: dict.askAi,
+        description: dict.askAiDesc,
+        category: dict.categories.actions,
         icon: <Bot size={16} />,
         action: onOpenChat,
       },
       {
         id: "run-slack-webhook",
-        label: "Run Slack Webhook (Simulated)",
-        description: "Simulates a Google Workspace automation with Slack notification",
-        category: "Automations (Mock)" as const,
+        label: dict.slackWebhook,
+        description: dict.slackWebhookDesc,
+        category: dict.categories.automations,
         icon: <Bell size={16} />,
         action: onOpenConsole,
       },
     ],
-    [router, theme, setTheme, onOpenConsole, onOpenChat],
+    [router, theme, setTheme, onOpenConsole, onOpenChat, lang, dict],
   );
 }
 
@@ -144,7 +149,13 @@ function CommandItem({ command, isHighlighted, onSelect, onMouseEnter }: Command
 
 // ─── Command Palette ───────────────────────────────────────────────────────────
 
-export function CommandPalette() {
+export function CommandPalette({
+  dict,
+  lang,
+}: {
+  dict: Dictionary["commandPalette"];
+  lang: Locale;
+}) {
   const state = useCommandPalette();
   const [query, setQuery] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -163,7 +174,7 @@ export function CommandPalette() {
   // ── AI Career Chat ──
   const { open: openChat } = useCareerChatDrawer();
 
-  const commands = useCommands(openConsole, openChat);
+  const commands = useCommands(lang, dict, openConsole, openChat);
 
   // ── Register global ⌘K / Ctrl+K shortcut ──
   useEffect(() => {
@@ -200,7 +211,7 @@ export function CommandPalette() {
       return acc;
     }, {});
 
-    return Object.entries(byCategory) as [CommandCategory, Command[]][];
+    return Object.entries(byCategory) as [string, Command[]][];
   }, [commands, query]);
 
   const flat = useMemo(() => grouped.flatMap(([, cmds]) => cmds), [grouped]);
@@ -267,7 +278,7 @@ export function CommandPalette() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Command palette"
+            aria-label={dict.ariaLabel}
             className="bg-background border-divider relative z-10 w-full max-w-lg overflow-hidden rounded-xl border shadow-2xl"
           >
             {/* ── Search Input ── */}
@@ -278,15 +289,15 @@ export function CommandPalette() {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search commands…"
-                aria-label="Search commands"
+                placeholder={dict.searchPlaceholder}
+                aria-label={dict.searchAria}
                 className="placeholder:text-default-400 min-w-0 flex-1 bg-transparent text-sm outline-none"
               />
               {query && (
                 <button
                   type="button"
                   onClick={() => setQuery("")}
-                  aria-label="Clear search"
+                  aria-label={dict.clearAria}
                   className="text-default-400 hover:text-foreground transition-colors"
                 >
                   <svg
@@ -315,7 +326,7 @@ export function CommandPalette() {
             >
               {grouped.length === 0 && (
                 <p className="text-default-400 px-3 py-8 text-center text-sm">
-                  No commands found for &ldquo;{query}&rdquo;
+                  {dict.noResults} &ldquo;{query}&rdquo;
                 </p>
               )}
 
@@ -345,15 +356,15 @@ export function CommandPalette() {
               <span className="flex items-center gap-1">
                 <Kbd className="text-xs">↑</Kbd>
                 <Kbd className="text-xs">↓</Kbd>
-                to navigate
+                {dict.footerNavigate}
               </span>
               <span className="flex items-center gap-1">
                 <Kbd className="text-xs">↵</Kbd>
-                to select
+                {dict.footerSelect}
               </span>
               <span className="flex items-center gap-1">
                 <Kbd className="text-xs">Esc</Kbd>
-                to close
+                {dict.footerClose}
               </span>
             </div>
           </div>

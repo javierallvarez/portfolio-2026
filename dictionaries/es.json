@@ -1,0 +1,430 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "interactiveLab": "Laboratorio interactivo",
+    "tools": "Herramientas",
+    "automations": "Automatizaciones",
+    "underTheHood": "Por dentro",
+    "signIn": "Entrar",
+    "askAi": "Pregunta a mi IA",
+    "askAiAria": "Chatea con la IA de Javier",
+    "search": "Buscar…",
+    "openPalette": "Abrir paleta de comandos",
+    "openPaletteMobileAria": "Abrir paleta de comandos",
+    "languageSwitcherAria": "Cambiar idioma",
+    "languageEs": "ES",
+    "languageEn": "EN",
+    "themeToLight": "Cambiar a modo claro",
+    "themeToDark": "Cambiar a modo oscuro"
+  },
+  "footer": {
+    "copyrightLead": "©",
+    "copyrightMid": "Javier Álvarez. Construido en público con",
+    "copyrightHeartAria": "cariño",
+    "home": "Inicio",
+    "interactiveLab": "Laboratorio interactivo",
+    "underTheHood": "Por dentro"
+  },
+  "hero": {
+    "titleLead": "Ingeniero de software",
+    "titleAccent": "construyendo para personas",
+    "subtitleBefore": "Ahora mismo construyo cosas interesantes junto a un equipo brillante en",
+    "subtitleCompany": "Adevinta",
+    "subtitleAfter": "Me apasiona crear productos sólidos y resolver retos arquitectónicos complejos.",
+    "exploreLab": "Explorar el laboratorio interactivo",
+    "openPalette": "Abrir la paleta de comandos",
+    "chips": [
+      "Next.js 15",
+      "TypeScript",
+      "PostgreSQL",
+      "Drizzle ORM",
+      "HeroUI v3",
+      "Playwright",
+      "GitHub Actions"
+    ]
+  },
+  "features": {
+    "internal": {
+      "title": "Herramientas internas y automatización",
+      "description": "Diseño scripts ad hoc y aplicaciones internas. Como administrador de Slack y Google Workspace, automatizo flujos que ahorran cientos de horas a la empresa."
+    },
+    "ai": {
+      "title": "IA transparente",
+      "description": "La IA como copiloto es un multiplicador, y en cada PR se documenta con una tabla dedicada de contribución con IA."
+    },
+    "security": {
+      "title": "Seguridad primero",
+      "description": "Validación con Zod, saneado XSS con DOMPurify, lista blanca CORS y rate limiting en cada endpoint que muta datos."
+    }
+  },
+  "commandPalette": {
+    "ariaLabel": "Paleta de comandos",
+    "searchPlaceholder": "Buscar comandos…",
+    "searchAria": "Buscar comandos",
+    "clearAria": "Borrar búsqueda",
+    "noResults": "No hay comandos para",
+    "footerNavigate": "para moverte",
+    "footerSelect": "para elegir",
+    "footerClose": "para cerrar",
+    "categories": {
+      "navigate": "Navegar",
+      "theme": "Tema",
+      "actions": "Acciones",
+      "automations": "Automatizaciones (simulado)"
+    },
+    "nav": {
+      "home": "Ir al inicio",
+      "interactiveLab": "Ir al laboratorio interactivo",
+      "interactiveLabDesc": "Base de datos en vivo, UI optimista y validación full-stack",
+      "tools": "Ir a utilidades para desarrolladores",
+      "toolsDesc": "Generador de contraseñas, traductor de cron, todo registrado en PostgreSQL",
+      "internalTooling": "Ir a herramientas internas y automatizaciones",
+      "internalToolingDesc": "Pipelines de aprovisionamiento IAM, informes. Python, Jenkins, Slack, GWS",
+      "underTheHood": "Ir a Por dentro",
+      "underTheHoodDesc": "Arquitectura, CI/CD y proceso guiado por especificaciones"
+    },
+    "themeLight": "Cambiar a modo claro",
+    "themeDark": "Cambiar a modo oscuro",
+    "askAi": "Preguntar al agente de carrera con IA",
+    "askAiDesc": "Chatea con la IA de Javier sobre su carrera, proyectos y stack",
+    "slackWebhook": "Ejecutar webhook de Slack (simulado)",
+    "slackWebhookDesc": "Simula una automatización de Google Workspace con notificación en Slack"
+  },
+  "pages": {
+    "tools": {
+      "title": "Utilidades",
+      "titleAccent": "para desarrolladores",
+      "introLead": "Herramientas pequeñas, rápidas y totalmente en el cliente. Cada uso se registra de forma anónima en nuestra",
+      "introDb": "base de datos PostgreSQL",
+      "introMid": "Los totales en vivo están en la página",
+      "introLink": "Por dentro",
+      "introEnd": ".",
+      "telemetryLead": "Cómo funciona la telemetría:",
+      "telemetryP1": "Cada herramienta ejecuta la acción ",
+      "telemetryP2": ", una Server Action que inserta una fila en la tabla ",
+      "telemetryP3": ". Sin datos personales ni huellas digitales: solo un tipo de evento y una marca de tiempo. Los totales se agregan en el servidor en cada carga de página."
+    },
+    "interactiveLab": {
+      "h1Lead": "Colección de vinilos y",
+      "h1Accent": "recomendaciones",
+      "heroP1Before": "Pasé años como ",
+      "heroP1Em1": "productor de música electrónica",
+      "heroP1Mid": " y ",
+      "heroP1Em2": "director de sello discográfico",
+      "heroP1After": ", y el sonido sigue atravesando todo lo que hago, incluidos los discos que llenan esta colección.",
+      "heroP2Before": "Pero también es una ",
+      "heroP2Em": "base de datos PostgreSQL en vivo",
+      "heroP2After": " que demuestra arquitectura full-stack real: Drizzle ORM, UI optimista, rate limiting, validación con Zod, RBAC con Clerk e integración con la API de Discogs, todo contra una base Neon en producción.",
+      "heroP3Before": "Adelante, ",
+      "heroP3Em": "prueba la arquitectura de datos",
+      "heroP3After": " y deja una recomendación abajo. ¿Qué disco debería estar en mi colección?",
+      "heroImageAlt": "Colección de vinilos de Javier",
+      "nowSpinningBadge": "Sonando ahora",
+      "nowSpinningAria": "Disco sonando ahora",
+      "noCoverAria": "Sin carátula",
+      "statusInCollection": "En colección",
+      "statusRecommended": "Recomendado",
+      "searchSectionAria": "Buscar y añadir vinilos",
+      "titleAddCollection": "Añadir a tu colección",
+      "titleRecommendRecord": "Recomendar un disco",
+      "descAddCollection": "Busca en Discogs y añade discos directamente a tu colección o a las recomendaciones.",
+      "descRecommend": "Busca en Discogs y recomienda un álbum que creas que debería estar aquí.",
+      "collectionAria": "Colección de vinilos de Javier",
+      "collectionLead": "Colección de",
+      "collectionAccent": "Javier",
+      "genreOther": "Otros",
+      "emptyCollection": "Aún no hay discos en la colección. ¡Vuelve pronto!",
+      "recommendationsAria": "Recomendaciones de la comunidad",
+      "communityLead": "Recomendaciones de la",
+      "communityAccent": "comunidad",
+      "communityBlurb": "Álbumes que la comunidad cree que Javier debería tener.",
+      "emptyRecommendations": "Aún no hay recomendaciones: ¡sé el primero en recomendar un álbum arriba!",
+      "sommelierAria": "Sommelier de vinilos",
+      "sommelierTitle": "Pregunta al sommelier de vinilos",
+      "sommelierSubtitle": "Cuéntale a la IA qué estás haciendo o cómo te sientes y elegirá el disco perfecto de mi colección para ti.",
+      "sommelierPlaceholder": "p. ej. cocinando un domingo por la tarde…",
+      "sommelierAsk": "Preguntar",
+      "sommelierAskAria": "Obtener recomendación",
+      "sommelierPickLabel": "Elección del sommelier",
+      "sommelierError": "No se pudo contactar con el sommelier. ¡Inténtalo de nuevo!",
+      "sommelierSuggestions": [
+        "cocinando algo ambicioso un domingo por la tarde",
+        "depurando un bug feo a medianoche",
+        "leyendo un día de lluvia",
+        "con amigos tomando algo",
+        "un viaje largo sin prisa",
+        "intentando concentrarte y entrar en flow"
+      ]
+    },
+    "internalTooling": {
+      "heroTitleLead": "Herramientas internas y",
+      "heroTitleAccent": "automatización",
+      "heroP1": "Construyo los motores invisibles que mantienen a los equipos de ingeniería. Lo que ves aquí raramente se publica, pero elimina horas de trabajo manual cada semana.",
+      "heroP2": "Son patrones arquitectónicos que diseño y mantengo. Cada diagrama muestra el stack real, la secuencia de datos y los puntos de integración.",
+      "showcaseA": "Escaparate A",
+      "iamTitle": "Aprovisionamiento IAM automatizado",
+      "iamIntro": "Pipeline de onboarding sin fricción que integra webhooks de RR. HH. con Google Workspace y Slack. Una nueva incorporación queda provisionada (cuenta, grupos y mensaje de bienvenida) antes de cruzar la puerta.",
+      "outcomeLabel": "Resultado:",
+      "iamOutcome": "Se redujo el tiempo medio de puesta en marcha de ~45 minutos de trabajo manual de IT a menos de 2 minutos de ejecución automatizada por nueva incorporación.",
+      "showcaseB": "Escaparate B",
+      "reportingTitle": "Pipeline de informes de actividad diaria",
+      "reportingIntro": "Agregación programada de telemetría para visibilidad de dirección. Cada mañana, los equipos reciben un resumen formateado en Slack del día anterior sin que nadie mueva un dedo.",
+      "reportingOutcome": "Se sustituyó un informe semanal manual en hoja de cálculo por un digest diario automatizado, multiplicando por 5 la cadencia de visibilidad sin esfuerzo adicional.",
+      "philosophyTitle": "Filosofía de ingeniería",
+      "philosophyBody": "Las buenas herramientas internas son invisibles. Corren en silencio, gestionan fallos con elegancia y no despiertan a nadie a las 3 de la mañana. Los patrones anteriores comparten tres propiedades: idempotencia (seguro repetir), observabilidad (cada paso deja rastro en un sistema central) y aislamiento de fallos (un fallo en Slack no revierte el aprovisionamiento en GWS).",
+      "iamFlow": [
+        {
+          "label": "Disparador",
+          "title": "Webhook del sistema de RR. HH.",
+          "description": "Un evento de nueva incorporación dispara un webhook HTTPS en el momento en que RR. HH. confirma la fecha de inicio. El payload incluye nombre, equipo, rol y grupos de acceso requeridos."
+        },
+        {
+          "label": "Procesamiento",
+          "title": "API Python Flask",
+          "description": "Un servicio interno ligero valida el esquema del payload, consulta la política de aprovisionamiento del rol y orquesta las llamadas posteriores.",
+          "tech": ["Python", "Flask", "Pydantic"]
+        },
+        {
+          "label": "Acción · Identidad",
+          "title": "Google Workspace Admin API",
+          "description": "Crea la cuenta corporativa de Google, la asigna a la UO correcta y la añade a los grupos relevantes, todo en una secuencia atómica.",
+          "tech": ["GWS Admin SDK", "OAuth 2.0", "Service Account"]
+        },
+        {
+          "label": "Acción · Comms",
+          "title": "Slack API",
+          "description": "Envía un DM de bienvenida con Block Kit a la nueva persona y publica en el canal de IT una notificación de aprovisionamiento completado con tarjeta resumen.",
+          "tech": ["Slack API", "Block Kit"]
+        }
+      ],
+      "reportingFlow": [
+        {
+          "label": "Disparador",
+          "title": "Cron de Jenkins",
+          "description": "Un pipeline de Jenkins programado se ejecuta cada mañana laborable, pasando parámetros (rango de fechas, canales destino) al script posterior.",
+          "tech": ["Jenkins", "Groovy Pipeline"]
+        },
+        {
+          "label": "Procesamiento",
+          "title": "Script Python de agregación",
+          "description": "Conecta a varias bases internas, agrega KPIs (despliegues, incidencias, PRs abiertos), normaliza los datos y construye el payload del informe.",
+          "tech": ["Python", "Pandas", "psycopg2"]
+        },
+        {
+          "label": "Acción",
+          "title": "Webhook de Slack · informe enriquecido",
+          "description": "Publica un mensaje Block Kit en canales por equipo con gráficas, tendencias y enlaces directos a dashboards. Cero esfuerzo manual, cada día.",
+          "tech": ["Slack Incoming Webhooks", "Block Kit"]
+        }
+      ]
+    },
+    "underTheHood": {
+      "milestoneSection": "Hito de arquitectura",
+      "milestoneTitle": "La refactorización i18n: por qué pasamos a rutas dinámicas",
+      "milestoneP1": "Aunque este portfolio empezó en un solo idioma, se reestructuró todo el directorio app alrededor del segmento dinámico [lang] para que español e inglés sean rutas de primer nivel, no un parche encima de URLs pensadas solo para un idioma. Esa decisión alinea layouts, diccionarios y navegación con lo que el App Router de Next.js espera de sitios internacionalizados y muestra escalabilidad y visión técnica.",
+      "milestoneP2": "El español es el valor por defecto para la mayoría del público local; el inglés sigue disponible para alcance global. El middleware lee Accept-Language, cae en español cuando encaja mejor y redirige rutas sin prefijo (por ejemplo /tools) a /es/tools o /en/tools para que enlaces y marcadores siempre caigan dentro de un locale.",
+      "heroH1Before": "Por ",
+      "heroH1Accent": "dentro",
+      "heroSubtitle": "Una mirada transparente a la arquitectura, infraestructura como código, pipeline de CI/CD y proceso de ingeniería detrás de este portfolio.",
+      "infraTitleBefore": "Infraestructura y",
+      "infraTitleAccent": "despliegue",
+      "infraP1Start": "El sitio en vivo corre en ",
+      "infraP1Strong1": "Vercel + Neon",
+      "infraP1Mid1": " por coste y simplicidad. Cero infraestructura que operar y un free tier generoso para un portfolio. Sin embargo, los roles enterprise exigen soltura en AWS, así que el repositorio incluye ",
+      "infraP1Strong2": "manifiestos Terraform",
+      "infraP1Mid2": " de nivel producción que definen la misma arquitectura en AWS: listos para ejecutar ",
+      "infraP1Code": "terraform apply",
+      "infraP1End": " contra una cuenta real.",
+      "awsDiagramCaption": "Arquitectura AWS",
+      "awsNodes": [
+        {
+          "icon": "⚡",
+          "title": "CloudFront",
+          "body": "CDN global con TLS, integración WAF y soporte de URLs firmadas para contenido privado."
+        },
+        {
+          "icon": "🗄️",
+          "title": "S3 + OAC",
+          "body": "Bundle estático inmutable en un bucket privado. CloudFront accede mediante Origin Access Control, sin URL pública del bucket."
+        },
+        {
+          "icon": "λ",
+          "title": "Lambda (Node 20)",
+          "body": "Sirve páginas SSR, rutas API y revalidación ISR. Function URL expone HTTPS sin API Gateway."
+        }
+      ],
+      "iacBadge": "IaC",
+      "terraformExcerptLead": "Extracto de",
+      "terraformFootnote": "Los manifiestos completos (main.tf, variables.tf, outputs.tf) viven en /infrastructure/terraform/ del repositorio. Definen un bucket S3, una distribución CloudFront con dos comportamientos de caché (estático TTL largo vs. SSR), una Lambda con Function URL y todos los roles IAM. No hay backend de estado para evitar sorpresas en el free tier. En producción se añadiría backend S3 con bloqueo de estado en DynamoDB.",
+      "cicdTitleAccent": "CI/CD",
+      "cicdTitleAfter": "Pipeline",
+      "cicdIntro": "Cada push a cualquier rama dispara el workflow de GitHub Actions. No se pueden fusionar PRs mientras un job esté en rojo. No hay bypass manual.",
+      "cicdSteps": [
+        {
+          "label": "Lint y type-check",
+          "description": "ESLint (estricto) + comprobación de formato Prettier + tsc --noEmit. Detecta deriva de estilo y errores de tipos antes de compilar un solo byte."
+        },
+        {
+          "label": "Build",
+          "description": "next build con variables de entorno dummy. Detecta referencias a env faltantes e imports incompatibles con SSR en tiempo de compilación."
+        },
+        {
+          "label": "Playwright E2E",
+          "description": "30 pruebas en Chromium + Mobile Safari contra el artefacto de producción. Cubren navegación, layout responsive y contenido."
+        },
+        {
+          "label": "Subida de artefacto",
+          "description": "La salida .next/ se sube como artefacto de GitHub (retención 7 días) para que E2E reutilice exactamente el mismo binario sin recompilar."
+        }
+      ],
+      "viewRepository": "Ver repositorio",
+      "viewPrHistory": "Historial de PRs (flujo JAG-XXX)",
+      "specTitle": "Desarrollo guiado por",
+      "specTitleAccent": "especificaciones",
+      "specIntroBefore": "No se escribe código sin spec. Cada funcionalidad empieza como un archivo ",
+      "specIntroAfter": " con contexto, decisiones técnicas, criterios de aceptación y sección de contribución con IA. La spec es la única fuente de verdad: se escribe antes de abrir la rama y se cierra cuando CI está verde.",
+      "specSteps": [
+        { "tag": "IDEA", "text": "Identificar la mejora o corrección necesaria" },
+        { "tag": "SPEC", "text": "Escribir /specs/JAG-XXX-title.md con criterios de aceptación" },
+        { "tag": "BRANCH", "text": "git checkout -b feat/JAG-XXX-titulo-corto" },
+        {
+          "tag": "IMPLEMENT",
+          "text": "Implementar según la spec. IA como copiloto, siempre revisado"
+        },
+        {
+          "tag": "PR",
+          "text": "Abrir PR con PULL_REQUEST_TEMPLATE (incluye tabla de contribución IA)"
+        },
+        { "tag": "CI", "text": "GitHub Actions: lint → build → Playwright E2E" },
+        { "tag": "MERGE", "text": "Squash merge a main con JAG-XXX en el mensaje de commit" },
+        { "tag": "CLOSE", "text": "Actualizar el estado de la spec a ✅ Hecho" }
+      ],
+      "stackTitleLead": "Stack",
+      "stackTitleAccent": "tecnológico",
+      "stackTitleAfter": "y por qué",
+      "stackIntro": "Cada tecnología tiene un motivo documentado. Nada por moda.",
+      "stackColLayer": "Capa",
+      "stackColTech": "Tecnología",
+      "stackColWhy": "Por qué",
+      "techStackRows": [
+        {
+          "layer": "Framework",
+          "tech": "Next.js 15 (App Router)",
+          "why": "Server Components, Server Actions e ISR sin configuración extra"
+        },
+        {
+          "layer": "Lenguaje",
+          "tech": "TypeScript (estricto) + Python",
+          "why": "`any` es error de lint; Python para APIs (Flask), pipelines Jenkins y scripts de automatización"
+        },
+        {
+          "layer": "Estilos",
+          "tech": "Tailwind CSS + HeroUI v3",
+          "why": "Velocidad utility-first con componentes accesibles y temables"
+        },
+        {
+          "layer": "Base de datos",
+          "tech": "PostgreSQL vía Drizzle ORM",
+          "why": "Consultas tipadas sin magia de ORM pesada"
+        },
+        {
+          "layer": "Auth",
+          "tech": "Clerk v7",
+          "why": "RBAC sin infraestructura propia; verificación JWT vía JWKS"
+        },
+        {
+          "layer": "Validación",
+          "tech": "Zod",
+          "why": "Un mismo esquema en server actions y formularios cliente"
+        },
+        {
+          "layer": "API externa",
+          "tech": "Discogs REST API",
+          "why": "Token en servidor; el cliente nunca ve el secreto"
+        },
+        {
+          "layer": "IA",
+          "tech": "Vercel AI SDK + Gemini 2.5 Flash",
+          "why": "Texto en streaming con streamText → toTextStreamResponse(); Upstash Redis limita el chat a 5 req/min por IP"
+        },
+        {
+          "layer": "Testing",
+          "tech": "Playwright E2E",
+          "why": "Chromium + Mobile Safari contra build de producción en CI"
+        },
+        {
+          "layer": "CI/CD",
+          "tech": "GitHub Actions",
+          "why": "Lint → type-check → build → E2E; PRs bloqueadas si CI falla"
+        },
+        {
+          "layer": "IaC (demo)",
+          "tech": "Terraform ≥ 1.7",
+          "why": "HCL agnóstico de nube; demuestra preparación enterprise en AWS"
+        },
+        {
+          "layer": "Hosting (live)",
+          "tech": "Vercel + Neon",
+          "why": "Cero ops; 0 €/mes en free tier para carga de portfolio"
+        }
+      ],
+      "securityTitleAccent": "Modelo",
+      "securityTitleAfter": " de seguridad",
+      "securityIntro": "La seguridad va por capas. No se confía en un solo control.",
+      "securityCards": [
+        {
+          "title": "Validación de entrada",
+          "body": "Esquemas Zod en cada Server Action y ruta API. El mismo esquema valida formularios cliente y payloads servidor."
+        },
+        {
+          "title": "Prevención XSS",
+          "body": "Un saneador regex sin dependencias elimina etiquetas HTML y bytes nulos antes de que cualquier cadena llegue a la base de datos."
+        },
+        {
+          "title": "Rate limiting",
+          "body": "Ventana deslizante Upstash Redis en todos los endpoints mutadores. La ruta de chat IA limita a 5 req/min por IP para evitar abuso y proteger cuotas. Límites distintos para anónimos y autenticados."
+        },
+        {
+          "title": "RBAC (Clerk)",
+          "body": "Los anónimos solo pueden recomendar vinilos. El admin (yo) puede añadir a colección, actualizar y borrar. Aplicado en servidor."
+        },
+        {
+          "title": "Lista blanca CORS",
+          "body": "lib/security/cors.ts exige orígenes explícitos. Orígenes desconocidos reciben 403 antes de ejecutar el handler."
+        },
+        {
+          "title": "Sin secretos en código",
+          "body": "Todas las credenciales en .env (gitignored) y GitHub Secrets. .env.example documenta variables sin valores."
+        }
+      ],
+      "telemetryTitleLead": "Telemetría",
+      "telemetryTitleAccent": "en vivo",
+      "telemetryP1Start": "Cada uso de herramientas en",
+      "telemetryToolsLink": "Utilidades para desarrolladores",
+      "telemetryP1Mid": "y cada búsqueda en Discogs del laboratorio interactivo inserta una fila anónima en la tabla",
+      "telemetryP1End": "en Neon PostgreSQL. Los totales de abajo son en vivo en cada carga.",
+      "telemetryStats": [
+        {
+          "label": "Contraseñas generadas",
+          "description": "vía generador de contraseñas"
+        },
+        {
+          "label": "Expresiones cron traducidas",
+          "description": "vía traductor de cron"
+        },
+        {
+          "label": "Búsquedas en Discogs",
+          "description": "vía laboratorio interactivo"
+        },
+        {
+          "label": "JWT decodificados",
+          "description": "vía decodificador JWT"
+        },
+        {
+          "label": "JSON formateados",
+          "description": "vía formateador JSON"
+        }
+      ]
+    }
+  }
+}

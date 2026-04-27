@@ -2,11 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, DM_Serif_Display } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Providers } from "@/components/providers";
-import { Navbar } from "@/components/layout/navbar";
-import { Footer } from "@/components/layout/footer";
-import { CommandPalette } from "@/components/layout/command-palette";
-import { DeveloperGreeting } from "@/components/layout/developer-greeting";
-import { CareerChatHost } from "@/components/ai/career-chat-host";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -59,7 +54,7 @@ export default function RootLayout({
      */
     <ClerkProvider>
       <html
-        lang="en"
+        lang="es"
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${dmSerifDisplay.variable} h-full antialiased`}
       >
@@ -80,14 +75,7 @@ export default function RootLayout({
           className="bg-background text-foreground flex min-h-full flex-col"
           suppressHydrationWarning
         >
-          <Providers>
-            <DeveloperGreeting />
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <CommandPalette />
-            <CareerChatHost />
-          </Providers>
+          <Providers>{children}</Providers>
         </body>
       </html>
     </ClerkProvider>

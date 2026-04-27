@@ -1,0 +1,430 @@
+{
+  "nav": {
+    "home": "Home",
+    "interactiveLab": "Interactive Lab",
+    "tools": "Tools",
+    "automations": "Automations",
+    "underTheHood": "Under the Hood",
+    "signIn": "Sign In",
+    "askAi": "Ask my AI",
+    "askAiAria": "Chat with Javier's AI",
+    "search": "Search…",
+    "openPalette": "Open command palette",
+    "openPaletteMobileAria": "Open command palette",
+    "languageSwitcherAria": "Switch language",
+    "languageEs": "ES",
+    "languageEn": "EN",
+    "themeToLight": "Switch to light mode",
+    "themeToDark": "Switch to dark mode"
+  },
+  "footer": {
+    "copyrightLead": "©",
+    "copyrightMid": "Javier Álvarez. Built in public with",
+    "copyrightHeartAria": "love",
+    "home": "Home",
+    "interactiveLab": "Interactive Lab",
+    "underTheHood": "Under the Hood"
+  },
+  "hero": {
+    "titleLead": "Software Engineer",
+    "titleAccent": "building for humans",
+    "subtitleBefore": "Currently building awesome things alongside a brilliant team at",
+    "subtitleCompany": "Adevinta",
+    "subtitleAfter": "Passionate about crafting robust products and solving complex architectural challenges.",
+    "exploreLab": "Explore the Interactive Lab",
+    "openPalette": "Open Command Palette",
+    "chips": [
+      "Next.js 15",
+      "TypeScript",
+      "PostgreSQL",
+      "Drizzle ORM",
+      "HeroUI v3",
+      "Playwright",
+      "GitHub Actions"
+    ]
+  },
+  "features": {
+    "internal": {
+      "title": "Internal Tooling & Automation",
+      "description": "Designing ad-hoc scripts and internal apps. As a Slack and Google Workspace admin, I automate workflows that save hundreds of hours for the company."
+    },
+    "ai": {
+      "title": "AI-Transparent",
+      "description": "AI pair programming is used as a multiplier, and it's disclosed in every PR via a dedicated AI Contribution table."
+    },
+    "security": {
+      "title": "Security-First",
+      "description": "Zod validation, DOMPurify XSS sanitization, CORS allowlisting, and rate limiting on every mutating endpoint."
+    }
+  },
+  "commandPalette": {
+    "ariaLabel": "Command palette",
+    "searchPlaceholder": "Search commands…",
+    "searchAria": "Search commands",
+    "clearAria": "Clear search",
+    "noResults": "No commands found for",
+    "footerNavigate": "to navigate",
+    "footerSelect": "to select",
+    "footerClose": "to close",
+    "categories": {
+      "navigate": "Navigate",
+      "theme": "Theme",
+      "actions": "Actions",
+      "automations": "Automations (Mock)"
+    },
+    "nav": {
+      "home": "Go to Home",
+      "interactiveLab": "Go to Interactive Lab",
+      "interactiveLabDesc": "Live database interactions, optimistic UI, and full-stack validation",
+      "tools": "Go to Developer Utilities",
+      "toolsDesc": "Password Generator, Cron Translator, all tracked in PostgreSQL",
+      "internalTooling": "Go to Internal Tooling & Automations",
+      "internalToolingDesc": "IAM provisioning pipelines, reporting automation. Python, Jenkins, Slack, GWS",
+      "underTheHood": "Go to Under the Hood",
+      "underTheHoodDesc": "Architecture, CI/CD and spec-driven process"
+    },
+    "themeLight": "Switch to Light Mode",
+    "themeDark": "Switch to Dark Mode",
+    "askAi": "Ask my AI Career Agent",
+    "askAiDesc": "Chat with Javier's AI about his career, projects, and tech stack",
+    "slackWebhook": "Run Slack Webhook (Simulated)",
+    "slackWebhookDesc": "Simulates a Google Workspace automation with Slack notification"
+  },
+  "pages": {
+    "tools": {
+      "title": "Developer",
+      "titleAccent": "Utilities",
+      "introLead": "Small, fast, and completely client-side tools. Every interaction is tracked anonymously in our live",
+      "introDb": "PostgreSQL database",
+      "introMid": "The aggregate counts are visible in real time on the",
+      "introLink": "Under the Hood",
+      "introEnd": "page.",
+      "telemetryLead": "How telemetry works:",
+      "telemetryP1": "Each tool fires a",
+      "telemetryP2": "Server Action that appends a row to the",
+      "telemetryP3": "table. No personal data, no fingerprinting. Just an event type and a timestamp. Counts are aggregated server-side on each page load."
+    },
+    "interactiveLab": {
+      "h1Lead": "Vinyl Collection &",
+      "h1Accent": "Recommendations",
+      "heroP1Before": "I spent years as an ",
+      "heroP1Em1": "Electronic Music Producer",
+      "heroP1Mid": " and ",
+      "heroP1Em2": "Record Label Director",
+      "heroP1After": ", and sound still runs through everything I do, including the records that fill this collection.",
+      "heroP2Before": "But it's also a ",
+      "heroP2Em": "live PostgreSQL database",
+      "heroP2After": " demonstrating real-world full-stack architecture: Drizzle ORM, optimistic UI, rate limiting, Zod validation, Clerk RBAC, and Discogs API integration, all running against a live Neon database.",
+      "heroP3Before": "Go ahead, ",
+      "heroP3Em": "test the DB architecture",
+      "heroP3After": " and drop a recommendation below. What record should be in my collection?",
+      "heroImageAlt": "Javier's vinyl collection",
+      "nowSpinningBadge": "Now Spinning",
+      "nowSpinningAria": "Now spinning",
+      "noCoverAria": "No cover art",
+      "statusInCollection": "In Collection",
+      "statusRecommended": "Recommended",
+      "searchSectionAria": "Search and add vinyl records",
+      "titleAddCollection": "Add to Your Collection",
+      "titleRecommendRecord": "Recommend a Record",
+      "descAddCollection": "Search Discogs and add records directly to your collection or recommendations.",
+      "descRecommend": "Search Discogs and recommend an album you think should be here.",
+      "collectionAria": "Javier's vinyl collection",
+      "collectionLead": "Javier's",
+      "collectionAccent": "Collection",
+      "genreOther": "Other",
+      "emptyCollection": "No records in the collection yet. Check back soon!",
+      "recommendationsAria": "Community recommendations",
+      "communityLead": "Community",
+      "communityAccent": "Recommendations",
+      "communityBlurb": "Albums the community thinks Javier should own.",
+      "emptyRecommendations": "No recommendations yet — be the first to recommend an album above!",
+      "sommelierAria": "Vinyl Sommelier",
+      "sommelierTitle": "Ask the Vinyl Sommelier",
+      "sommelierSubtitle": "Tell the AI what you're doing or how you're feeling, and it will pick the perfect record from my collection for you.",
+      "sommelierPlaceholder": "e.g. cooking on a Sunday afternoon…",
+      "sommelierAsk": "Ask",
+      "sommelierAskAria": "Get recommendation",
+      "sommelierPickLabel": "Sommelier's Pick",
+      "sommelierError": "Something went wrong reaching the sommelier. Try again!",
+      "sommelierSuggestions": [
+        "cooking something ambitious on a Sunday afternoon",
+        "debugging a gnarly bug at midnight",
+        "reading on a rainy day",
+        "having friends over for drinks",
+        "a long drive with nowhere to be",
+        "trying to focus and get into flow"
+      ]
+    },
+    "internalTooling": {
+      "heroTitleLead": "Internal Tooling &",
+      "heroTitleAccent": "Automation",
+      "heroP1": "Building the invisible engines that power engineering teams. The work below rarely ships publicly, but it quietly eliminates hours of manual toil every week.",
+      "heroP2": "These are architectural patterns I design and maintain. Each diagram shows the real technology stack, the data-flow sequence, and the integration points.",
+      "showcaseA": "Showcase A",
+      "iamTitle": "Automated IAM Provisioning",
+      "iamIntro": "Zero-touch onboarding pipeline integrating HR webhooks with Google Workspace and Slack. A new hire is fully provisioned (account, groups, and welcome message) before they walk through the door.",
+      "outcomeLabel": "Outcome:",
+      "iamOutcome": "Reduced average onboarding setup time from ~45 minutes of manual IT work to under 2 minutes of automated execution per new hire.",
+      "showcaseB": "Showcase B",
+      "reportingTitle": "Daily Activity Reporting Pipeline",
+      "reportingIntro": "Scheduled telemetry aggregation for management visibility. Every morning, teams receive a formatted Slack digest of the previous day's engineering activity without anyone lifting a finger.",
+      "reportingOutcome": "Replaced a weekly manual report compiled in a spreadsheet with a daily automated digest, increasing visibility cadence 5× with zero additional effort.",
+      "philosophyTitle": "Engineering Philosophy",
+      "philosophyBody": "Good internal tooling is invisible. It runs quietly in the background, handles failures gracefully, and never pages anyone at 3 AM. The patterns above share three properties: idempotency (safe to re-run), observability (every step logs to a central system), and fault isolation (a failure in the Slack step never rolls back the GWS provisioning).",
+      "iamFlow": [
+        {
+          "label": "Trigger",
+          "title": "HR System Webhook",
+          "description": "A new-hire event fires an HTTPS webhook the moment HR confirms a start date. The payload carries name, team, role, and required access groups."
+        },
+        {
+          "label": "Processing",
+          "title": "Python Flask API",
+          "description": "A lightweight internal service validates the payload schema, looks up the provisioning policy for the role, and orchestrates the downstream calls.",
+          "tech": ["Python", "Flask", "Pydantic"]
+        },
+        {
+          "label": "Action · Identity",
+          "title": "Google Workspace Admin API",
+          "description": "Creates the corporate Google account, assigns it to the correct OU, and adds it to the relevant Google Groups, all in a single atomic sequence.",
+          "tech": ["GWS Admin SDK", "OAuth 2.0", "Service Account"]
+        },
+        {
+          "label": "Action · Comms",
+          "title": "Slack API",
+          "description": "Sends a personalised Block Kit welcome DM to the new hire and posts a provisioning-complete notification to the IT channel with a summary card.",
+          "tech": ["Slack API", "Block Kit"]
+        }
+      ],
+      "reportingFlow": [
+        {
+          "label": "Trigger",
+          "title": "Jenkins Cron Job",
+          "description": "A scheduled Jenkins pipeline fires every weekday morning, passing environment parameters (date range, target channels) to the downstream script.",
+          "tech": ["Jenkins", "Groovy Pipeline"]
+        },
+        {
+          "label": "Processing",
+          "title": "Python Aggregation Script",
+          "description": "Connects to multiple internal databases, aggregates KPIs (deployments, incident count, open PRs), normalises the data, and builds the report payload.",
+          "tech": ["Python", "Pandas", "psycopg2"]
+        },
+        {
+          "label": "Action",
+          "title": "Slack Webhook · Rich Report",
+          "description": "Posts a formatted Block Kit message to per-team channels with charts, trend indicators, and direct links to dashboards. Zero manual effort, every day.",
+          "tech": ["Slack Incoming Webhooks", "Block Kit"]
+        }
+      ]
+    },
+    "underTheHood": {
+      "milestoneSection": "Architectural Milestone",
+      "milestoneTitle": "The i18n refactor: why we moved to dynamic routing",
+      "milestoneP1": "Although this portfolio started as a single-language experience, the entire app directory was refactored around a dynamic [lang] segment so Spanish and English are first-class routes, not an afterthought. That structural choice keeps layouts, dictionaries, and navigation aligned with how Next.js App Router expects internationalized sites to behave and signals scalability and technical foresight.",
+      "milestoneP2": "Spanish is the default for most local visitors; English remains available for global reach. Middleware reads Accept-Language, falls back to Spanish when it is a better fit, and redirects bare paths like /tools to /es/tools or /en/tools so bookmarks and shared links always resolve inside a locale.",
+      "heroH1Before": "Under the ",
+      "heroH1Accent": "Hood",
+      "heroSubtitle": "A transparent look at the architecture, infrastructure-as-code, CI/CD pipeline, and engineering process behind this portfolio.",
+      "infraTitleBefore": "Infrastructure &",
+      "infraTitleAccent": "Deployment",
+      "infraP1Start": "The live site runs on ",
+      "infraP1Strong1": "Vercel + Neon",
+      "infraP1Mid1": " for cost-efficiency. Zero infrastructure to operate and a generous free tier that fits a portfolio workload. However, enterprise roles demand AWS fluency, so the repository includes production-grade ",
+      "infraP1Strong2": "Terraform manifests",
+      "infraP1Mid2": " that define the same architecture on AWS: ready to ",
+      "infraP1Code": "terraform apply",
+      "infraP1End": " against a real account.",
+      "awsDiagramCaption": "AWS Architecture",
+      "awsNodes": [
+        {
+          "icon": "⚡",
+          "title": "CloudFront",
+          "body": "Global CDN with TLS termination, WAF integration, and signed-URL support for private content."
+        },
+        {
+          "icon": "🗄️",
+          "title": "S3 + OAC",
+          "body": "Immutable static bundle behind a private bucket. CloudFront accesses it via Origin Access Control, with no public bucket URL."
+        },
+        {
+          "icon": "λ",
+          "title": "Lambda (Node 20)",
+          "body": "Handles SSR pages, API routes, and ISR revalidation. Function URL exposes an HTTPS endpoint without API Gateway overhead."
+        }
+      ],
+      "iacBadge": "IaC",
+      "terraformExcerptLead": "Excerpt from",
+      "terraformFootnote": "The full manifests (main.tf, variables.tf, outputs.tf) live in /infrastructure/terraform/ in the repository. They define an S3 bucket, a CloudFront distribution with two cache behaviors (static long-TTL vs. SSR passthrough), a Lambda function with a Function URL, and all IAM roles. No state backend is configured to avoid free-tier surprises. A production setup would add an S3 backend with DynamoDB state locking.",
+      "cicdTitleAccent": "CI/CD",
+      "cicdTitleAfter": "Pipeline",
+      "cicdIntro": "Every push to any branch triggers the GitHub Actions workflow. PRs cannot be merged while any job is red. There is no manual override.",
+      "cicdSteps": [
+        {
+          "label": "Lint & Type-check",
+          "description": "ESLint (strict) + Prettier format check + tsc --noEmit. Catches style drift and type errors before a single byte is compiled."
+        },
+        {
+          "label": "Build",
+          "description": "next build with dummy env vars. Catches missing environment variable references and SSR-incompatible imports at compile time."
+        },
+        {
+          "label": "Playwright E2E",
+          "description": "30 tests across Chromium + Mobile Safari, run against the production artifact. Tests cover navigation, responsive layout, and page content."
+        },
+        {
+          "label": "Artifact Upload",
+          "description": "The .next/ build output is uploaded as a GitHub artifact (7-day retention) so the E2E job reuses the exact same binary without rebuilding."
+        }
+      ],
+      "viewRepository": "View repository",
+      "viewPrHistory": "PR history (JAG-XXX workflow)",
+      "specTitle": "Spec-Driven",
+      "specTitleAccent": "Development",
+      "specIntroBefore": "No code is written without a spec. Every feature starts as a ",
+      "specIntroAfter": " file that defines context, technical decisions, acceptance criteria, and an AI contribution section. The spec is the single source of truth: it is written before the branch is cut and closed when CI is green.",
+      "specSteps": [
+        { "tag": "IDEA", "text": "Identify the feature or fix needed" },
+        { "tag": "SPEC", "text": "Write /specs/JAG-XXX-title.md with acceptance criteria" },
+        { "tag": "BRANCH", "text": "git checkout -b feat/JAG-XXX-short-title" },
+        {
+          "tag": "IMPLEMENT",
+          "text": "Build against the spec. AI pair-programming, always reviewed"
+        },
+        {
+          "tag": "PR",
+          "text": "Open PR using the PULL_REQUEST_TEMPLATE (includes AI Contribution table)"
+        },
+        { "tag": "CI", "text": "GitHub Actions: lint → build → Playwright E2E" },
+        { "tag": "MERGE", "text": "Squash merge to main with JAG-XXX in the commit message" },
+        { "tag": "CLOSE", "text": "Update spec status to ✅ Done" }
+      ],
+      "stackTitleLead": "Tech",
+      "stackTitleAccent": "Stack",
+      "stackTitleAfter": " & Rationale",
+      "stackIntro": "Every technology choice has a documented reason. No cargo-culting.",
+      "stackColLayer": "Layer",
+      "stackColTech": "Technology",
+      "stackColWhy": "Why",
+      "techStackRows": [
+        {
+          "layer": "Framework",
+          "tech": "Next.js 15 (App Router)",
+          "why": "Server Components, Server Actions, and ISR out of the box"
+        },
+        {
+          "layer": "Language",
+          "tech": "TypeScript (strict) + Python",
+          "why": "`any` is a lint error; Python handles backend APIs (Flask), Jenkins pipelines, and advanced automation scripts"
+        },
+        {
+          "layer": "Styling",
+          "tech": "Tailwind CSS + HeroUI v3",
+          "why": "Utility-first speed with accessible, themeable components"
+        },
+        {
+          "layer": "Database",
+          "tech": "PostgreSQL via Drizzle ORM",
+          "why": "Type-safe queries without the ORM magic overhead"
+        },
+        {
+          "layer": "Auth",
+          "tech": "Clerk v7",
+          "why": "RBAC with zero-infrastructure overhead; JWKS-based JWT verification"
+        },
+        {
+          "layer": "Validation",
+          "tech": "Zod",
+          "why": "Single schema shared between server actions and client forms"
+        },
+        {
+          "layer": "External API",
+          "tech": "Discogs REST API",
+          "why": "Server-side token; client never touches the secret"
+        },
+        {
+          "layer": "AI",
+          "tech": "Vercel AI SDK + Gemini 2.5 Flash",
+          "why": "Streaming text via `streamText` → `toTextStreamResponse()`; Upstash Redis rate-limits the chat route to 5 req/min per IP"
+        },
+        {
+          "layer": "Testing",
+          "tech": "Playwright E2E",
+          "why": "Chromium + Mobile Safari; runs against production build in CI"
+        },
+        {
+          "layer": "CI/CD",
+          "tech": "GitHub Actions",
+          "why": "Lint → type-check → build → E2E; PRs blocked on red CI"
+        },
+        {
+          "layer": "IaC (demo)",
+          "tech": "Terraform ≥ 1.7",
+          "why": "HCL is cloud-agnostic; demonstrates enterprise AWS readiness"
+        },
+        {
+          "layer": "Hosting (live)",
+          "tech": "Vercel + Neon",
+          "why": "Zero-ops; $0/month on free tier for a portfolio workload"
+        }
+      ],
+      "securityTitleAccent": "Security",
+      "securityTitleAfter": "Model",
+      "securityIntro": "Security is layered. No single control is relied upon exclusively.",
+      "securityCards": [
+        {
+          "title": "Input validation",
+          "body": "Zod schemas on every Server Action and API route. The same schema validates client-side forms and server-side payloads."
+        },
+        {
+          "title": "XSS prevention",
+          "body": "A zero-dependency regex sanitizer strips all HTML tags and null bytes before any string reaches the database."
+        },
+        {
+          "title": "Rate limiting",
+          "body": "Upstash Redis sliding-window limiter on all mutating endpoints. The AI Chat route is aggressively capped at 5 requests per minute per IP to prevent abuse and protect billing quotas. Anonymous and authenticated limits are configured separately."
+        },
+        {
+          "title": "RBAC (Clerk)",
+          "body": "Anonymous users can only recommend vinyls. The admin (me) can add to collection, update, and delete. Enforced server-side."
+        },
+        {
+          "title": "CORS allowlist",
+          "body": "lib/security/cors.ts enforces an explicit origin allowlist. Unknown origins receive a 403 before any handler runs."
+        },
+        {
+          "title": "No secrets in code",
+          "body": "All credentials live in .env (gitignored) and GitHub Secrets. .env.example documents the required variables without values."
+        }
+      ],
+      "telemetryTitleLead": "Live",
+      "telemetryTitleAccent": "Telemetry",
+      "telemetryP1Start": "Every tool interaction on the",
+      "telemetryToolsLink": "Developer Utilities",
+      "telemetryP1Mid": "page and every Discogs search in the Interactive Lab appends an anonymous row to the",
+      "telemetryP1End": "table in Neon PostgreSQL. Counts below are live, fresh on every page load.",
+      "telemetryStats": [
+        {
+          "label": "Passwords Generated",
+          "description": "via Password Generator"
+        },
+        {
+          "label": "Cron Expressions Translated",
+          "description": "via Cron Translator"
+        },
+        {
+          "label": "Discogs Searches",
+          "description": "via Interactive Lab"
+        },
+        {
+          "label": "JWTs Decoded",
+          "description": "via JWT Decoder"
+        },
+        {
+          "label": "JSONs Formatted",
+          "description": "via JSON Formatter"
+        }
+      ]
+    }
+  }
+}
