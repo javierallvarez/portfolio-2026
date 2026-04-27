@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   Cloud,
   Database,
@@ -13,6 +14,10 @@ import {
   Braces,
 } from "lucide-react";
 import { getTelemetryStatsAction } from "@/actions/telemetry";
+import type { Locale } from "@/lib/i18n/config";
+import { isLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/get-dictionary";
+import { withLocale } from "@/lib/i18n/utils";
 
 export const metadata: Metadata = {
   title: "Under the Hood",
@@ -260,136 +265,74 @@ function PipelineStep({
   );
 }
 
-// ─── Tech table ──────────────────────────────────────────────────────────────
-
-const TECH_STACK = [
-  {
-    layer: "Framework",
-    tech: "Next.js 15 (App Router)",
-    why: "Server Components, Server Actions, and ISR out of the box",
-  },
-  {
-    layer: "Language",
-    tech: "TypeScript (strict) + Python",
-    why: "`any` is a lint error; Python handles backend APIs (Flask), Jenkins pipelines, and advanced automation scripts",
-  },
-  {
-    layer: "Styling",
-    tech: "Tailwind CSS + HeroUI v3",
-    why: "Utility-first speed with accessible, themeable components",
-  },
-  {
-    layer: "Database",
-    tech: "PostgreSQL via Drizzle ORM",
-    why: "Type-safe queries without the ORM magic overhead",
-  },
-  {
-    layer: "Auth",
-    tech: "Clerk v7",
-    why: "RBAC with zero-infrastructure overhead; JWKS-based JWT verification",
-  },
-  {
-    layer: "Validation",
-    tech: "Zod",
-    why: "Single schema shared between server actions and client forms",
-  },
-  {
-    layer: "External API",
-    tech: "Discogs REST API",
-    why: "Server-side token; client never touches the secret",
-  },
-  {
-    layer: "AI",
-    tech: "Vercel AI SDK + Gemini 2.5 Flash",
-    why: "Streaming text via `streamText` → `toTextStreamResponse()`; Upstash Redis rate-limits the chat route to 5 req/min per IP",
-  },
-  {
-    layer: "Testing",
-    tech: "Playwright E2E",
-    why: "Chromium + Mobile Safari; runs against production build in CI",
-  },
-  {
-    layer: "CI/CD",
-    tech: "GitHub Actions",
-    why: "Lint → type-check → build → E2E; PRs blocked on red CI",
-  },
-  {
-    layer: "IaC (demo)",
-    tech: "Terraform ≥ 1.7",
-    why: "HCL is cloud-agnostic; demonstrates enterprise AWS readiness",
-  },
-  {
-    layer: "Hosting (live)",
-    tech: "Vercel + Neon",
-    why: "Zero-ops; $0/month on free tier for a portfolio workload",
-  },
-] as const;
-
 // ─── Page ────────────────────────────────────────────────────────────────────
 
-export default async function UnderTheHoodPage() {
+export default async function UnderTheHoodPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang: raw } = await params;
+  const lang: Locale = isLocale(raw) ? raw : "es";
+  const dict = await getDictionary(lang);
+  const uth = dict.pages.underTheHood;
   const telemetry = await getTelemetryStatsAction();
+  const toolsHref = withLocale(lang, "/tools");
   return (
     <div className="mx-auto max-w-5xl space-y-20 px-4 py-16">
       {/* ── Hero ── */}
       <div>
         <h1 className="text-foreground font-serif text-4xl font-normal tracking-tight sm:text-5xl">
-          Under the <span className="gradient-heading">Hood</span>
+          {uth.heroH1Before}
+          <span className="gradient-heading">{uth.heroH1Accent}</span>
         </h1>
         <p className="text-default-500 mt-4 max-w-2xl text-lg leading-relaxed">
-          A transparent look at the architecture, infrastructure-as-code, CI/CD pipeline, and
-          engineering process behind this portfolio.
+          {uth.heroSubtitle}
         </p>
       </div>
+
+      <section aria-labelledby="milestone-heading" className="space-y-4">
+        <div>
+          <p className="text-default-400 mb-1 text-xs font-semibold tracking-widest uppercase">
+            {uth.milestoneSection}
+          </p>
+          <SectionTitle>
+            <span id="milestone-heading">{uth.milestoneTitle}</span>
+          </SectionTitle>
+          <Prose>
+            <p>{uth.milestoneP1}</p>
+            <p>{uth.milestoneP2}</p>
+          </Prose>
+        </div>
+      </section>
 
       {/* ── Infrastructure & Deployment ── */}
       <section aria-labelledby="infra-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            Infrastructure &amp;{" "}
+            {uth.infraTitleBefore}{" "}
             <span id="infra-heading" className="gradient-heading">
-              Deployment
+              {uth.infraTitleAccent}
             </span>
           </SectionTitle>
           <Prose>
             <p>
-              The live site runs on <strong>Vercel + Neon</strong> for cost-efficiency. Zero
-              infrastructure to operate and a generous free tier that fits a portfolio workload.
-              However, enterprise roles demand AWS fluency, so the repository includes
-              production-grade <strong>Terraform manifests</strong> that define the same
-              architecture on AWS: ready to{" "}
+              {uth.infraP1Start}
+              <strong>{uth.infraP1Strong1}</strong>
+              {uth.infraP1Mid1}
+              <strong>{uth.infraP1Strong2}</strong>
+              {uth.infraP1Mid2}
               <code className="bg-content2 rounded px-1 py-0.5 font-mono text-sm">
-                terraform apply
-              </code>{" "}
-              against a real account.
+                {uth.infraP1Code}
+              </code>
+              {uth.infraP1End}
             </p>
           </Prose>
         </div>
 
-        {/* Architecture diagram */}
         <Card>
           <p className="text-default-500 mb-5 text-xs font-semibold tracking-widest uppercase">
-            AWS Architecture
+            {uth.awsDiagramCaption}
           </p>
           <ArchitectureDiagram />
           <div className="border-divider mt-6 grid gap-3 border-t pt-5 sm:grid-cols-3">
-            {[
-              {
-                icon: "⚡",
-                title: "CloudFront",
-                body: "Global CDN with TLS termination, WAF integration, and signed-URL support for private content.",
-              },
-              {
-                icon: "🗄️",
-                title: "S3 + OAC",
-                body: "Immutable static bundle behind a private bucket. CloudFront accesses it via Origin Access Control, with no public bucket URL.",
-              },
-              {
-                icon: "λ",
-                title: "Lambda (Node 20)",
-                body: "Handles SSR pages, API routes, and ISR revalidation. Function URL exposes an HTTPS endpoint without API Gateway overhead.",
-              },
-            ].map((item) => (
+            {uth.awsNodes.map((item) => (
               <div key={item.title} className="space-y-1">
                 <p className="text-foreground text-sm font-semibold">
                   {item.icon} {item.title}
@@ -400,30 +343,20 @@ export default async function UnderTheHoodPage() {
           </div>
         </Card>
 
-        {/* Terraform snippet */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
             <span className="bg-warning/10 text-warning rounded-md px-2.5 py-1 text-xs font-semibold">
-              IaC
+              {uth.iacBadge}
             </span>
             <p className="text-default-500 text-sm">
-              Excerpt from{" "}
+              {uth.terraformExcerptLead}{" "}
               <code className="bg-content2 rounded px-1 py-0.5 font-mono text-xs">
                 infrastructure/terraform/main.tf
               </code>
             </p>
           </div>
           <CodeBlock code={TERRAFORM_SNIPPET} />
-          <p className="text-default-400 text-xs leading-relaxed">
-            The full manifests (<code className="font-mono">main.tf</code>,{" "}
-            <code className="font-mono">variables.tf</code>,{" "}
-            <code className="font-mono">outputs.tf</code>) live in{" "}
-            <code className="font-mono">/infrastructure/terraform/</code> in the repository. They
-            define an S3 bucket, a CloudFront distribution with two cache behaviors (static long-TTL
-            vs. SSR passthrough), a Lambda function with a Function URL, and all IAM roles. No state
-            backend is configured to avoid free-tier surprises. A production setup would add an S3
-            backend with DynamoDB state locking.
-          </p>
+          <p className="text-default-400 text-xs leading-relaxed">{uth.terraformFootnote}</p>
         </div>
       </section>
 
@@ -432,40 +365,25 @@ export default async function UnderTheHoodPage() {
         <div>
           <SectionTitle>
             <span id="cicd-heading" className="gradient-heading">
-              CI/CD
+              {uth.cicdTitleAccent}
             </span>{" "}
-            Pipeline
+            {uth.cicdTitleAfter}
           </SectionTitle>
           <Prose>
-            <p>
-              Every push to any branch triggers the GitHub Actions workflow. PRs cannot be merged
-              while any job is red. There is no manual override.
-            </p>
+            <p>{uth.cicdIntro}</p>
           </Prose>
         </div>
 
         <Card>
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <PipelineStep
-              icon="1"
-              label="Lint & Type-check"
-              description="ESLint (strict) + Prettier format check + tsc --noEmit. Catches style drift and type errors before a single byte is compiled."
-            />
-            <PipelineStep
-              icon="2"
-              label="Build"
-              description="next build with dummy env vars. Catches missing environment variable references and SSR-incompatible imports at compile time."
-            />
-            <PipelineStep
-              icon="3"
-              label="Playwright E2E"
-              description="30 tests across Chromium + Mobile Safari, run against the production artifact. Tests cover navigation, responsive layout, and page content."
-            />
-            <PipelineStep
-              icon="4"
-              label="Artifact Upload"
-              description="The .next/ build output is uploaded as a GitHub artifact (7-day retention) so the E2E job reuses the exact same binary without rebuilding."
-            />
+            {uth.cicdSteps.map((step, i) => (
+              <PipelineStep
+                key={step.label}
+                icon={String(i + 1)}
+                label={step.label}
+                description={step.description}
+              />
+            ))}
           </div>
         </Card>
 
@@ -479,7 +397,7 @@ export default async function UnderTheHoodPage() {
             <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
               <path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.185 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.004.071 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.338 4.695-4.566 4.944.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.744 0 .267.18.578.688.48C19.138 20.203 22 16.447 22 12.021 22 6.484 17.523 2 12 2z" />
             </svg>
-            View repository
+            {uth.viewRepository}
           </a>
           <a
             href="https://github.com/javierallvarez/portfolio-2026/pulls?q=is%3Apr"
@@ -490,7 +408,7 @@ export default async function UnderTheHoodPage() {
             <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
               <path d="M6 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm13-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0ZM6 15a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm2-6.5A.5.5 0 0 0 6.5 11h-1a.5.5 0 0 0-.5.5v2a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V11a.5.5 0 0 0-.5-.5h-1v-.5a.5.5 0 0 0-.5-.5Zm6.5-1.25A.75.75 0 0 0 12.75 10h-1.5A.75.75 0 0 0 10.5 10.75v2.5c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-2.5ZM18 11a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v2.5a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V11Z" />
             </svg>
-            PR history (JAG-XXX workflow)
+            {uth.viewPrHistory}
           </a>
         </div>
       </section>
@@ -499,43 +417,32 @@ export default async function UnderTheHoodPage() {
       <section aria-labelledby="sdd-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            Spec-Driven{" "}
+            {uth.specTitle}{" "}
             <span id="sdd-heading" className="gradient-heading">
-              Development
+              {uth.specTitleAccent}
             </span>
           </SectionTitle>
           <Prose>
             <p>
-              No code is written without a spec. Every feature starts as a{" "}
+              {uth.specIntroBefore}
               <code className="bg-content2 rounded px-1 py-0.5 font-mono text-sm">
                 /specs/JAG-XXX-title.md
-              </code>{" "}
-              file that defines context, technical decisions, acceptance criteria, and an AI
-              contribution section. The spec is the single source of truth: it is written before the
-              branch is cut and closed when CI is green.
+              </code>
+              {uth.specIntroAfter}
             </p>
           </Prose>
         </div>
 
         <Card>
           <ol className="space-y-3">
-            {[
-              ["IDEA", "Identify the feature or fix needed"],
-              ["SPEC", "Write /specs/JAG-XXX-title.md with acceptance criteria"],
-              ["BRANCH", "git checkout -b feat/JAG-XXX-short-title"],
-              ["IMPLEMENT", "Build against the spec. AI pair-programming, always reviewed"],
-              ["PR", "Open PR using the PULL_REQUEST_TEMPLATE (includes AI Contribution table)"],
-              ["CI", "GitHub Actions: lint → build → Playwright E2E"],
-              ["MERGE", "Squash merge to main with JAG-XXX in the commit message"],
-              ["CLOSE", "Update spec status to ✅ Done"],
-            ].map(([step, desc], i) => (
-              <li key={step} className="flex items-start gap-3">
+            {uth.specSteps.map((row, i) => (
+              <li key={row.tag} className="flex items-start gap-3">
                 <span className="text-primary bg-primary/10 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold">
                   {i + 1}
                 </span>
                 <div className="text-sm">
-                  <span className="text-foreground font-semibold">{step}</span>
-                  <span className="text-default-500"> — {desc}</span>
+                  <span className="text-foreground font-semibold">{row.tag}</span>
+                  <span className="text-default-500"> — {row.text}</span>
                 </div>
               </li>
             ))}
@@ -547,14 +454,14 @@ export default async function UnderTheHoodPage() {
       <section aria-labelledby="stack-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            Tech{" "}
+            {uth.stackTitleLead}{" "}
             <span id="stack-heading" className="gradient-heading">
-              Stack
+              {uth.stackTitleAccent}
             </span>{" "}
-            &amp; Rationale
+            {uth.stackTitleAfter}
           </SectionTitle>
           <Prose>
-            <p>Every technology choice has a documented reason. No cargo-culting.</p>
+            <p>{uth.stackIntro}</p>
           </Prose>
         </div>
 
@@ -562,13 +469,17 @@ export default async function UnderTheHoodPage() {
           <table className="border-divider w-full border-collapse text-sm">
             <thead>
               <tr className="bg-content2 text-left">
-                <th className="border-divider border px-4 py-3 font-semibold">Layer</th>
-                <th className="border-divider border px-4 py-3 font-semibold">Technology</th>
-                <th className="border-divider border px-4 py-3 font-semibold">Why</th>
+                <th className="border-divider border px-4 py-3 font-semibold">
+                  {uth.stackColLayer}
+                </th>
+                <th className="border-divider border px-4 py-3 font-semibold">
+                  {uth.stackColTech}
+                </th>
+                <th className="border-divider border px-4 py-3 font-semibold">{uth.stackColWhy}</th>
               </tr>
             </thead>
             <tbody>
-              {TECH_STACK.map(({ layer, tech, why }, i) => (
+              {uth.techStackRows.map(({ layer, tech, why }, i) => (
                 <tr key={layer} className={i % 2 === 0 ? "bg-content1" : "bg-content2/50"}>
                   <td className="border-divider text-default-500 border px-4 py-2.5 text-xs font-medium whitespace-nowrap">
                     {layer}
@@ -591,55 +502,28 @@ export default async function UnderTheHoodPage() {
         <div>
           <SectionTitle>
             <span id="security-heading" className="gradient-heading">
-              Security
-            </span>{" "}
-            Model
+              {uth.securityTitleAccent}
+            </span>
+            {uth.securityTitleAfter}
           </SectionTitle>
           <Prose>
-            <p>Security is layered. No single control is relied upon exclusively.</p>
+            <p>{uth.securityIntro}</p>
           </Prose>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {[
-            {
-              icon: <CheckCircle2 size={15} className="text-teal-400" />,
-              title: "Input validation",
-              body: "Zod schemas on every Server Action and API route. The same schema validates client-side forms and server-side payloads.",
-            },
-            {
-              icon: <ShieldCheck size={15} className="text-teal-400" />,
-              title: "XSS prevention",
-              body: "A zero-dependency regex sanitizer strips all HTML tags and null bytes before any string reaches the database.",
-            },
-            {
-              icon: <Zap size={15} className="text-teal-400" />,
-              title: "Rate limiting",
-              body: "Upstash Redis sliding-window limiter on all mutating endpoints. The AI Chat route is aggressively capped at 5 requests per minute per IP to prevent abuse and protect billing quotas. Anonymous and authenticated limits are configured separately.",
-            },
-            {
-              icon: <KeyRound size={15} className="text-teal-400" />,
-              title: "RBAC (Clerk)",
-              body: "Anonymous users can only recommend vinyls. The admin (me) can add to collection, update, and delete. Enforced server-side.",
-            },
-            {
-              icon: <Globe size={15} className="text-teal-400" />,
-              title: "CORS allowlist",
-              body: "lib/security/cors.ts enforces an explicit origin allowlist. Unknown origins receive a 403 before any handler runs.",
-            },
-            {
-              icon: <Lock size={15} className="text-teal-400" />,
-              title: "No secrets in code",
-              body: "All credentials live in .env (gitignored) and GitHub Secrets. .env.example documents the required variables without values.",
-            },
-          ].map((item) => (
-            <Card key={item.title}>
-              <p className="text-foreground mb-1 flex items-center gap-1.5 text-sm font-semibold">
-                {item.icon} {item.title}
-              </p>
-              <p className="text-default-500 text-xs leading-relaxed">{item.body}</p>
-            </Card>
-          ))}
+          {uth.securityCards.map((item, i) => {
+            const icons = [CheckCircle2, ShieldCheck, Zap, KeyRound, Globe, Lock] as const;
+            const Icon = icons[i] ?? CheckCircle2;
+            return (
+              <Card key={item.title}>
+                <p className="text-foreground mb-1 flex items-center gap-1.5 text-sm font-semibold">
+                  <Icon size={15} className="text-teal-400" aria-hidden="true" /> {item.title}
+                </p>
+                <p className="text-default-500 text-xs leading-relaxed">{item.body}</p>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
@@ -647,74 +531,55 @@ export default async function UnderTheHoodPage() {
       <section aria-labelledby="telemetry-heading" className="space-y-6">
         <div>
           <SectionTitle>
-            Live{" "}
+            {uth.telemetryTitleLead}{" "}
             <span id="telemetry-heading" className="gradient-heading">
-              Telemetry
+              {uth.telemetryTitleAccent}
             </span>
           </SectionTitle>
           <Prose>
             <p>
-              Every tool interaction on the{" "}
-              <a href="/tools" className="text-teal-400 underline-offset-2 hover:underline">
-                Developer Utilities
-              </a>{" "}
-              page and every Discogs search in the Interactive Lab appends an anonymous row to the{" "}
+              {uth.telemetryP1Start}{" "}
+              <Link href={toolsHref} className="text-teal-400 underline-offset-2 hover:underline">
+                {uth.telemetryToolsLink}
+              </Link>{" "}
+              {uth.telemetryP1Mid}{" "}
               <code className="bg-content2 rounded px-1 py-0.5 font-mono text-xs">
                 telemetry_events
               </code>{" "}
-              table in Neon PostgreSQL. Counts below are live, fresh on every page load.
+              {uth.telemetryP1End}
             </p>
           </Prose>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {[
-            {
-              icon: <KeySquare size={20} className="text-teal-400" />,
-              label: "Passwords Generated",
-              value: telemetry.password_generated,
-              description: "via Password Generator",
-            },
-            {
-              icon: <BarChart3 size={20} className="text-teal-400" />,
-              label: "Cron Expressions Translated",
-              value: telemetry.cron_translated,
-              description: "via Cron Translator",
-            },
-            {
-              icon: <Database size={20} className="text-teal-400" />,
-              label: "Discogs Searches",
-              value: telemetry.discogs_searched,
-              description: "via Interactive Lab",
-            },
-            {
-              icon: <KeyRound size={20} className="text-teal-400" />,
-              label: "JWTs Decoded",
-              value: telemetry.jwt_decoded,
-              description: "via JWT Decoder",
-            },
-            {
-              icon: <Braces size={20} className="text-teal-400" />,
-              label: "JSONs Formatted",
-              value: telemetry.json_formatted,
-              description: "via JSON Formatter",
-            },
-          ].map((stat) => (
-            <Card key={stat.label}>
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 ring-1 ring-teal-500/20">
-                  {stat.icon}
+          {uth.telemetryStats.map((stat, i) => {
+            const icons = [KeySquare, BarChart3, Database, KeyRound, Braces] as const;
+            const values = [
+              telemetry.password_generated,
+              telemetry.cron_translated,
+              telemetry.discogs_searched,
+              telemetry.jwt_decoded,
+              telemetry.json_formatted,
+            ] as const;
+            const Icon = icons[i] ?? KeySquare;
+            const value = values[i] ?? 0;
+            return (
+              <Card key={stat.label}>
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 ring-1 ring-teal-500/20">
+                    <Icon size={20} className="text-teal-400" aria-hidden="true" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-foreground font-serif text-3xl leading-none font-normal">
+                      {value.toLocaleString()}
+                    </p>
+                    <p className="text-foreground mt-1 text-sm font-medium">{stat.label}</p>
+                    <p className="text-default-400 text-xs">{stat.description}</p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-foreground font-serif text-3xl leading-none font-normal">
-                    {stat.value.toLocaleString()}
-                  </p>
-                  <p className="text-foreground mt-1 text-sm font-medium">{stat.label}</p>
-                  <p className="text-default-400 text-xs">{stat.description}</p>
-                </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </div>
       </section>
     </div>
