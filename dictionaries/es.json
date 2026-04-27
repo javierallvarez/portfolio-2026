@@ -14,8 +14,17 @@
     "languageSwitcherAria": "Cambiar idioma",
     "languageEs": "ES",
     "languageEn": "EN",
+    "languageEsAria": "Sitio en español",
+    "languageEnAria": "Sitio en inglés",
     "themeToLight": "Cambiar a modo claro",
-    "themeToDark": "Cambiar a modo oscuro"
+    "themeToDark": "Cambiar a modo oscuro",
+    "menu": "Menú",
+    "menuOpenAria": "Abrir menú de navegación",
+    "closeMenuAria": "Cerrar menú de navegación"
+  },
+  "mobileHint": {
+    "message": "📱 Estás en móvil. Para el laboratorio técnico completo y los diagramas, te recomiendo entrar desde un ordenador.",
+    "dismissAria": "Cerrar"
   },
   "footer": {
     "copyrightLead": "©",
@@ -25,23 +34,17 @@
     "interactiveLab": "Laboratorio interactivo",
     "underTheHood": "Por dentro"
   },
-  "hero": {
-    "titleLead": "Ingeniero de software",
-    "titleAccent": "construyendo para personas",
-    "subtitleBefore": "Ahora mismo construyo cosas interesantes junto a un equipo brillante en",
-    "subtitleCompany": "Adevinta",
-    "subtitleAfter": "Me apasiona crear productos sólidos y resolver retos arquitectónicos complejos.",
-    "exploreLab": "Explorar el laboratorio interactivo",
-    "openPalette": "Abrir la paleta de comandos",
-    "chips": [
-      "Next.js 15",
-      "TypeScript",
-      "PostgreSQL",
-      "Drizzle ORM",
-      "HeroUI v3",
-      "Playwright",
-      "GitHub Actions"
-    ]
+  "bio": {
+    "greeting": "Hola, soy Javier",
+    "headlineRole": "Ingeniero de software en Adevinta",
+    "p1": "Soy ingeniero de software en Adevinta y tengo debilidad por la productividad de ingeniería: esa parte del trabajo que convierte \"son solo cinco minutos\" en cientos de horas recuperadas para personas de verdad.",
+    "p2": "Me dedico a herramientas internas, automatizaciones y a limar asperezas para que otros desarrolladores puedan entregar valor sin pelearse con el toolchain. Cuando no estoy depurando pipelines o webhooks de Slack, suelo rebuscar vinilos, armar playlists o convencerme de que un plugin de sintetizador más es un gasto totalmente justificado.",
+    "p3": "Si te suena a tu caos organizado — pasa. El café es metafórico, pero la bienvenida es real.",
+    "avatarAlt": "Retrato de Javier Álvarez (marcador de posición)",
+    "ctaCv": "Ver CV completo (PDF)",
+    "ctaLinkedIn": "Conectar en LinkedIn",
+    "cvToastTitle": "El PDF del CV está en camino",
+    "cvToastDescription": "Lo estoy puliendo; mientras tanto, LinkedIn es el sitio más rápido para saludar."
   },
   "features": {
     "internal": {

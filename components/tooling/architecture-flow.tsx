@@ -44,7 +44,7 @@ function Node({ node, index }: { node: FlowNode; index: number }) {
       role="listitem"
     >
       {/* Step number */}
-      <span className="absolute -top-2.5 -left-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-teal-500 text-[10px] font-bold text-white">
+      <span className="absolute -top-2 -left-2 z-10 flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full bg-teal-500 px-1 text-[10px] font-bold text-white shadow-sm ring-2 ring-teal-600/40">
         {index + 1}
       </span>
 

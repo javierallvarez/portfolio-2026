@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Bot, User, Send, X, Sparkles, ExternalLink } from "lucide-react";
 import { useCareerChat } from "@/hooks/use-career-chat";
 import { stripLocale } from "@/lib/i18n/utils";
+import { LINKEDIN_PROFILE_URL } from "@/lib/social";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -266,7 +267,7 @@ export function CareerChat({ isOpen, onClose }: CareerChatProps) {
               </div>
 
               <a
-                href="https://www.linkedin.com/in/javier-álvarez-07783a111"
+                href={LINKEDIN_PROFILE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-1 inline-flex items-center gap-1.5 text-xs text-zinc-500 transition-colors hover:text-teal-400"
