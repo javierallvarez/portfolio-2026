@@ -17,7 +17,6 @@ const KNOWN_PATH_FIRST_SEGMENT = new Set([
 function getPreferredLocale(request: NextRequest): Locale {
   const header = request.headers.get("accept-language");
   if (!header) return defaultLocale;
-  const primary = header.split(",")[0]?.trim().toLowerCase() ?? "";
 
   const ranges: { base: string; q: number; order: number }[] = [];
   let order = 0;
