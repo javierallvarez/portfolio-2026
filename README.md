@@ -53,7 +53,7 @@ La interfaz sigue una filosofía _Developer-First_ y _Mobile-Second_ (priorizand
    - `DATABASE_URL` (conexión a Neon PostgreSQL)
    - `GOOGLE_GENERATIVE_AI_API_KEY` (clave de Gemini para el chat y el sommelier)
    - Resto de claves indicadas en `.env.example` (Clerk, Discogs, Upstash, etc.) si usas esas funciones
-4. Inicializar la base de datos: `npm run db:push`
+4. Inicializar la base de datos: `npm run db:push` (en terminales sin TTY, p. ej. CI o scripts: `npx drizzle-kit push --force`).
 5. Levantar servidor local: `npm run dev`
 
 ---
@@ -160,17 +160,21 @@ Registra de forma anónima las interacciones de los usuarios con las herramienta
 
 ### **3.2. Tabla: `vinyls`**
 
-Almacena la colección de discos físicos importada desde Discogs. Actúa como el corpus de conocimiento (Knowledge Base) para que el Agente de IA (Vinyl Sommelier) realice _Retrieval-Augmented Generation_ (RAG).
+Almacena la colección de discos físicos importada desde Discogs. Actúa como el corpus de conocimiento (_Knowledge Base_) para que el Agente de IA (Vinyl Sommelier) realice _Retrieval-Augmented Generation_ (RAG).
 
-| Columna      | Tipo        | Restricciones                            | Descripción                            |
-| :----------- | :---------- | :--------------------------------------- | :------------------------------------- |
-| `id`         | `uuid`      | PRIMARY KEY, Default `gen_random_uuid()` | Identificador único en nuestra DB.     |
-| `discogs_id` | `integer`   | UNIQUE                                   | ID de referencia de la API de Discogs. |
-| `title`      | `varchar`   | NOT NULL                                 | Título del álbum.                      |
-| `artist`     | `varchar`   | NOT NULL                                 | Nombre del artista o grupo.            |
-| `year`       | `integer`   |                                          | Año de lanzamiento de la edición.      |
-| `cover_url`  | `varchar`   |                                          | URL de la imagen de portada.           |
-| `created_at` | `timestamp` | NOT NULL, Default `now()`                | Fecha de registro en el sistema.       |
+| Columna           | Tipo        | Restricciones                            | Descripción                                                    |
+| :---------------- | :---------- | :--------------------------------------- | :------------------------------------------------------------- |
+| `id`              | `uuid`      | PRIMARY KEY, Default `gen_random_uuid()` | Identificador interno.                                         |
+| `discogs_id`      | `integer`   | UNIQUE (`vinyls_discogs_id_idx`)         | Id. de release en Discogs; varias filas pueden tener `NULL`.   |
+| `title`           | `varchar`   | NOT NULL                                 | Título del álbum.                                              |
+| `artist`          | `varchar`   | NOT NULL                                 | Nombre del artista o grupo.                                    |
+| `year`            | `integer`   | NOT NULL                                 | Año de lanzamiento (validado con Zod en la API).               |
+| `cover_url`       | `varchar`   |                                          | URL de la imagen de portada.                                   |
+| `status`          | `enum`      | NOT NULL, Default `recommended`          | `in_collection` \| `recommended`.                              |
+| `genre`           | `varchar`   |                                          | Género o estilo (pista desde Discogs).                         |
+| `is_now_spinning` | `boolean`   | NOT NULL, Default `false`                | Marca el disco en reproducción (solo uno en `true`; UX admin). |
+| `created_at`      | `timestamp` | NOT NULL, Default `now()`                | Alta del registro.                                             |
+| `updated_at`      | `timestamp` | NOT NULL, Default `now()`                | Última actualización.                                          |
 
 ### **3.3. Principios de diseño: normalización e índices**
 
@@ -184,8 +188,9 @@ El diseño de la base de datos combina infraestructura serverless con rigor rela
 
 **Optimización de consultas**
 
-- **Índices B-Tree:** sobre columnas de filtrado frecuente (p. ej. `discogs_id` en catálogo RAG, `event_type` en telemetría) para favorecer _Index Scan_ frente a _Sequential Scan_ en el laboratorio interactivo y en el dashboard de _Under the Hood_.
-- **Carga de trabajo:** lecturas dominantes en telemetría (agregaciones por tipo de evento) y selección acotada de vinilos para contexto del Sommelier.
+- **`telemetry_events_event_type_idx`:** índice B-tree en `event_type` (telemetría y agregaciones en _Under the Hood_).
+- **`vinyls_artist_idx`:** índice B-tree en `artist` (lecturas ordenadas; el Sommelier ordena por `artist` y `title` en la consulta).
+- **`vinyls_discogs_id_idx`:** índice único B-tree en `discogs_id` (deduplicación por release; varias filas con `NULL` permitidas en PostgreSQL).
 
 ---
 

@@ -11,6 +11,9 @@ export type VinylStatus = (typeof vinylStatusValues)[number];
  * Uses Zod v4 API (`error` instead of `errorMap` / `invalid_type_error`).
  */
 export const vinylBaseSchema = z.object({
+  /** Discogs release id when the row comes from a Discogs search result. */
+  discogsId: z.number().int().positive().optional(),
+
   title: z
     .string()
     .min(1, "Title is required")

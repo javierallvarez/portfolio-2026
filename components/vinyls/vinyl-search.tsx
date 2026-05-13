@@ -87,6 +87,7 @@ export function VinylSearch({ isAdmin }: VinylSearchProps) {
 
     startSubmit(async () => {
       const result = await createVinylAction({
+        discogsId: selected.discogsId,
         title: selected.title,
         artist: selected.artist,
         year: selected.year ?? new Date().getFullYear(),

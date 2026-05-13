@@ -2,7 +2,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { streamText } from "ai";
 import { db } from "@/lib/db";
 import { vinyls } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 /** Edge avoids Node streaming buffering quirks with Gemini text streams on Vercel. */
 export const runtime = "edge";
@@ -58,7 +58,9 @@ export async function POST(req: Request) {
       collection = await db
         .select({ artist: vinyls.artist, title: vinyls.title, genre: vinyls.genre })
         .from(vinyls)
-        .where(eq(vinyls.status, "in_collection"));
+        .where(eq(vinyls.status, "in_collection"))
+        // Uses B-tree on `artist` (leading sort key); stable ordering for the LLM context.
+        .orderBy(asc(vinyls.artist), asc(vinyls.title));
     } catch {
       return new Response("I can't reach the record shelf right now. Try again in a moment!", {
         status: 200,
